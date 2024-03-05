@@ -1,0 +1,18 @@
+﻿function teste(integer a, integer arr<>)
+	return
+end
+
+function main1()
+	integer a = 0
+	integer b = 1
+	integer n = 10
+	integer arr<10>
+
+	teste(10, arr)
+
+	while n < 10 
+		a = b
+		b = a + b
+		n = n - 1
+	end
+end
