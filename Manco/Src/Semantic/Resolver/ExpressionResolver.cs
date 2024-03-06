@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Entities;
 using Language.Semantic.Enums;
@@ -15,10 +16,12 @@ namespace Language.Semantic.Resolver
     public partial class ExpressionResolver
     {
         /// <summary>
-        /// Resolve expression, () by () first priority
+        /// Resolve expressão e retorna tipo
         /// </summary>
         /// <param name="originalTokens"></param>
         /// <param name="scopes"></param>
+        /// <param name="currentVarName">Variavel atual não pode ser usada dentro da expressão</param>
+        /// <param name="restriction"></param>
         /// <returns></returns>
         /// <exception cref="SemanticException"></exception>
         public VariableType Evaluate(
@@ -28,11 +31,13 @@ namespace Language.Semantic.Resolver
             ExpressionRestriction restriction
         )
         {
+            // Variaveis atuais disponiveis
             List<Variable> variables = scopes
                 .SelectMany(x => x.Variables)
                 .Where(x => x.Name != currentVarName)
                 .ToList();
 
+            // Reduz tokens para simplificação
             List<ReducedToken> tokens = Validate(originalTokens, variables, restriction);
             ValidateRestrictions(restriction, tokens, variables);
 
@@ -91,10 +96,11 @@ namespace Language.Semantic.Resolver
                         var lastOpen = result.FindLastIndex(x => x.Type == TokenType.OPEN);
 
                         if (lastOpen == -1)
-                            throw new SemanticException("Internal error", token);
+                            throw new SemanticException("Internal error", token, ErrorCode.Expression);
 
                         var toResolve = result.Skip(lastOpen + 1).Take(index - lastOpen - 1).ToList();
 
+                        // Resolve por prioridade o que ta dentro do (...)
                         var resolved = ResolvePriorityTokensGroup1(toResolve);
                         resolved = ResolvePriorityTokensGroup2(resolved);
                         resolved = ResolvePriorityTokensGroup3(resolved);
@@ -103,15 +109,14 @@ namespace Language.Semantic.Resolver
                         Print(toResolve, resolved);
 
                         if (resolved.Count() != 1)
-                            throw new SemanticException("Failed to resolve expression", token);
+                            throw new SemanticException("Failed to resolve expression", token, ErrorCode.Expression);
 
                         result = result.Take(lastOpen).ToList();
                         result.AddRange(resolved);
                         break;
                     default:
-                        throw new SemanticException($"Internal expression error, {token} not allowed in expression", token);
+                        throw new SemanticException($"Internal expression error, {token} not allowed in expression", token, ErrorCode.Expression);
                 }
-
                 index++;
             }
 

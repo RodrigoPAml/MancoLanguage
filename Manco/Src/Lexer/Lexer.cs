@@ -146,6 +146,14 @@ namespace Language.Lexer
             }
         }
 
+        /// <summary>
+        /// Função interna e recursiva que reconhece tokens atráves do regex
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="lineIndex"></param>
+        /// <param name="desloc"></param>
+        /// <returns></returns>
+        /// <exception cref="LexerException"></exception>
         private bool Work(string token, int lineIndex, int desloc)
         {
             if (token.Count() == 0)

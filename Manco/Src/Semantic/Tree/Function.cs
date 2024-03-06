@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
 using Language.Semantic.Entities;
@@ -16,7 +17,7 @@ namespace Language.Semantic.Tree
         {
             // Verifica se a função com mesmo nome já não foi declarada
             if (scopes.First().Variables.Any(x => x.Name == tokens[position].Content && x.Type == TokenType.FUNCTION))
-                throw new SemanticException($"Function {tokens[position]} already declared", tokens[position]);
+                throw new SemanticException($"Function {tokens[position]} already declared", tokens[position], ErrorCode.FunctionDeclaration);
 
             // Adiciona função a variaveis do escopo (global)
             var functionVar = new Variable()
@@ -36,7 +37,7 @@ namespace Language.Semantic.Tree
             List<Variable> variables = new List<Variable>();
             FunctionState state = FunctionState.FunctionName;
 
-            // Itera novamente, para ver as variaveis
+            // Itera novamente, para validar suas variaveis
             foreach (Token token in tokens.Skip(position))
             {
                 switch (state)
@@ -49,7 +50,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.Open;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -61,7 +62,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.FirstVariableType;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -88,7 +89,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.VariableName;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -112,7 +113,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.VariableName;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -125,7 +126,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.Comma;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -143,7 +144,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.ArrayClose;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -153,13 +154,12 @@ namespace Language.Semantic.Tree
                             {
                                 case TokenType.GREATER:
                                     variables[variables.Count() - 1].IsArray = true;
-                                    variables[variables.Count() - 1].ArraySize = 0;
                                     variables[variables.Count() - 1].FromFunction = true;
 
                                     state = FunctionState.ArrayPosClose;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -174,7 +174,7 @@ namespace Language.Semantic.Tree
                                     state = FunctionState.VariableType;
                                     break;
                                 default:
-                                    throw new SemanticException($"Unexpected token {token} in function declaration", token);
+                                    throw new SemanticException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -195,11 +195,11 @@ namespace Language.Semantic.Tree
 
                 // Valida se mesmo argumento já não existe
                 if (scopes.First().Variables.Any(x => x.Name == variable.Name))
-                    throw new SemanticException("Variable of function already declared", tokens[position]);
+                    throw new SemanticException("Variable of function already declared", tokens[position], ErrorCode.FunctionDeclaration);
 
                 // Valida argumento não tem mesmo nome que a função atual
                 if (variable.Name == functionName)
-                    throw new SemanticException("Variable of function have the same name of the function", tokens[position]);
+                    throw new SemanticException("Variable of function have the same name of the function", tokens[position], ErrorCode.FunctionDeclaration);
 
                 // Add functions variable in the scope, since its the first one, dont verify if already exists
                 scopes.First().Variables.Add(variable);

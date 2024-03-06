@@ -1,4 +1,4 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
 using Language.Lexer.Enums;
 using Language.Semantic.Entities;
 using Language.Semantic.Exceptions;
@@ -8,7 +8,7 @@ namespace Language.Semantic.Resolver
     public partial class ExpressionResolver
     {
         /// <summary>
-        /// Multiplication operation between two tokens
+        /// Operação de multiplicação
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -50,7 +50,7 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot multiply tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot multiply tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 case TokenType.DECIMAL_VAL:
@@ -85,16 +85,16 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot multiply tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot multiply tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot multiply tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot multiply tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
 
         /// <summary>
-        /// Divide operation between two tokens
+        /// Operação de divisão
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -136,7 +136,7 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot divide tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot divide tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 case TokenType.DECIMAL_VAL:
@@ -172,16 +172,16 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot divide tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot divide tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot divide tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot divide tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
 
         /// <summary>
-        /// Modulus operation between two tokens
+        /// Modulo % entre dois tokens
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -210,11 +210,11 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot do modulus with tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot do modulus with tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot do modulus with tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot do modulus with tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
     }

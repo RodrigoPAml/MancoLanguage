@@ -1,12 +1,11 @@
-﻿using Language.Lexer.Entities;
-using Language.Semantic.Entities;
+﻿using Language.Semantic.Entities;
 
 namespace Language.Semantic.Resolver
 {
     public partial class ExpressionResolver
     {
         /// <summary>
-        /// Debug initial expression
+        /// Mostra expressão inicial
         /// </summary>
         /// <param name="initial"></param>
         public void Print(List<ReducedToken> initial)
@@ -28,7 +27,7 @@ namespace Language.Semantic.Resolver
         }
 
         /// <summary>
-        /// Debug expression solving
+        /// Mostra expressão resolvida
         /// </summary>
         /// <param name="before"></param>
         /// <param name="after"></param>

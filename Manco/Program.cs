@@ -17,7 +17,7 @@ public class Program
 
         try
         {
-            lexer.Parse("C:\\Users\\Rodrigo\\Desktop\\FiniteStateMachine\\Files\\code.txt");
+            lexer.Parse("C:\\Users\\Rodrigo\\Desktop\\Manco\\Manco\\Files\\code.txt");
         }
         catch (LexerException le)
         {

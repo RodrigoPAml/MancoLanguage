@@ -11,10 +11,19 @@ namespace Language.Semantic.Tree
     /// </summary>
     public class Expression : SemanticTree
     {
+        /// <summary>
+        /// Resultado esperado
+        /// </summary>
         private VariableType? _result = null;
 
+        /// <summary>
+        /// Variavel atual, deve ser desconsiderado seu uso na expressão
+        /// </summary>
         private readonly string _currentVariable;
 
+        /// <summary>
+        /// Restrição de formação da expressão
+        /// </summary>
         private readonly ExpressionRestriction _restriction;
 
         public Expression(ExpressionRestriction restriction = ExpressionRestriction.None, string currentVariable = "")
@@ -23,6 +32,10 @@ namespace Language.Semantic.Tree
             _restriction = restriction;
         }
 
+        /// <summary>
+        /// Retorna resultado
+        /// </summary>
+        /// <returns></returns>
         public VariableType? GetResult()
         { 
             return _result; 

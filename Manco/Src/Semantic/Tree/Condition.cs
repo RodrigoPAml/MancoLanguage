@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
 using Language.Semantic.Entities;
@@ -25,7 +26,7 @@ namespace Language.Semantic.Tree
             var result = expr.GetResult();
 
             if(result != VariableType.Boolean)
-                throw new SemanticException($"Expression type {result} is not valid with expected type {VariableType.Boolean}", tokens[position - 1]);
+                throw new SemanticException($"Expression type {result} is not valid with expected type {VariableType.Boolean}", tokens[position - 1], ErrorCode.Conditions);
         }
     }
 }

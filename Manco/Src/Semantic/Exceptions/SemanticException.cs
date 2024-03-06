@@ -1,14 +1,16 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Common.Exceptions;
+using Language.Lexer.Entities;
 
 namespace Language.Semantic.Exceptions
 {
-    public class SemanticException : Exception
+    /// <summary>
+    /// Exceção semantica
+    /// </summary>
+    public class SemanticException : BaseException
     {
-        public Token Token { get; set; }
-
-        public SemanticException(string message, Token token) : base(message)
+        public SemanticException(string message, Token? token, ErrorCode? code) : base(message, token, code)
         {
-            Token = token;
         }
     }
 }

@@ -2,30 +2,28 @@
 
 namespace Language.Semantic.Entities
 {
+    /// <summary>
+    /// Variavel declarada
+    /// </summary>
     public class Variable
     {
         /// <summary>
-        /// The name of variable
+        /// Nome da Variavel
         /// </summary>
-        public string Name { get; set; }    
+        public string Name { get; set; } = string.Empty; 
 
         /// <summary>
-        /// The token type of the variable
+        /// Tipo do token relacionado a variavel
         /// </summary>
         public TokenType Type { get; set; }
 
         /// <summary>
-        /// If the variable is an array
+        /// Se variavel é array
         /// </summary>
         public bool IsArray { get; set; } = false;
 
         /// <summary>
-        /// The array size, not always provided because if it's a function args its empty
-        /// </summary>
-        public int ArraySize { get; set; } = 0;
-
-        /// <summary>
-        /// If the argument is from the function declaration
+        /// Se variavel veio da função atual
         /// </summary>
         public bool FromFunction { get; set; } = false;
 

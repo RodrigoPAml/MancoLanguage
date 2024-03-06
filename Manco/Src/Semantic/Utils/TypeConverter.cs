@@ -6,6 +6,9 @@ using Language.Semantic.Exceptions;
 
 namespace Language.Semantic.Utils
 {
+    /// <summary>
+    /// Conversão entre tipos
+    /// </summary>
     public static class TypeConverter
     {
         public static VariableType ExpectedResult(TokenType type, Token token)
@@ -24,7 +27,7 @@ namespace Language.Semantic.Utils
                 case TokenType.STRING_DECL:
                     return VariableType.String;
                 default:
-                    throw new SemanticException($"Failed to recognize type {type}", token);
+                    throw new SemanticException($"Failed to recognize type {type}", token, ErrorCode.Type);
             }
         }
 
@@ -44,7 +47,7 @@ namespace Language.Semantic.Utils
                 case TokenType.STRING_DECL:
                     return TokenType.ARR_INDEX_STRING;
                 default:
-                    throw new SemanticException($"Failed to recognize array type {type}", token);
+                    throw new SemanticException($"Failed to recognize array type {type}", token, ErrorCode.Type);
             }
         }
 
@@ -64,7 +67,7 @@ namespace Language.Semantic.Utils
                 case TokenType.STRING_DECL:
                     return TokenType.STR_VAR;
                 default:
-                    throw new SemanticException($"Failed to recognize identifier type {type}", token);
+                    throw new SemanticException($"Failed to recognize identifier type {type}", token, ErrorCode.Type);
             }
         }
 
@@ -89,7 +92,7 @@ namespace Language.Semantic.Utils
                 case TokenType.ARR_INDEX_BOOL:
                     return VariableType.Boolean;
                 default:
-                    throw new SemanticException($"Failed to recognize type return by expression: {type}", token);
+                    throw new SemanticException($"Failed to recognize type return by expression: {type}", token, ErrorCode.Type);
             }
         }
     }

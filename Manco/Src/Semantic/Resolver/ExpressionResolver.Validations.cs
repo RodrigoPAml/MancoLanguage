@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Entities;
 using Language.Semantic.Enums;
@@ -9,6 +10,14 @@ namespace Language.Semantic.Resolver
 {
     public partial class ExpressionResolver
     {
+        /// <summary>
+        /// Valida tokens utilizados e simplifica
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <param name="variables"></param>
+        /// <param name="restriction"></param>
+        /// <returns></returns>
+        /// <exception cref="SemanticException"></exception>
         public List<ReducedToken> Validate(List<Token> tokens, List<Variable> variables, ExpressionRestriction restriction)
         {
             Console.WriteLine();
@@ -30,10 +39,10 @@ namespace Language.Semantic.Resolver
                         .FirstOrDefault();
                     
                     if (arrVariable ==  null)
-                        throw new SemanticException("Canno't access by index, variable dont exist", tokens[i]);
+                        throw new SemanticException("Canno't access by index, variable dont exist", tokens[i], ErrorCode.Expression);
 
                     if (!arrVariable.IsArray)
-                        throw new SemanticException("Canno't access by index, variable is not an array", tokens[i]);
+                        throw new SemanticException("Canno't access by index, variable is not an array", tokens[i], ErrorCode.Expression);
 
                     var indexVariable = variables
                         .Where(x => x.Name == tokens[i+2].Content)
@@ -42,10 +51,10 @@ namespace Language.Semantic.Resolver
                     if (tokens[i+2].Type != TokenType.INTEGER_VAL)
                     {
                         if (indexVariable == null)
-                            throw new SemanticException("Canno't access by index, variable of index dont exist", tokens[i]);
+                            throw new SemanticException("Canno't access by index, variable of index dont exist", tokens[i], ErrorCode.Expression);
 
                         if (indexVariable.IsArray)
-                            throw new SemanticException("Canno't access by index, variable of index is an array", tokens[i]);
+                            throw new SemanticException("Canno't access by index, variable of index is an array", tokens[i], ErrorCode.Expression);
                     }
 
                     Console.WriteLine($"Mocked value: {tokens[i].Content}{tokens[i + 1].Content}{tokens[i + 2].Content}{tokens[i + 3].Content} = 1");
@@ -72,11 +81,11 @@ namespace Language.Semantic.Resolver
                        .FirstOrDefault();
 
                     if (variable == null)
-                        throw new SemanticException("Variable dont exist", tokens[i]);
+                        throw new SemanticException("Variable dont exist", tokens[i], ErrorCode.Expression);
 
                     // Identificadores que são array e que podem ser usados diretamos e sem indice, somente string
                     if (variable.IsArray && variable.Type != TokenType.STRING_DECL && restriction != ExpressionRestriction.ArrayReferenceVariable)
-                        throw new SemanticException("Canno't use an array directly", tokens[i]);
+                        throw new SemanticException("Canno't use an array directly", tokens[i], ErrorCode.Expression);
 
                     Console.WriteLine($"Mocked value: {tokens[i].Content} = 1");
 
@@ -90,7 +99,7 @@ namespace Language.Semantic.Resolver
                         MoreOnLeft = tokens[i].MoreOnLeft,
                         Variable = variable,
                         TestValue = "1",
-                        IsArray = variable.IsArray
+                        IsArray = variable.IsArray,
                     });
                 }
                 else
@@ -127,10 +136,10 @@ namespace Language.Semantic.Resolver
                 case ExpressionRestriction.StringArrayIndex:
                     {
                         if (tokens.Count() != 1)
-                            throw new SemanticException("String index assignment must be with only a single operation", tokens[0]);
+                            throw new SemanticException("String index assignment must be with only a single operation", tokens[0], ErrorCode.Expression);
 
                         if (tokens[0].Type != TokenType.ARR_INDEX_STRING && (tokens[0].Type != TokenType.STRING_VAL && tokens[0].Content.Count() != 1))
-                            throw new SemanticException("String index assignment must come from another single string character", tokens[0]);
+                            throw new SemanticException("String index assignment must come from another single string character", tokens[0], ErrorCode.Expression);
                     }
                     break;
                 case ExpressionRestriction.StringDeclaration:
@@ -140,21 +149,21 @@ namespace Language.Semantic.Resolver
                             TokenType.STRING_VAL,
                             TokenType.STR_VAR,
                             TokenType.ARR_INDEX_STRING,
-                            TokenType.PLUS
+                            TokenType.PLUS,
                         };
 
                         if (tokens.Any(x => !allowed.Contains(x.Type)))
-                            throw new SemanticException("String declaration with invalid composion", tokens[0]);
+                            throw new SemanticException("String declaration with invalid composion", tokens[0], ErrorCode.Expression);
 
                         if(tokens.Any(x => x.Variable != null && x.Variable.FromFunction))
-                            throw new SemanticException("String declaration with invalid composion because of undetermined size", tokens[0]);
+                            throw new SemanticException("String declaration with invalid composion because of undetermined size", tokens[0], ErrorCode.Expression);
 
                         break;
                     }
                 case ExpressionRestriction.SingleReferenceVariable:
                     {
                         if (tokens.Count() != 1)
-                            throw new SemanticException("Reference argument must be provided by a previous declared variable", tokens[0]);
+                            throw new SemanticException("Reference argument must be provided by a previous declared variable", tokens[0], ErrorCode.Expression);
 
                         List<TokenType> allowed = new List<TokenType>()
                         {
@@ -169,17 +178,17 @@ namespace Language.Semantic.Resolver
                         };
 
                         if (tokens.Any(x => !allowed.Contains(x.Type)))
-                            throw new SemanticException("Reference argument with invalid composition, need a referenciable one", tokens[0]);
+                            throw new SemanticException("Reference argument with invalid composition, need a referenciable one", tokens[0], ErrorCode.Expression);
 
                         if(!variables.Where(x => x.Name == tokens[0].Content && !x.IsArray).Any())
-                            throw new SemanticException($"Argument {tokens[0].Content} can't be an array here", tokens[0]);
+                            throw new SemanticException($"Argument {tokens[0].Content} can't be an array here", tokens[0], ErrorCode.Expression);
 
                         break;
                     }
                 case ExpressionRestriction.ArrayReferenceVariable:
                     {
                         if (tokens.Count() != 1)
-                            throw new SemanticException("Reference argument must be provided by a previous declared variable", tokens[0]);
+                            throw new SemanticException("Reference argument must be provided by a previous declared variable", tokens[0], ErrorCode.Expression);
 
                         List<TokenType> allowed = new List<TokenType>()
                         {
@@ -190,10 +199,10 @@ namespace Language.Semantic.Resolver
                         };
 
                         if (tokens.Any(x => !allowed.Contains(x.Type)))
-                            throw new SemanticException("Reference argument with invalid compositon, need an array", tokens[0]);
+                            throw new SemanticException("Reference argument with invalid compositon, need an array", tokens[0], ErrorCode.Expression);
 
                         if (!variables.Where(x => x.Name == tokens[0].Content && x.IsArray).Any())
-                            throw new SemanticException($"Argument {tokens[0].Content} must be an array here", tokens[0]);
+                            throw new SemanticException($"Argument {tokens[0].Content} must be an array here", tokens[0], ErrorCode.Expression);
 
                         break;
                     }

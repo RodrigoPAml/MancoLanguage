@@ -53,7 +53,7 @@ namespace Language.Semantic.Tree
                 case TokenType.RETURN:
                     break;
                 default:
-                    throw new SemanticException($"Invalid syntax at {tokens[position]}", tokens[position]);
+                    throw new SemanticException($"Invalid semantic at {tokens[position]}", tokens[position], null);
             }
         }
     }

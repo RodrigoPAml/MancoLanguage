@@ -2,20 +2,23 @@
 
 namespace Language.Semantic.Entities
 {
+    /// <summary>
+    /// Scopo
+    /// </summary>
     public class Scope
     {
         /// <summary>
-        /// Scope Type
+        /// Tipo
         /// </summary>
         public ScopeType Type { get; set; }
 
         /// <summary>
-        /// Scope Name
+        /// Nome
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Variables of this scope
+        /// Variaveis do Scopo
         /// </summary>
         public List<Variable> Variables { get; set; } = new List<Variable>();
 

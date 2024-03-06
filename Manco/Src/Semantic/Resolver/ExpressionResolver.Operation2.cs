@@ -1,4 +1,4 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
 using Language.Lexer.Enums;
 using Language.Semantic.Entities;
 using Language.Semantic.Exceptions;
@@ -8,7 +8,7 @@ namespace Language.Semantic.Resolver
     public partial class ExpressionResolver
     {
         /// <summary>
-        /// Sum operation between two tokens
+        /// Operação de soma
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -50,7 +50,7 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 case TokenType.DECIMAL_VAL:
@@ -86,7 +86,7 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 case TokenType.STRING_VAL:
@@ -119,16 +119,16 @@ namespace Language.Semantic.Resolver
                                     Type = TokenType.STRING_VAL
                                 };
                             default:
-                                throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot add tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
 
         /// <summary>
-        /// Sum operation between two tokens
+        /// Operação de substração
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -170,7 +170,7 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot sub tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot sub tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 case TokenType.DECIMAL_VAL:
@@ -206,11 +206,11 @@ namespace Language.Semantic.Resolver
                                     };
                                 }
                             default:
-                                throw new SemanticException($"Cannot sub tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot sub tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot sub tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot sub tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
     }

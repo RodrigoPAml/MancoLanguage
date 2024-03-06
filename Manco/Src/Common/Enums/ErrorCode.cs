@@ -10,6 +10,7 @@
         ArrayDeclaration,
         ArrayIndexAssign,
         InvalidAssign,
+        InvalidDeclaration,
         FunctionDeclaration,
         Conditions,
         Else,

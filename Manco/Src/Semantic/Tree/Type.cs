@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
 using Language.Semantic.Entities;
@@ -19,7 +20,7 @@ namespace Language.Semantic.Tree
                     new Name().Validate(position + 1, tokens, scopes);
                     break;
                 default:
-                    throw new SemanticException($"Invalid syntax at {tokens[position]}", tokens[position]);
+                    throw new SemanticException($"Invalid type at {tokens[position]}", tokens[position], ErrorCode.Type);
             }
         }
     }

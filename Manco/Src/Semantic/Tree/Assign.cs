@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
 using Language.Semantic.Entities;
@@ -10,15 +11,16 @@ namespace Language.Semantic.Tree
 {
     /// <summary>
     /// Valida atribuição, sem acesso a array por índice
-    /// Não chega aqui atribuição de string por exemplo, só se for na declaração
+    /// Não chega aqui atribuição de string por exemplo, só se for na declaração pois so pode modificar por índice
     /// </summary>
     public class Assign : SemanticTree
     {
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if(position >= tokens.Count())
-                throw new SemanticException($"Invalid token {tokens[position - 1]}", tokens[position-1]);
+                throw new SemanticException($"Invalid token {tokens[position - 1]}", tokens[position-1], ErrorCode.InvalidAssign);
 
+            // basicamente se é decleração com atribuição ou modificação
             int indexVariable =
                 tokens[0].Type == TokenType.IDENTIFIER
                 ? 0
@@ -48,7 +50,7 @@ namespace Language.Semantic.Tree
             var result = expr.GetResult();
 
             if (result != expectedResult)
-                throw new SemanticException($"Expression type {result} is not valid with expected type {expectedResult}", tokens[position - 1]);
+                throw new SemanticException($"Expression type {result} is not valid with expected type {expectedResult}", tokens[position - 1], ErrorCode.InvalidAssign);
         }
     }
 }

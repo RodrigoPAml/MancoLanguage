@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
 using Language.Semantic.Entities;
@@ -30,21 +31,21 @@ namespace Language.Semantic.Tree
                 {
                     // Valida Chamada de função
                     case TokenType.OPEN:
-                        ValidateFunctionsExists(position, tokens, scopes);
+                        ValidateFunctionsExists(position, tokens, scopes); // Função existe ?
                         new FunctionCall().Validate(position, tokens, scopes);
                         break;
                     // Atribuição de variavel
                     case TokenType.ASSIGN:
-                        ValidateVariableExists(position, tokens, scopes);
+                        ValidateVariableExists(position, tokens, scopes); // Variavel existe ?
                         new Assign().Validate(position + 1, tokens, scopes);
                         break;
                     // Atribuição por indice
                     case TokenType.OPEN_BRACKET:
-                        ValidateVariableExistsArray(position, tokens, scopes);
+                        ValidateVariableExistsArray(position, tokens, scopes); // Array existe ?
                         new ArrayAssign().Validate(position + 1, tokens, scopes);
                         break;
                     default:
-                        throw new SemanticException($"Invalid syntax at {tokens[position]}", tokens[position]);
+                        throw new SemanticException($"Invalid attribution at {tokens[position]}", tokens[position], ErrorCode.InvalidAssign);
                 } 
             }
             // Cai aqui quando é declaração de variavel com ou sem atribuição
@@ -54,7 +55,7 @@ namespace Language.Semantic.Tree
                 if (position >= tokens.Count())
                 {
                     if (tokens[0].Type == TokenType.STRING_DECL)
-                        throw new SemanticException($"Invalid syntax at {tokens[1]}, string needs a value", tokens[1]);
+                        throw new SemanticException($"Invalid declaration at {tokens[1]}, string needs a initializer", tokens[1], ErrorCode.InvalidDeclaration);
 
                     ValidateVariableDontExists(position, tokens, scopes, false);
                     return;
@@ -72,7 +73,7 @@ namespace Language.Semantic.Tree
                         ValidateVariableDontExists(position, tokens, scopes, true);
                         break;
                     default:
-                        throw new SemanticException($"Invalid syntax at {tokens[position]}", tokens[position]);
+                        throw new SemanticException($"Invalid syntax declaration {tokens[position]}", tokens[position], ErrorCode.InvalidDeclaration);
                 }
             }
         }
@@ -83,21 +84,18 @@ namespace Language.Semantic.Tree
         public void ValidateVariableDontExists(int position, List<Token> tokens, Stack<Scope> scopes, bool isArray)
         {
             if (scopes.Any(x => x.Variables.Any(y => y.Name == tokens[position - 1].Content && y.Type != TokenType.FUNCTION)))
-                throw new SemanticException($"Variable {tokens[position - 1]} already declared", tokens[position - 1]);
+                throw new SemanticException($"Variable {tokens[position - 1]} already declared", tokens[position - 1], ErrorCode.Identifier);
 
             string functionName = scopes.ElementAt(scopes.Count()-2).Name;
 
             if(functionName == tokens[position - 1].Content)
-                throw new SemanticException($"Variable {tokens[position - 1]} has the same name of the function", tokens[position - 1]);
+                throw new SemanticException($"Variable {tokens[position - 1]} has the same name of the function", tokens[position - 1], ErrorCode.Identifier);
 
             scopes.First().Variables.Add(new Variable()
             {
                 Name = tokens[position - 1].Content,
                 Type = tokens[position - 2].Type,
                 IsArray = isArray || tokens[position -2 ].Type == TokenType.STRING_DECL,
-                ArraySize = isArray && !string.IsNullOrEmpty(tokens[3].Content)
-                    ? int.Parse(tokens[3].Content)
-                    : 0
             });
         }
 
@@ -112,10 +110,10 @@ namespace Language.Semantic.Tree
                  .FirstOrDefault();
 
             if (variable == null)
-                throw new SemanticException($"Variable {tokens[position - 1]} don't exist", tokens[position - 1]);
+                throw new SemanticException($"Variable {tokens[position - 1]} don't exist", tokens[position - 1], ErrorCode.ArrayDeclaration);
 
             if (!variable.IsArray)
-                throw new SemanticException($"Variable {tokens[position - 1]} is not an array", tokens[position - 1]);
+                throw new SemanticException($"Variable {tokens[position - 1]} is not an array", tokens[position - 1], ErrorCode.ArrayDeclaration);
 
             var indexToken = tokens[2];
 
@@ -127,10 +125,10 @@ namespace Language.Semantic.Tree
                     .FirstOrDefault();
 
                 if (variableIndex == null)
-                    throw new SemanticException($"Variable {indexToken} must exist", indexToken);
+                    throw new SemanticException($"Variable {indexToken} must exist", indexToken, ErrorCode.ArrayIndexAssign);
 
-                if (variableIndex.Type != TokenType.INTEGER_DECL || variableIndex.Type != TokenType.INTEGER_DECL)
-                    throw new SemanticException($"Variable {indexToken} must be a integer to be used as a index", indexToken);
+                if (variableIndex.Type != TokenType.INTEGER_DECL)
+                    throw new SemanticException($"Variable {indexToken} must be a integer to be used as a index", indexToken, ErrorCode.ArrayIndexAssign);
             }
         }
 
@@ -145,16 +143,16 @@ namespace Language.Semantic.Tree
                 .FirstOrDefault();
 
             if (variable == null)
-                throw new SemanticException($"Variable {tokens[position - 1]} don't exist", tokens[position - 1]);
+                throw new SemanticException($"Variable {tokens[position - 1]} don't exist", tokens[position - 1], ErrorCode.InvalidDeclaration);
 
             if (variable.IsArray)
-                throw new SemanticException($"Variable {tokens[position - 1]} is an array", tokens[position - 1]);
+                throw new SemanticException($"Variable {tokens[position - 1]} is an array", tokens[position - 1], ErrorCode.InvalidDeclaration);
         }
 
         public void ValidateFunctionsExists(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (!scopes.Any(x => x.Variables.Any(y => y.Name == tokens[position - 1].Content && y.Type == TokenType.FUNCTION)))
-                throw new SemanticException($"Function {tokens[position - 1]} don't exist", tokens[position - 1]);
+                throw new SemanticException($"Function {tokens[position - 1]} don't exist", tokens[position - 1], ErrorCode.FunctionDeclaration);
         }
     }
 }

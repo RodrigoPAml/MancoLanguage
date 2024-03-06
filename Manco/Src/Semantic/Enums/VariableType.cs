@@ -1,5 +1,8 @@
 ﻿namespace Language.Semantic.Enums
 {
+    /// <summary>
+    /// Tipo da variavel
+    /// </summary>
     public enum VariableType
     {
         Integer,

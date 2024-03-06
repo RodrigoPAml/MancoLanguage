@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Enums;
+﻿using Language.Common.Enums;
+using Language.Lexer.Enums;
 using Language.Semantic.Entities;
 using Language.Semantic.Exceptions;
 
@@ -7,7 +8,7 @@ namespace Language.Semantic.Resolver
     public partial class ExpressionResolver
     {
         /// <summary>
-        /// Operations AND GRUPO 4
+        /// Operação AND GRUPO 4
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -37,16 +38,16 @@ namespace Language.Semantic.Resolver
                                     Type = TokenType.BOOL_VAL,    
                                 };
                             default:
-                                throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
 
         /// <summary>
-        /// Operations OR GRUPO 4
+        /// Operação OR GRUPO 4
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -75,11 +76,11 @@ namespace Language.Semantic.Resolver
                                     Type = TokenType.BOOL_VAL,
                                 };
                             default:
-                                throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left);
+                                throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
                 default:
-                    throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left);
+                    throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
         }
     }

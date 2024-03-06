@@ -1,4 +1,5 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
 using Language.Semantic.Entities;
@@ -26,8 +27,9 @@ namespace Language.Semantic.Tree
                 .FirstOrDefault();
 
             if (functionVar == null)
-                throw new SemanticException($"Function {functionName} was not founded in the global scope", tokens[position]);
+                throw new SemanticException($"Function {functionName} was not founded in the global scope", tokens[position], ErrorCode.FunctionCall);
 
+            // Função sem argumentos 
             if (currentTokens.Count() == 2 && functionVar.ChildVariables.Count == 0)
                 return;
 
@@ -38,8 +40,9 @@ namespace Language.Semantic.Tree
                     .ToList()
             );
 
-            if(groups.Count != functionVar.ChildVariables.Count) 
-                throw new SemanticException($"Function {functionName} expects {functionVar.ChildVariables.Count} arguments but recieved {groups.Count}", tokens[position]);
+            // Não bate número de argumentos
+            if (groups.Count != functionVar.ChildVariables.Count)
+                throw new SemanticException($"Function {functionName} expects {functionVar.ChildVariables.Count} arguments but recieved {groups.Count}", tokens[position], ErrorCode.FunctionCall);
 
             var indexVariable = 0;
             foreach (var group in groups)
@@ -55,55 +58,44 @@ namespace Language.Semantic.Tree
                 };
 
                 // Por referencia
-                if(referenceTypes.Contains(functionVariable.Type))
+                if (referenceTypes.Contains(functionVariable.Type))
                     restriction = ExpressionRestriction.SingleReferenceVariable;
 
                 // Quando é array é referencia sempre
                 if (functionVariable.IsArray)
                     restriction = ExpressionRestriction.ArrayReferenceVariable;
 
-                var expectedResult = TypeConverter.ExpectedResult(functionVariable.Type, tokens[position]);
-                var expr = new Expression(restriction);
+                if (functionName == "print")
+                {
+                    var expr = new Expression();
 
-                // Valida expressão da atribuição
-                expr.Validate(0, group, scopes);
+                    // Valida expressão do print
+                    expr.Validate(0, group, scopes);
+                    expr.GetResult();
+                }
+                else
+                {
+                    var expectedResult = TypeConverter.ExpectedResult(functionVariable.Type, tokens[position]);
+                    var expr = new Expression(restriction);
 
-                var result = expr.GetResult();
+                    // Valida expressão da atribuição
+                    expr.Validate(0, group, scopes);
 
-                if (result != expectedResult)
-                    throw new SemanticException($"Expression type {result} is not valid with expected function type {expectedResult}", tokens[position - 1]);
+                    var result = expr.GetResult();
+
+                    if (result != expectedResult)
+                        throw new SemanticException($"Expression type {result} is not valid with expected function type {expectedResult}", tokens[position - 1], ErrorCode.FunctionCall);
+                }
 
                 indexVariable++;
             }
         }
 
-        private static void ValidateForSingleTypeOrArray(TokenType functionArg, TokenType provided)
-        {
-            switch (functionArg)
-            {
-                // Tipos por referencia
-                case TokenType.BOOLEAN_DECL_REF:
-                case TokenType.DECIMAL_DECL_REF:
-                case TokenType.INTEGER_DECL_REF:
-                    {
-                        List<TokenType> allowedTypes = new List<TokenType>()
-                        {
-
-                        };
-
-                    }
-                    break;
-                // Arrays
-                case TokenType.STRING_DECL:
-                case TokenType.INTEGER_DECL:
-                case TokenType.DECIMAL_DECL:
-                case TokenType.BOOLEAN_DECL:
-                    { 
-                    }
-                    break;
-            }
-        }
-
+        /// <summary>
+        /// Conteudos das chamadas da função retornados aqui
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
         private static List<List<Token>> SplitTokens(List<Token> tokens)
         {
             List<List<Token>> tokenGroups = new List<List<Token>>();
