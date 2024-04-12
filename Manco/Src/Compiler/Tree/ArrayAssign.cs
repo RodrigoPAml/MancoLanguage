@@ -51,7 +51,7 @@ namespace Language.Compiler.Tree
             else
             {
                 info.Lines.Add($"move t5 sp");
-                info.Lines.Add($"addi t5 t5 {variable?.StackPos - info.StackPointer} sp");
+                info.Lines.Add($"addi t5 t5 {variable?.StackPos - info.StackPointer}");
             }
 
             if (indexVariable != null)

@@ -208,13 +208,13 @@ namespace Language.Compiler.Resolver
                             case TokenType.INTEGER_VAR:
                             case TokenType.ARR_INDEX_INTEGER:
                                 {
-                                    return IntegerOp(info, left, right, "stle", TokenType.BOOL_VAL);
+                                    return IntegerOp(info, left, right, "slte", TokenType.BOOL_VAL);
                                 }
                             case TokenType.DECIMAL_VAL:
                             case TokenType.DECIMAL_VAR:
                             case TokenType.ARR_INDEX_DECIMAL:
                                 {
-                                    return IntegerDecimalOp(info, left, right, "stlef", TokenType.BOOL_VAL);
+                                    return IntegerDecimalOp(info, left, right, "sltef", TokenType.BOOL_VAL);
                                 }
                             default:
                                 throw new CompilerException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
@@ -230,13 +230,13 @@ namespace Language.Compiler.Resolver
                             case TokenType.INTEGER_VAR:
                             case TokenType.ARR_INDEX_INTEGER:
                                 {
-                                    return DecimalIntegerOp(info, left, right, "stlef", TokenType.BOOL_VAL);
+                                    return DecimalIntegerOp(info, left, right, "sltef", TokenType.BOOL_VAL);
                                 }
                             case TokenType.DECIMAL_VAL:
                             case TokenType.DECIMAL_VAR:
                             case TokenType.ARR_INDEX_DECIMAL:
                                 {
-                                    return DecimalOp(info, left, right, "stlef", TokenType.BOOL_VAL);
+                                    return DecimalOp(info, left, right, "sltef", TokenType.BOOL_VAL);
                                 }
                             default:
                                 throw new CompilerException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);

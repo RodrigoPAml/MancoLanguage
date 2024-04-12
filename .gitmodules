@@ -1,0 +1,3 @@
+[submodule "AssemblerSimulator"]
+	path = AssemblerSimulator
+	url = https://github.com/RodrigoPAml/AssemblerSimulator
