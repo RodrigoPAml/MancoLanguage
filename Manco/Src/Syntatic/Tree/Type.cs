@@ -16,11 +16,11 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if(position >= tokens.Count())
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.Type);
+                throw new SyntaxException($"Type withou content is not allowed", tokens[position - 1], ErrorCode.Type);
 
             // Não pode no escopo global
             if(scopes.First().Type == ScopeType.Global)
-                throw new SyntaxException($"Invalid token {tokens[position]} at global scope", tokens[position], ErrorCode.Type);
+                throw new SyntaxException($"Invalid type declaration at global scope", tokens[position], ErrorCode.Type);
 
             switch (tokens[position].Type)
             {
@@ -29,7 +29,7 @@ namespace Language.Syntatic.Tree
                     new Name().Validate(position + 1, tokens, scopes);
                     break;
                 default:
-                    throw new SyntaxException($"Invalid token {tokens[position]}", tokens[position], ErrorCode.Type);
+                    throw new SyntaxException($"Invalid element after type, expected IDENTIFIER but got {tokens[position]}",tokens[position], ErrorCode.Type);
             }
         }
     }

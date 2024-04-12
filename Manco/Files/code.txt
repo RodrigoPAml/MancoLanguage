@@ -1,13 +1,34 @@
-﻿function main()
-	integer a = 0
-	integer b = 1
-	integer n = 10
+function find_greater_number(integer a<>, integer n, integer& greater)
+    integer i = 0
+    while i < n
+        if greater < a[i]
+            greater = a[i]
+        end
+        i = i + 1
+    end
+end
 
-	while n < 10
-		print(a)
-	
-		a = b
-		b = a + b
-		n = n - 1
-	end
+function find_sum(integer a<>, integer n, integer& sum)
+    integer i = 0
+    while i < n
+        sum = sum + a[i]
+        i = i + 1
+    end
+end
+
+function insert(integer a<>, integer n)
+    integer i = 0
+    while i < n
+       a[i] = i 
+       i = i + 1
+    end
+end
+
+function main()
+    integer list<4>
+    insert(list, 4)
+    integer greater = -1
+    integer sum = 0
+    find_greater_number(list, 4, greater)
+    print(greater)
 end

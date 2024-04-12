@@ -17,7 +17,7 @@ public class Program
 
         try
         {
-            lexer.Parse("C:\\Users\\Rodrigo\\Desktop\\Manco\\Manco\\Files\\code.txt");
+            lexer.ParseFromFile("C:\\Users\\Rodrigo\\Desktop\\Manco\\Manco\\Files\\code.txt");
         }
         catch (LexerException le)
         {
@@ -31,7 +31,6 @@ public class Program
         }
 
         var tokens = lexer.GetResult();
-        lexer.Print();
 
         SyntaxChecker checker = new SyntaxChecker();
 
@@ -51,10 +50,10 @@ public class Program
         }
 
         SemanticChecker semanticChecker = new SemanticChecker();
-        semanticChecker.Parse(tokens);
 
         try
         {
+            semanticChecker.Parse(tokens);
         }
         catch (SemanticException le)
         {

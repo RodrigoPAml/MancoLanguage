@@ -11,9 +11,9 @@ namespace Language.Semantic.Resolver
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        public List<ReducedToken> ResolvePriorityTokensGroup4(List<ReducedToken> tokens)
+        public List<SemanticToken> ResolvePriorityTokensGroup4(List<SemanticToken> tokens)
         {
-            List<ReducedToken> resolved = new List<ReducedToken>();
+            List<SemanticToken> resolved = new List<SemanticToken>();
             TokenType? operation = null;
 
             foreach (var token in tokens)
@@ -44,9 +44,14 @@ namespace Language.Semantic.Resolver
             return ResolvePriorityTokensGroup41(resolved);
         }
 
-        private List<ReducedToken> ResolvePriorityTokensGroup41(List<ReducedToken> tokens)
+        /// <summary>
+        /// Resolve tokens AND then OR GRUPO 4
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
+        private List<SemanticToken> ResolvePriorityTokensGroup41(List<SemanticToken> tokens)
         {
-            List<ReducedToken> resolved = new List<ReducedToken>();
+            List<SemanticToken> resolved = new List<SemanticToken>();
             TokenType? operation = null;
 
             foreach (var token in tokens)

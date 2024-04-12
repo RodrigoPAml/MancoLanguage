@@ -15,11 +15,11 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (position >= tokens.Count())
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.Loop);
+                throw new SyntaxException($"Invalid while, no expression", tokens[0], ErrorCode.Loop);
 
             // While não pode estar no escopo global
             if (scopes.First().Type == ScopeType.Global)
-                throw new SyntaxException($"Invalid token {tokens[position]} in this scope", tokens[position], ErrorCode.Loop);
+                throw new SyntaxException($"While cant appear in global scope", tokens[0], ErrorCode.Loop);
 
             // Insere novo escopo
             scopes.Push(new Scope(ScopeType.Loop));

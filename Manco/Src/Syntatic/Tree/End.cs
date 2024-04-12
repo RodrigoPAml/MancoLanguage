@@ -16,15 +16,15 @@ namespace Language.Syntatic.Tree
         {
             // End sempre sozinho
             if(position != tokens.Count())
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.EndOfScope);
+                throw new SyntaxException($"End should appear alone", tokens[position - 1], ErrorCode.EndOfScope);
 
             // Caira aqui quando tiver mais fechamentos de escopo do que escopos
             if(scopes.Count() < 1)
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.EndOfScope);
+                throw new SyntaxException($"Mismatch in ends of scope", tokens[position - 1], ErrorCode.EndOfScope);
 
             // Se tentar fechar o escopo global
             if(scopes.First().Type == ScopeType.Global)
-                throw new SyntaxException($"Invalid token {tokens[position - 1]} in global scope", tokens[position - 1], ErrorCode.EndOfScope);
+                throw new SyntaxException($"Closing in global scope", tokens[position - 1], ErrorCode.EndOfScope);
 
             scopes.Pop();
         }

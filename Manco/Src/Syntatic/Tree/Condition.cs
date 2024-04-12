@@ -16,7 +16,7 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (position >= tokens.Count())
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.Conditions);
+                throw new SyntaxException($"Conditional without expression", tokens[position - 1], ErrorCode.Conditions);
 
             // Se for if só puxamos novo escopo
             if (tokens[position-1].Type == TokenType.IF)
@@ -26,7 +26,7 @@ namespace Language.Syntatic.Tree
                 var scopeCommandsSize = scopes.First().Commands.Count();
 
                 if (scopeCommandsSize < 2)
-                    throw new SyntaxException($"Invalid elif token {tokens[position - 1]}", tokens[position - 1], ErrorCode.Conditions);
+                    throw new SyntaxException($"Invalid elif without previous if", tokens[position - 1], ErrorCode.Conditions);
 
                 // Case seja um else if, precisa ter um if ou else if anteriomente
                 if (scopes.First().Commands[scopeCommandsSize - 2] != TokenType.IF &&

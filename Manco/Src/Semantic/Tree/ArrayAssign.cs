@@ -18,7 +18,7 @@ namespace Language.Semantic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (position >= tokens.Count())
-                throw new SemanticException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.ArrayIndexAssign);
+                throw new SemanticException($"Unexcepted token at array index assign", tokens[position - 1], ErrorCode.ArrayIndexAssign);
           
             var variable = scopes
                 .SelectMany(x => x.Variables)
@@ -26,14 +26,14 @@ namespace Language.Semantic.Tree
                 .FirstOrDefault();
 
             if(variable == null)
-                throw new SemanticException($"Internal error", tokens[position - 1], ErrorCode.ArrayIndexAssign);
+                throw new SemanticException($"Internal error, should not happen", tokens[position - 1], ErrorCode.ArrayIndexAssign);
 
             var expectedResult = TypeConverter.ExpectedResult(variable.Type, tokens[position - 1]);
             var expr = new Expression(
                 variable.Type == TokenType.STRING_DECL 
-                    ? ExpressionRestriction.StringArrayIndex // Se for array de string, resultado precisa ser 1 caracter só 
+                    ? ExpressionRestriction.StringArrayIndex // Se for assign de indice em array de string, resultado precisa ser 1 número, ou quantidade de caracter já determinada 
                     : ExpressionRestriction.None,
-                  tokens[0].Content
+                  string.Empty
             );
 
             // Valida expressão da atribuição ao índice
@@ -41,8 +41,8 @@ namespace Language.Semantic.Tree
 
             var result = expr.GetResult();
 
-            if (result != expectedResult)
-                throw new SemanticException($"Expression type {result} is not valid with expected type {expectedResult}", tokens[position - 1], ErrorCode.ArrayIndexAssign);
+            if (!expr.IsResultValid(expectedResult))
+                throw new SemanticException($"Expression type {result} is not valid with expected type {expectedResult} in array assign", tokens[position - 1], ErrorCode.ArrayIndexAssign);
         }
     }
 }

@@ -5,3 +5,5 @@
 /.vs
 /Manco/obj
 /Manco/bin/Debug/net6.0
+/GUI/bin/Debug/net6.0-windows
+/GUI/obj

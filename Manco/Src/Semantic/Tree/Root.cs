@@ -50,6 +50,8 @@ namespace Language.Semantic.Tree
                     new Type().Validate(position + 1, tokens, scopes);
                     break;
                 case TokenType.COMMENT:
+                case TokenType.BREAK:
+                case TokenType.CONTINUE:
                 case TokenType.RETURN:
                     break;
                 default:

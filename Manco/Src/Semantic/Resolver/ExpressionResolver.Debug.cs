@@ -8,7 +8,7 @@ namespace Language.Semantic.Resolver
         /// Mostra expressão inicial
         /// </summary>
         /// <param name="initial"></param>
-        public void Print(List<ReducedToken> initial)
+        public void Print(List<SemanticToken> initial)
         {
             Console.WriteLine();
             Console.Write("Initial by value: ");
@@ -31,7 +31,7 @@ namespace Language.Semantic.Resolver
         /// </summary>
         /// <param name="before"></param>
         /// <param name="after"></param>
-        public void Print(List<ReducedToken> before, List<ReducedToken> after)
+        public void Print(List<SemanticToken> before, List<SemanticToken> after)
         {
             Console.Write("Resolving step: ");
             foreach (var token in before)

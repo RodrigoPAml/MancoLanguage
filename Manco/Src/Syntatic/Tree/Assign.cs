@@ -14,7 +14,7 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if(position >= tokens.Count())
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position-1], ErrorCode.InvalidAssign);
+                throw new SyntaxException($"Assignment without content is not allowed", tokens[position-1], ErrorCode.InvalidAssign);
 
             // Valida expressão da atribuição
             new Expression().Validate(position, tokens, scopes);

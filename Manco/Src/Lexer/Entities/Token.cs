@@ -26,7 +26,7 @@ namespace Language.Lexer.Entities
 
         public override string ToString()
         {
-            return $"{Type}({Content}):{Line}-{Start}-{End}";
+            return $"{Type}({Content}): At line {Line}-{Start}-{End}";
         }
     }
 }

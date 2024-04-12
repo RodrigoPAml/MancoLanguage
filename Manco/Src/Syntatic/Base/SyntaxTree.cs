@@ -4,7 +4,8 @@ using Language.Syntatic.Entities;
 namespace Language.Syntatic.Base
 {
     /// <summary>
-    /// Estrutura base da árvore que valida a sintaxe do código
+    /// Estrutura base da árvore que valida a sintaxe do código iterativamente por
+    /// cada token
     /// </summary>
     public abstract class SyntaxTree
     {

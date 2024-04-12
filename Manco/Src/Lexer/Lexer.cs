@@ -3,6 +3,7 @@ using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Lexer.Exceptions;
 using Language.Lexer.Utils;
+using System.Globalization;
 using MatchType = Language.Lexer.Enums.MatchType;
 
 namespace Language.Lexer
@@ -51,7 +52,6 @@ namespace Language.Lexer
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "\\[", TokenType.OPEN_BRACKET));
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "\\]", TokenType.CLOSE_BRACKET));
 
-
             _patterns.Add(new TokenPattern(MatchType.Exact, "OR", TokenType.OR));
             _patterns.Add(new TokenPattern(MatchType.Exact, "AND", TokenType.AND));
 
@@ -65,7 +65,7 @@ namespace Language.Lexer
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "if", TokenType.IF));
             _patterns.Add(new TokenPattern(MatchType.Exact, "end", TokenType.END));
 
-            _patterns.Add(new TokenPattern(MatchType.String, "\"[^\"]*\"", TokenType.STRING_VAL));
+            _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "\"[^\"]+\"", TokenType.STRING_VAL));
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "(true|false)", TokenType.BOOL_VAL));
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "\\d+\\.\\d+", TokenType.DECIMAL_VAL));
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "[0-9][0-9]*", TokenType.INTEGER_VAL));
@@ -102,18 +102,23 @@ namespace Language.Lexer
             Console.WriteLine();
         }
 
+        public void ParseFromFile(string filename)
+        { 
+            Parse(File.ReadAllText(filename));
+        }
+
         /// <summary>
         /// Parse do arquivo de código
         /// </summary>
         /// <param name="filePath"></param>
-        public void Parse(string filePath)
+        public void Parse(string content)
         {
             try
             {
                 _lineTokens = null;
                 _result = new List<List<Token>>();
 
-                var lines = File.ReadAllLines(filePath);
+                var lines = content.Split('\n');
                 int lineIndex = 0;
 
                 foreach (var line in lines)
@@ -168,7 +173,7 @@ namespace Language.Lexer
                     _lineTokens.Add(resultToken);
 
                     if (resultToken.MoreOnLeft)
-                        return Work(token.Substring(resultToken.Size), lineIndex, desloc+resultToken.Size);
+                        return Work(token.Substring(resultToken.Size), lineIndex, desloc+resultToken.Content.Length);
 
                     return true;
                 }

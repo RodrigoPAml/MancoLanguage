@@ -13,7 +13,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken And(ReducedToken left, ReducedToken right)
+        public SemanticToken And(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -31,7 +31,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                return new ReducedToken()
+                                return new SemanticToken()
                                 {
                                     Content = result,
                                     TestValue = result,
@@ -52,7 +52,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Or(ReducedToken left, ReducedToken right)
+        public SemanticToken Or(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -69,7 +69,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                return new ReducedToken()
+                                return new SemanticToken()
                                 {
                                     Content = result,
                                     TestValue = result,

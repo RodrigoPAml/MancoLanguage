@@ -4,7 +4,8 @@ using Language.Semantic.Entities;
 namespace Language.Semantic.Base
 {
     /// <summary>
-    /// Estrutura base da árvore que valida a semantica do código
+    /// Estrutura base da árvore que valida a semantica do código iterativamente atráves dos
+    /// tokens
     /// </summary>
     public abstract class SemanticTree
     {

@@ -20,6 +20,8 @@
         Loop,
         Identifier,
         Return,
-        Type
+        Type,
+        Continue,
+        Break
     }
 }

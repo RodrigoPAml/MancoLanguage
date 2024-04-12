@@ -16,14 +16,14 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (tokens.Count == 1)
-                throw new SyntaxException($"Invalid token {tokens[0]}", tokens[0], ErrorCode.Identifier);
+                throw new SyntaxException($"Missing content after identifier", tokens[0], ErrorCode.Identifier);
 
             if (position >= tokens.Count())
                 return;
 
             // Nada disso no escopo global
             if (scopes.First().Type == ScopeType.Global)
-                throw new SyntaxException($"Invalid token {tokens[position]} in this scope", tokens[position], ErrorCode.Identifier);
+                throw new SyntaxException($"Identifier cant appear on global scope", tokens[position], ErrorCode.Identifier);
 
             switch (tokens[position].Type)
             {
@@ -44,7 +44,7 @@ namespace Language.Syntatic.Tree
                     new ArrayAssign().Validate(position + 1, tokens, scopes);
                     break;
                 default:
-                    throw new SyntaxException($"Invalid token {tokens[position]}", tokens[position], ErrorCode.Identifier);
+                    throw new SyntaxException($"Invalid identifier operation", tokens[position], ErrorCode.Identifier);
             }
         }
     }

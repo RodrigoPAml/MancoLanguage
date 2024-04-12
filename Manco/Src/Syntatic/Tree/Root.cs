@@ -62,8 +62,14 @@ namespace Language.Syntatic.Tree
                 case TokenType.DECIMAL_DECL:
                     new Type().Validate(position + 1, tokens, scopes);
                     break;
+                case TokenType.CONTINUE:
+                    new Continue().Validate(position + 1, tokens, scopes);
+                    break;
+                case TokenType.BREAK:
+                    new Break().Validate(position + 1, tokens, scopes);
+                    break;
                 default:
-                    throw new SyntaxException($"Invalid syntax at {tokens[position]}", tokens[position], ErrorCode.InvalidToken);
+                    throw new SyntaxException($"Invalid starting element", tokens[position], ErrorCode.InvalidToken);
             }
         }
     }

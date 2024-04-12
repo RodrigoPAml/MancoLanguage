@@ -38,25 +38,25 @@ namespace Language.Semantic.Resolver
                 .ToList();
 
             // Reduz tokens para simplificação
-            List<ReducedToken> tokens = Validate(originalTokens, variables, restriction);
+            List<SemanticToken> tokens = Validate(originalTokens, variables, restriction);
             ValidateRestrictions(restriction, tokens, variables);
 
-            tokens.Insert(0, new ReducedToken()
+            tokens.Insert(0, new SemanticToken()
             { 
                 Type= TokenType.OPEN,
                 Content = "(",
             });
 
-            tokens.Add(new ReducedToken()
+            tokens.Add(new SemanticToken()
             {
                 Type = TokenType.CLOSE,
                 Content = ")",
             });
 
-            Print(tokens);
+            //Print(tokens);
 
             int index = 0;
-            List<ReducedToken> result = new List<ReducedToken>();
+            List<SemanticToken> result = new List<SemanticToken>();
 
             foreach (var token in tokens)
             {
@@ -106,7 +106,7 @@ namespace Language.Semantic.Resolver
                         resolved = ResolvePriorityTokensGroup3(resolved);
                         resolved = ResolvePriorityTokensGroup4(resolved);
 
-                        Print(toResolve, resolved);
+                        //Print(toResolve, resolved);
 
                         if (resolved.Count() != 1)
                             throw new SemanticException("Failed to resolve expression", token, ErrorCode.Expression);
@@ -120,7 +120,6 @@ namespace Language.Semantic.Resolver
                 index++;
             }
 
-            Console.WriteLine("Resultado final: " + result[0]);
             return TypeConverter.ExpressionResult(result[0].Type, result[0]);
         }
     }

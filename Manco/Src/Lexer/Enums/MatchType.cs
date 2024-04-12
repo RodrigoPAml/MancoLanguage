@@ -9,7 +9,5 @@
         Exact,
         // Match exato mas pode ter mais outro token em conjunto
         ExactWithMore,
-        // Match customizado para string
-        String,
     }
 }

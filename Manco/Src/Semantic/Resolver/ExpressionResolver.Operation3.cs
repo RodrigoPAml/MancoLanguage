@@ -13,7 +13,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Greater(ReducedToken left, ReducedToken right)
+        public SemanticToken Greater(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -31,7 +31,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -46,7 +46,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -71,7 +71,7 @@ namespace Language.Semantic.Resolver
                                        ? "true"
                                        : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -86,7 +86,7 @@ namespace Language.Semantic.Resolver
                                        ? "true"
                                        : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -108,7 +108,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken GreaterEqual(ReducedToken left, ReducedToken right)
+        public SemanticToken GreaterEqual(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -126,7 +126,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -141,7 +141,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -166,7 +166,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -181,7 +181,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -203,7 +203,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Less(ReducedToken left, ReducedToken right)
+        public SemanticToken Less(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -221,7 +221,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -236,7 +236,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -261,7 +261,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -276,7 +276,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -298,7 +298,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken LessEqual(ReducedToken left, ReducedToken right)
+        public SemanticToken LessEqual(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -316,7 +316,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -331,7 +331,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -356,7 +356,7 @@ namespace Language.Semantic.Resolver
                                        ? "true"
                                        : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -371,7 +371,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -393,7 +393,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Equals(ReducedToken left, ReducedToken right)
+        public SemanticToken Equals(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -411,7 +411,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -426,7 +426,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -451,7 +451,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -466,7 +466,7 @@ namespace Language.Semantic.Resolver
                                        ? "true"
                                        : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -491,7 +491,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -513,7 +513,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken NotEquals(ReducedToken left, ReducedToken right)
+        public SemanticToken NotEquals(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -531,7 +531,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -546,7 +546,7 @@ namespace Language.Semantic.Resolver
                                        ? "true"
                                        : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -571,7 +571,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -586,7 +586,7 @@ namespace Language.Semantic.Resolver
                                        ? "true"
                                        : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -611,7 +611,7 @@ namespace Language.Semantic.Resolver
                                         ? "true"
                                         : "false";
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,

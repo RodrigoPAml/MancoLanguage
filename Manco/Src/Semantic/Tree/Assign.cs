@@ -49,7 +49,7 @@ namespace Language.Semantic.Tree
             
             var result = expr.GetResult();
 
-            if (result != expectedResult)
+            if (!expr.IsResultValid(expectedResult))
                 throw new SemanticException($"Expression type {result} is not valid with expected type {expectedResult}", tokens[position - 1], ErrorCode.InvalidAssign);
         }
     }

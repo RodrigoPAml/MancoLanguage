@@ -3,9 +3,9 @@
 namespace Language.Semantic.Entities
 {
     /// <summary>
-    /// Token formado por um ou mais tokens para simplificação
+    /// Token formado por um ou mais tokens para simplificação da fase semantica
     /// </summary>
-    public class ReducedToken : Token
+    public class SemanticToken : Token
     {
         /// <summary>
         /// Variavel relacionada a token

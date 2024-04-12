@@ -1,6 +1,8 @@
-﻿using Language.Lexer.Entities;
+﻿using Language.Common.Enums;
+using Language.Lexer.Entities;
 using Language.Syntatic.Entities;
 using Language.Syntatic.Enums;
+using Language.Syntatic.Exceptions;
 using Language.Syntatic.Tree;
 
 namespace Language.Syntatic
@@ -21,6 +23,9 @@ namespace Language.Syntatic
             {
                 new Root().Validate(0, line, scopes);
             }
+
+            if (scopes.Count != 1)
+                throw new SyntaxException("Mismatch of scopes", tokens.Last().Last(), ErrorCode.EndOfScope);
         }
     }
 }

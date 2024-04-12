@@ -13,7 +13,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Mult(ReducedToken left, ReducedToken right)
+        public SemanticToken Mult(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -29,7 +29,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) * int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -42,7 +42,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) * float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -64,7 +64,7 @@ namespace Language.Semantic.Resolver
                             case TokenType.ARR_INDEX_INTEGER:
                                 {
                                     var result = (float.Parse(left.TestValue) * int.Parse(right.TestValue)).ToString();
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -77,7 +77,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) * float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -99,7 +99,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Divide(ReducedToken left, ReducedToken right)
+        public SemanticToken Divide(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -115,7 +115,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) / int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -128,7 +128,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) / float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -151,7 +151,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (float.Parse(left.TestValue) / int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -162,9 +162,9 @@ namespace Language.Semantic.Resolver
                             case TokenType.DECIMAL_VAR:
                             case TokenType.ARR_INDEX_DECIMAL:
                                 {
-                                    var result = (int.Parse(left.TestValue) / float.Parse(right.TestValue)).ToString();
+                                    var result = (float.Parse(left.TestValue) / float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -186,7 +186,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Mod(ReducedToken left, ReducedToken right)
+        public SemanticToken Mod(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -202,7 +202,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) % int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,

@@ -7,6 +7,9 @@ using Language.Semantic.Tree;
 
 namespace Language.Semantic
 {
+    /// <summary>
+    /// Validador semantico
+    /// </summary>
     public class SemanticChecker
     {
         public void Parse(List<List<Token>> tokens)
@@ -32,9 +35,7 @@ namespace Language.Semantic
             });
 
             foreach (var line in tokens)
-            {
                 new Root().Validate(0, line, scopes);
-            }
 
             if (!scopes.SelectMany(x => x.Variables).Any(x => x.Name == "main" && x.Type == TokenType.FUNCTION))
                 throw new SemanticException($"No main founded", null, null);

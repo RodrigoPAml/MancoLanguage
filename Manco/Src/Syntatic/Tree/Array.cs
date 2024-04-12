@@ -26,7 +26,7 @@ namespace Language.Syntatic.Tree
             if (position != 3)
                 throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.ArrayDeclaration);
 
-            if (tokens[3].Type != TokenType.INTEGER_VAL && tokens[3].Type != TokenType.IDENTIFIER)
+            if (tokens[3].Type != TokenType.INTEGER_VAL)
                 throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.ArrayDeclaration);
 
             if(int.Parse(tokens[3].Content) == 0)

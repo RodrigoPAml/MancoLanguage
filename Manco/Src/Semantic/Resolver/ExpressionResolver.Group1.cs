@@ -11,9 +11,9 @@ namespace Language.Semantic.Resolver
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        public List<ReducedToken> ResolvePriorityTokensGroup1(List<ReducedToken> tokens)
+        public List<SemanticToken> ResolvePriorityTokensGroup1(List<SemanticToken> tokens)
         {
-            List<ReducedToken> resolved = new List<ReducedToken>();
+            List<SemanticToken> resolved = new List<SemanticToken>();
 
             TokenType? operation = null;
 
@@ -53,18 +53,21 @@ namespace Language.Semantic.Resolver
             return ResolvePriorityTokensGroup12(resolved);
         }
 
-        private List<ReducedToken> ResolvePriorityTokensGroup12(List<ReducedToken> tokens)
+        /// <summary>
+        /// Resolve tokens * / % GRUPO 1
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
+        private List<SemanticToken> ResolvePriorityTokensGroup12(List<SemanticToken> tokens)
         {
-            List<ReducedToken> resolved = new List<ReducedToken>();
+            List<SemanticToken> resolved = new List<SemanticToken>();
 
             TokenType? operation = null;
 
-            // Resolve division an multiplication first
             foreach (var token in tokens)
             {
                 switch (token.Type)
                 {
-                    // Operators
                     case TokenType.PERCENTAGE:
                         operation = token.Type;
                         break;

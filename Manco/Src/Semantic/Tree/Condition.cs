@@ -26,7 +26,7 @@ namespace Language.Semantic.Tree
             var result = expr.GetResult();
 
             if(result != VariableType.Boolean)
-                throw new SemanticException($"Expression type {result} is not valid with expected type {VariableType.Boolean}", tokens[position - 1], ErrorCode.Conditions);
+                throw new SemanticException($"Expression of conditional is expected to be boolean but got {result}", tokens[position - 1], ErrorCode.Conditions);
         }
     }
 }

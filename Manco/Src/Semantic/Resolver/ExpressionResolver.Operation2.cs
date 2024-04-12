@@ -13,7 +13,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Add(ReducedToken left, ReducedToken right)
+        public SemanticToken Add(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -29,7 +29,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) + int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -42,7 +42,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) + float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -65,7 +65,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (float.Parse(left.TestValue) + int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -76,9 +76,9 @@ namespace Language.Semantic.Resolver
                             case TokenType.DECIMAL_VAR:
                             case TokenType.ARR_INDEX_DECIMAL:
                                 {
-                                    var result = (int.Parse(left.TestValue) + float.Parse(right.TestValue)).ToString();
+                                    var result = (float.Parse(left.TestValue) + float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -98,21 +98,21 @@ namespace Language.Semantic.Resolver
                         switch (right.Type)
                         {
                             case TokenType.STRING_VAL:
-                                return new ReducedToken()
+                                return new SemanticToken()
                                 {
                                     TestValue = result,
                                     Content = result,
                                     Type = TokenType.STRING_VAL
                                 };
                             case TokenType.STR_VAR:
-                                return new ReducedToken()
+                                return new SemanticToken()
                                 {
                                     TestValue = result,
                                     Content = result,
                                     Type = TokenType.STRING_VAL
                                 };
                             case TokenType.ARR_INDEX_STRING:
-                                return new ReducedToken()
+                                return new SemanticToken()
                                 {
                                     TestValue = result,
                                     Content = result,
@@ -133,7 +133,7 @@ namespace Language.Semantic.Resolver
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ReducedToken Sub(ReducedToken left, ReducedToken right)
+        public SemanticToken Sub(SemanticToken left, SemanticToken right)
         {
             switch (left.Type)
             {
@@ -149,7 +149,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) - int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -162,7 +162,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) - float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -185,7 +185,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (float.Parse(left.TestValue) - int.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,
@@ -198,7 +198,7 @@ namespace Language.Semantic.Resolver
                                 {
                                     var result = (int.Parse(left.TestValue) - float.Parse(right.TestValue)).ToString();
 
-                                    return new ReducedToken()
+                                    return new SemanticToken()
                                     {
                                         TestValue = result,
                                         Content = result,

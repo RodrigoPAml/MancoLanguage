@@ -71,7 +71,6 @@ namespace Language.Semantic.Tree
 
                     // Valida expressão do print
                     expr.Validate(0, group, scopes);
-                    expr.GetResult();
                 }
                 else
                 {
@@ -83,7 +82,7 @@ namespace Language.Semantic.Tree
 
                     var result = expr.GetResult();
 
-                    if (result != expectedResult)
+                    if (!expr.IsResultValid(expectedResult))
                         throw new SemanticException($"Expression type {result} is not valid with expected function type {expectedResult}", tokens[position - 1], ErrorCode.FunctionCall);
                 }
 

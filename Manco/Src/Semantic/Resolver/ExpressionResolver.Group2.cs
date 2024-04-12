@@ -11,25 +11,15 @@ namespace Language.Semantic.Resolver
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        public List<ReducedToken> ResolvePriorityTokensGroup2(List<ReducedToken> tokens)
+        public List<SemanticToken> ResolvePriorityTokensGroup2(List<SemanticToken> tokens)
         {
-            List<ReducedToken> resolved = new List<ReducedToken>();
+            List<SemanticToken> resolved = new List<SemanticToken>();
             TokenType? operation = null;
-
-            if (tokens[0].Type == TokenType.MINUS)
-            {
-                tokens.Insert(0, new ReducedToken()
-                {
-                    Content = "0",
-                    Type = TokenType.INTEGER_VAL,
-                });
-            }
 
             foreach (var token in tokens)
             {
                 switch (token.Type)
                 {
-                    // Operators
                     case TokenType.PLUS:
                     case TokenType.MINUS:
                         operation = token.Type;

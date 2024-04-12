@@ -22,7 +22,7 @@ namespace Language.Semantic.Tree
             var result = expr.GetResult();
 
             if(result != VariableType.Boolean)
-                throw new SemanticException($"Expression type {result} is not valid with expected type {VariableType.Boolean}", tokens[position - 1], ErrorCode.FunctionCall);
+                throw new SemanticException($"While expect boolean return in experssion but got {result}", tokens[position - 1], ErrorCode.FunctionCall);
         }
     }
 }

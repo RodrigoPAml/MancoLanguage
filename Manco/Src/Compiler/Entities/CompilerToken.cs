@@ -1,0 +1,40 @@
+﻿using Language.Lexer.Entities;
+
+namespace Language.Compiler.Entities
+{
+    /// <summary>
+    /// Token formado por um ou mais tokens para simplificação da compilação
+    /// </summary>
+    public class CompilerToken : Token
+    {
+        /// <summary>
+        /// Variavel relacionada a token
+        /// </summary>
+        public Variable? Variable { get; set; } = null;
+
+        /// <summary>
+        /// Se é array
+        /// </summary>
+        public bool IsArray { get; set; } = false;
+
+        /// <summary>
+        /// Onde na stack essa variavel esta guardada
+        /// </summary>
+        public int StackPos = -1;
+
+        /// <summary>
+        /// Onde na stack essa variavel esta guardada (endereco guardado)
+        /// </summary>
+        public int StackRegisterMemory = -1;
+
+        /// <summary>
+        /// Variavel de indice, usualmente usado para acesso por indice de array na stack
+        /// </summary>
+        public Variable? IndexVariable = null;
+
+        /// <summary>
+        /// Tamamho da stack que ocupa
+        /// </summary>
+        public int StackSize = -1;
+    }
+}

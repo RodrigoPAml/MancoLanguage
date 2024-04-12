@@ -15,7 +15,7 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (position >= tokens.Count)
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.Expression);
+                throw new SyntaxException($"Expression with empty body not allowed", tokens[position - 1], ErrorCode.Expression);
 
             int delimiterCount = 0;
             bool isPreviousIdentifier = false;
@@ -47,7 +47,7 @@ namespace Language.Syntatic.Tree
                                 case TokenType.MINUS:
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in expression", token, ErrorCode.Expression);
+                                    throw new SyntaxException($"Element {token} forms an invalid expression", token, ErrorCode.Expression);
                             }
                             break;
                         }
@@ -57,7 +57,7 @@ namespace Language.Syntatic.Tree
                             {
                                 case TokenType.OPEN_BRACKET:
                                     if(!isPreviousIdentifier)
-                                        throw new SyntaxException($"Unexpected token {token} in expression", token, ErrorCode.Expression);
+                                        throw new SyntaxException($"Element {token} forms an invalid expression", token, ErrorCode.Expression);
                                     isPreviousIdentifier = false;
                                     state = ExpressionState.ArrayAccess;
                                     break;
@@ -82,7 +82,7 @@ namespace Language.Syntatic.Tree
                                     delimiterCount--;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in expression", token, ErrorCode.Expression);
+                                    throw new SyntaxException($"Element {token} forms an invalid expression", token, ErrorCode.Expression);
                             }
                             break;
                         }
@@ -94,7 +94,7 @@ namespace Language.Syntatic.Tree
                                 state = ExpressionState.ArrayEnd;
                                 break;
                             default:
-                                throw new SyntaxException($"Unexpected token {token} in expression", token, ErrorCode.Expression);
+                                throw new SyntaxException($"Element {token} forms an invalid expression", token, ErrorCode.Expression);
                         }
                         break;
                     case ExpressionState.ArrayEnd:
@@ -105,7 +105,7 @@ namespace Language.Syntatic.Tree
                                 state = ExpressionState.Operator;
                                 break;
                             default:
-                                throw new SyntaxException($"Unexpected token {token} in expression", token, ErrorCode.Expression);
+                                throw new SyntaxException($"Element {token} forms an invalid expression", token, ErrorCode.Expression);
                         }
                         break;
                 }
@@ -123,13 +123,13 @@ namespace Language.Syntatic.Tree
             };
 
             if (state == ExpressionState.String)
-                throw new SyntaxException($"Unterminated string", tokens.Last(), ErrorCode.Expression);
+                throw new SyntaxException($"Expression with unterminated string", tokens.Last(), ErrorCode.Expression);
 
             if (!endTokensAllowed.Contains(tokens.Last().Type))
-                throw new SyntaxException($"Missing element in expression", tokens.Last(), ErrorCode.Expression);
+                throw new SyntaxException($"Expression not allowed to end with element", tokens.Last(), ErrorCode.Expression);
 
             if (delimiterCount != 0)
-                throw new SyntaxException($"Missing open or close in expression", tokens.Last(), ErrorCode.Expression);
+                throw new SyntaxException($"Expression with missing CLOSE or OPEN elements", tokens.Last(), ErrorCode.Expression);
         }
 
         internal enum ExpressionState

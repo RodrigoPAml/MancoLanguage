@@ -20,7 +20,7 @@ namespace Language.Semantic.Tree
                     new Name().Validate(position + 1, tokens, scopes);
                     break;
                 default:
-                    throw new SemanticException($"Invalid type at {tokens[position]}", tokens[position], ErrorCode.Type);
+                    throw new SemanticException($"Invalid element after type, expected IDENTIFIER but got at {tokens[position]}", tokens[position], ErrorCode.Type);
             }
         }
     }

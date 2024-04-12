@@ -28,10 +28,12 @@ namespace Language.Lexer.Entities
                 case MatchType.ExactWithMore:
                     _match = new Regex($"^{match}");
                     break;
-                case MatchType.String:
-                    _match = new Regex($"^{match}");
-                    break;
             }
+        }
+
+        public MatchType GetMatchType()
+        {
+            return _type;
         }
 
         public Token? Find(string token, int line, int desloc)
@@ -41,9 +43,6 @@ namespace Language.Lexer.Entities
             if (match.Success)
             {
                 string result = match.Groups[0].Value;
-
-                if (_type == MatchType.String)
-                    result = result.Substring(1, result.Length - 2); 
 
                 return new Token()
                 {

@@ -6,7 +6,7 @@ using Language.Semantic.Resolver;
 
 namespace Language.Semantic.Tree
 {
-    /// <summary>
+    /// <summary> 
     /// Valida se expressão é valida semanticamente
     /// </summary>
     public class Expression : SemanticTree
@@ -39,7 +39,21 @@ namespace Language.Semantic.Tree
         public VariableType? GetResult()
         { 
             return _result; 
-        }    
+        }
+
+        public bool IsResultValid(VariableType expectedResult)
+        {
+            switch(expectedResult)
+            {
+                case VariableType.String:
+                    return (_result == VariableType.Integer || _result == VariableType.String);
+                case VariableType.Integer:
+                case VariableType.Decimal:
+                    return (_result == VariableType.Integer || _result == VariableType.Decimal);
+                default:
+                    return _result == expectedResult;
+            }
+        }
 
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {

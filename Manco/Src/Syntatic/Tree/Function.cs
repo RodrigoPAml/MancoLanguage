@@ -16,11 +16,11 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (position >= tokens.Count)
-                throw new SyntaxException($"Invalid token {tokens[position - 1]}", tokens[position - 1], ErrorCode.FunctionDeclaration);
+                throw new SyntaxException($"Unexpected token in function decleration", tokens[position - 1], ErrorCode.FunctionDeclaration);
 
             // Função deve sempre estar no escopo global
             if (scopes.First().Type != ScopeType.Global)
-                throw new SyntaxException($"Invalid token {tokens[position]} in this scope", tokens[position], ErrorCode.FunctionDeclaration);
+                throw new SyntaxException($"Function declaration must be in global scope", tokens[position], ErrorCode.FunctionDeclaration);
 
             FunctionState state = FunctionState.FunctionName;
 
@@ -40,7 +40,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.Open;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Expecintg IDENTIFIER but got element {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -52,7 +52,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.FirstVariableType;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Expecintg OPEN but got element {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -73,7 +73,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.VariableName;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Unexpected element {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -91,7 +91,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.VariableName;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Unexpected element {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -103,7 +103,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.Comma;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Expected IDENTIFIER but got {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -121,7 +121,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.ArrayClose;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Unexpected element  {token} in function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -133,7 +133,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.ArrayPosClose;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Unexpected element {token} in array of function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -148,7 +148,7 @@ namespace Language.Syntatic.Tree
                                     state = FunctionState.VariableType;
                                     break;
                                 default:
-                                    throw new SyntaxException($"Unexpected token {token} in function declaration", token, ErrorCode.FunctionDeclaration);
+                                    throw new SyntaxException($"Unexpected element {token} in array of function declaration", token, ErrorCode.FunctionDeclaration);
                             }
                             break;
                         }
@@ -163,7 +163,7 @@ namespace Language.Syntatic.Tree
             }
 
             if (state != FunctionState.FunctionEnd)
-                throw new SyntaxException($"Unexpected function declaration", tokens.Last(), ErrorCode.FunctionDeclaration);
+                throw new SyntaxException($"Unexpected end of function declaration", tokens.Last(), ErrorCode.FunctionDeclaration);
         }
 
         internal enum FunctionState

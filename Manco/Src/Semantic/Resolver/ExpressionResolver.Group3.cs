@@ -11,9 +11,9 @@ namespace Language.Semantic.Resolver
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        public List<ReducedToken> ResolvePriorityTokensGroup3(List<ReducedToken> tokens)
+        public List<SemanticToken> ResolvePriorityTokensGroup3(List<SemanticToken> tokens)
         {
-            List<ReducedToken> resolved = new List<ReducedToken>();
+            List<SemanticToken> resolved = new List<SemanticToken>();
             TokenType? operation = null;
 
             foreach (var token in tokens)
