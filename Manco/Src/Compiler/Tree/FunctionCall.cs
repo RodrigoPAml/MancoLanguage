@@ -89,7 +89,7 @@ namespace Language.Compiler.Tree
                     expr.Validate(0, group, scopes, info);
                     var result = expr.GetResult();
 
-                    if(result?.Type == TokenType.INTEGER_VAL)
+                    if(result?.Type == TokenType.INTEGER_VAL || result?.Type == TokenType.BOOL_VAL)
                     {
                         info.Lines.Add("jal #print_int");
                     }

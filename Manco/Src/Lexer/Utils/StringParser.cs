@@ -60,11 +60,15 @@ namespace Language.Lexer.Utils
                 var start = index;
 
                 while (index < _line.Length && !specialChars.Contains(_line[index]))
-                    index++;
-
-                if (_line[index-1] == '"')
                 {
-                    index--;
+                    if (_line[index] == '"')
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        index++;
+                    }
                 }
 
                 yield return (_line.Substring(start, index - start), start);

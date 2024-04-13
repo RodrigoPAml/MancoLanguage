@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AssemblerSimulator\AssemblerEmulator.csproj" />
     <ProjectReference Include="..\Manco\Manco.csproj" />
   </ItemGroup>
 

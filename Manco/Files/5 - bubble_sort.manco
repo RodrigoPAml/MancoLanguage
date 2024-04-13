@@ -1,0 +1,50 @@
+-- Programa que executa bubble sort sobre um array de inteiros
+function bubble_sort(integer arr<>, integer n)
+    bool swapped = true
+    while swapped
+        swapped = false
+        integer i = 0
+        while i < n - 1
+            integer idx = i + 1
+            if arr[i] > arr[idx]
+                integer prev = arr[i]
+                arr[i] = arr[idx]
+                arr[idx] = prev 
+                swapped = true
+            end
+            i = i + 1
+        end
+        n = n - 1
+    end
+end
+
+function fill_arr(integer arr<>, integer n)
+    integer idx = 0
+    while idx < n
+        arr[idx] = n - idx 
+        idx = idx + 1
+    end
+end
+
+function show_arr(integer arr<>, integer n)
+    integer idx = 0
+    while idx < n
+        print(arr[idx])
+        print(" ")
+        idx = idx + 1
+    end
+end
+
+function main()
+     integer arr<5>
+     integer size = 5
+     fill_arr(arr, size)
+
+     print("Array inicial: ")
+     show_arr(arr, size)
+
+     bubble_sort(arr, size)
+
+     print("\nArray sorted: ")
+     show_arr(arr, size)
+end

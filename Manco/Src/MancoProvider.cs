@@ -24,6 +24,20 @@ namespace Manco
             _text = text ?? string.Empty;
         }
 
+        public void Validate()
+        {
+            Lexer lexer = new Lexer();
+            lexer.Parse(_text);
+
+            var tokens = lexer.GetResult();
+
+            SyntaxChecker checker = new SyntaxChecker();
+            checker.Parse(tokens);
+
+            SemanticChecker semanticChecker = new SemanticChecker();
+            semanticChecker.Parse(tokens);
+        }
+
         public List<string> Compile()
         {
             Lexer lexer = new Lexer();

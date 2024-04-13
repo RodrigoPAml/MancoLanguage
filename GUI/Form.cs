@@ -1,5 +1,8 @@
+using AssemblerEmulator;
 using Language.Common.Exceptions;
 using Manco;
+using System.Security.Policy;
+using System.Text;
 using System.Text.RegularExpressions;
 using Timer = System.Windows.Forms.Timer;
 
@@ -18,6 +21,11 @@ namespace GUI
         private Timer _timerCodeVerify = new Timer();
 
         /// <summary>
+        /// Time when last typed
+        /// </summary>
+        private DateTime _lastTyped = DateTime.Now;
+
+        /// <summary>
         /// Opened file
         /// </summary>
         private string _openFile = string.Empty;
@@ -33,6 +41,11 @@ namespace GUI
         private bool _hasCodeError = false;
 
         /// <summary>
+        /// Referencia para formulario
+        /// </summary>
+        private static Form _form = null;
+
+        /// <summary>
         /// The manco language provider
         /// </summary>
         private MancoProvider _provider = new MancoProvider();
@@ -41,10 +54,11 @@ namespace GUI
         {
             InitializeComponent();
 
+            _form = this;
             WindowState = FormWindowState.Maximized;
 
             _timerBeautify = new Timer();
-            _timerBeautify.Interval = 3000;
+            _timerBeautify.Interval = 2000;
             _timerBeautify.Tick += this.Beautify;
             _timerBeautify.Start();
 
@@ -54,15 +68,7 @@ namespace GUI
             _timerCodeVerify.Start();
         }
 
-        private void ButtonRun_Click(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
-        /// <summary>
-        /// Verify code
-        /// </summary>
-        private void VerifyCode(object? sender, EventArgs e)
+        private void btnCompile_Click(object sender, EventArgs e)
         {
             if (_hasCodeError)
                 return;
@@ -73,20 +79,118 @@ namespace GUI
             {
                 listBoxOutput.Items.Clear();
 
-                _provider.SetCode(codeTextBox.Text);
-                textBoxGenerated.Text = string.Join("\n", _provider.Compile().Select(x => x));
+                _provider.SetCode(string.Join('\n', codeTextBox.Text));
+
+                DateTime now = DateTime.Now;
+                textBoxGenerated.Text = string.Join('\n', _provider.Compile().Select(x => x).ToList());
+
+                listBoxOutput.Items.Clear();
+                listBoxOutput.Items.Add($"Code compiled in {(DateTime.Now - now).TotalMilliseconds} ms");
+
+                BeautifyGenerated();
             }
             catch (BaseException bex)
             {
+                listBoxOutput.Items.Clear();
+                listBoxOutput.Items.Add($"Compilation failed: {bex.Message}, Token: {bex.Token}, ErrorType: {bex.Code}");
+            }
+            catch (Exception ex)
+            {
+                listBoxOutput.Items.Clear();
+                listBoxOutput.Items.Add($"Fatal error: {ex.Message}");
+            }
+        }
+
+        private void ButtonRun_Click(object sender, EventArgs e)
+        {
+            if (_hasCodeError)
+                return;
+
+            DateTime now = DateTime.Now;
+
+            listBoxOutput.Items.Clear();
+            listBoxCodeOutput.Clear();
+            _form.listBoxOutput.Items.Add("Executing program");
+
+            Emulator emulator = new Emulator(null, null, OnSyscall);
+
+            emulator.AddInstructions(textBoxGenerated.Text.Split('\n').ToList());
+            
+            try
+            {
+                while (emulator.ExecuteLine())
+                { }
+
+                _form.listBoxCodeOutput.AppendText(Environment.NewLine + "Program exited 0");
+            }
+            catch(Exception ex)
+            {
+                listBoxCodeOutput.AppendText(Environment.NewLine + $"Program exited 1: {ex.Message}");
+            }
+
+            listBoxOutput.Items.Add($"Code executed in {(DateTime.Now - now).TotalMilliseconds} ms");
+        }
+
+        /// <summary>
+        /// When a syscall is made
+        /// </summary>
+        private static void OnSyscall(int code, byte[] value)
+        {
+            if (code == 1)
+            {
+                int integer = BitConverter.ToInt32(value);
+                _form.listBoxCodeOutput.AppendText(integer.ToString());
+            }
+            else if (code == 2)
+            {
+                var fl = BitConverter.ToSingle(value);
+                _form.listBoxCodeOutput.AppendText(fl.ToString());
+            }
+            else if (code == 3)
+            {
+                var fl = Encoding.ASCII.GetString(new byte[] { value[0] });
+                fl = fl.Replace("\n", Environment.NewLine);
+
+                _form.listBoxCodeOutput.AppendText(fl);
+            }
+        }
+
+        /// <summary>
+        /// Verify code
+        /// </summary>
+        private void VerifyCode(object? sender, EventArgs e)
+        {
+            if (!_hasChanged)
+                return;
+            
+            if (_hasCodeError)
+                return;
+
+            if ((DateTime.Now - _lastTyped).TotalSeconds < 3)
+                return;
+
+            try
+            {
+                listBoxOutput.Items.Clear();
+
+                _provider.SetCode(string.Join('\n', codeTextBox.Text));
+                _provider.Validate();
+            }
+            catch (BaseException bex)
+            {
+                textBoxGenerated.Text = "";
+
                 if (bex.Token != null)
-                    HighlightLine(bex.Token.Line-1, bex.Token.Start, bex.Token.End, Color.Red);
+                    HighlightLine(bex.Token.Line - 1, bex.Token.Start, bex.Token.End, Color.Red);
 
                 listBoxOutput.Items.Add($"Message: {bex.Message}, Token: {bex.Token}, ErrorType: {bex.Code}");
                 _hasCodeError = true;
             }
             catch (Exception ex)
             {
-                listBoxOutput.Items.Add($"Erro Fatal: {ex.Message}");
+                textBoxGenerated.Text = "";
+
+                listBoxOutput.Items.Add($"Fatal error: {ex.Message}");
                 _hasCodeError = true;
             }
         }
@@ -138,13 +242,16 @@ namespace GUI
         /// </summary>
         private void richTextBoxCode_TextChanged(object sender, EventArgs e)
         {
+            _lastTyped = DateTime.Now;
             _hasChanged = true;
 
-            if(_hasCodeError)
+            if (_hasCodeError)
                 RemoveHighlight();
 
             _hasCodeError = false;
         }
+
+        #region ColorHighlight
 
         /// <summary>
         /// Put colors on syntax
@@ -154,58 +261,63 @@ namespace GUI
             if (!_hasChanged)
                 return;
 
+            if ((DateTime.Now - _lastTyped).TotalSeconds < 3)
+                return; 
+
+            this.codeTextBox.Visible = false;
             this.codeTextBox.SuspendLayout();
 
-            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange);
+            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
 
-            CheckKeyword("function", Color.DarkBlue);
-            CheckKeyword("end", Color.DarkBlue);
-            CheckKeyword("while", Color.DarkBlue);
-            CheckKeyword("OR", Color.DarkBlue);
-            CheckKeyword("AND", Color.DarkBlue);
-            CheckKeyword("break", Color.DarkBlue);
-            CheckKeyword("continue", Color.DarkBlue);
-            CheckKeyword("break", Color.DarkBlue);
-            CheckKeyword("if", Color.DarkBlue);
-            CheckKeyword("elif", Color.DarkBlue);
-            CheckKeyword("else", Color.DarkBlue);
+            CheckKeyword("function", Color.DarkBlue, codeTextBox);
+            CheckKeyword("end", Color.DarkBlue, codeTextBox);
+            CheckKeyword("while", Color.DarkBlue, codeTextBox);
+            CheckKeyword("or", Color.DarkBlue, codeTextBox);
+            CheckKeyword("and", Color.DarkBlue, codeTextBox);
+            CheckKeyword("break", Color.DarkBlue, codeTextBox);
+            CheckKeyword("continue", Color.DarkBlue, codeTextBox);
+            CheckKeyword("break", Color.DarkBlue, codeTextBox);
+            CheckKeyword("if", Color.DarkBlue, codeTextBox);
+            CheckKeyword("elif", Color.DarkBlue, codeTextBox);
+            CheckKeyword("else", Color.DarkBlue, codeTextBox);
 
-            CheckKeyword("integer", Color.DarkGreen);
-            CheckKeyword("decimal", Color.DarkGreen);
-            CheckKeyword("bool", Color.DarkGreen);
-            CheckKeyword("string", Color.DarkGreen);
-            CheckKeyword("integer&", Color.DarkGreen);
-            CheckKeyword("decimal&", Color.DarkGreen);
-            CheckKeyword("bool&", Color.DarkGreen);
-            CheckKeyword("print", Color.HotPink);
+            CheckKeyword("integer", Color.DarkGreen, codeTextBox);
+            CheckKeyword("decimal", Color.DarkGreen, codeTextBox);
+            CheckKeyword("bool", Color.DarkGreen, codeTextBox);
+            CheckKeyword("string", Color.DarkGreen, codeTextBox);
+            CheckKeyword("integer&", Color.DarkGreen, codeTextBox);
+            CheckKeyword("decimal&", Color.DarkGreen, codeTextBox);
+            CheckKeyword("bool&", Color.DarkGreen, codeTextBox);
+            CheckKeyword("print", Color.HotPink, codeTextBox);
 
-            CheckKeyword(">=", Color.Gray);
-            CheckKeyword("<=", Color.Gray);
-            CheckKeyword(">", Color.Gray);
-            CheckKeyword("<", Color.Gray);
-            CheckKeyword("-", Color.Gray);
-            CheckKeyword("!=", Color.Gray);
-            CheckKeyword("==", Color.Gray);
-            CheckKeyword("=", Color.Gray);
-            CheckKeyword(":", Color.Gray);
-            CheckKeyword(new Regex("\\+"), Color.Gray);
-            CheckKeyword(new Regex("\\/"), Color.Gray);
-            CheckKeyword(new Regex("\\*"), Color.Gray);
-            CheckKeyword(new Regex("\\%"), Color.Gray);
-            CheckKeyword(new Regex("\\("), Color.Gray);
-            CheckKeyword(new Regex("\\)"), Color.Gray);
-            CheckKeyword(new Regex("\\."), Color.Gray);
-            CheckKeyword(new Regex("\\["), Color.Gray);
-            CheckKeyword(new Regex("\\]"), Color.Gray);
+            CheckKeyword(">=", Color.Gray, codeTextBox);
+            CheckKeyword("<=", Color.Gray, codeTextBox);
+            CheckKeyword(">", Color.Gray, codeTextBox);
+            CheckKeyword("<", Color.Gray, codeTextBox);
+            CheckKeyword("-", Color.Gray, codeTextBox);
+            CheckKeyword("!=", Color.Gray, codeTextBox);
+            CheckKeyword("==", Color.Gray, codeTextBox);
+            CheckKeyword("=", Color.Gray, codeTextBox);
+            CheckKeyword(":", Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\+"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\/"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\*"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\%"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\("), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\)"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\."), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\["), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\]"), Color.Gray, codeTextBox);
 
-            CheckKeyword(new Regex("^*--.*"), Color.Gray);
+            CheckKeyword(new Regex("^*--.*"), Color.Gray, codeTextBox);
 
-            CheckKeyword(new Regex("true|false"), Color.HotPink);
-            CheckKeyword(new Regex("[0-9][0-9]*"), Color.DarkOliveGreen);
-            CheckKeyword(new Regex("\\d+\\.\\d+"), Color.DarkOliveGreen);
-            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange);
+            CheckKeyword(new Regex("true|false"), Color.HotPink, codeTextBox);
+            CheckKeyword(new Regex("[0-9][0-9]*"), Color.DarkOliveGreen, codeTextBox);
+            CheckKeyword(new Regex("\\d+\\.\\d+"), Color.DarkOliveGreen, codeTextBox);
+            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
 
             this.codeTextBox.ResumeLayout();
+            this.codeTextBox.Visible = true;
 
             _hasChanged = false;
         }
@@ -215,20 +327,20 @@ namespace GUI
         /// </summary>
         /// <param name="regex"></param>
         /// <param name="color"></param>
-        private void CheckKeyword(Regex regex, Color color)
+        private void CheckKeyword(Regex regex, Color color, RichTextBox textbox)
         {
-            var matches = regex.Matches(this.codeTextBox.Text).ToList();
+            var matches = regex.Matches(textbox.Text).ToList();
 
             foreach (var match in matches)
             {
                 int index = match.Index;
                 int size = match.Length;
-                int selectStart = this.codeTextBox.SelectionStart;
+                int selectStart = textbox.SelectionStart;
 
-                this.codeTextBox.Select(index, size);
-                this.codeTextBox.SelectionColor = color;
-                this.codeTextBox.Select(selectStart, 0);
-                this.codeTextBox.SelectionColor = Color.Black;
+                textbox.Select(index, size);
+                textbox.SelectionColor = color;
+                textbox.Select(selectStart, 0);
+                textbox.SelectionColor = Color.Black;
             }
         }
 
@@ -291,21 +403,101 @@ namespace GUI
         /// </summary>
         /// <param name="word"></param>
         /// <param name="color"></param>
-        private void CheckKeyword(string word, Color color)
+        private void CheckKeyword(string word, Color color, RichTextBox textbox)
         {
-            if (this.codeTextBox.Text.Contains(word))
+            if (textbox.Text.Contains(word))
             {
                 int index = -1;
-                int selectStart = this.codeTextBox.SelectionStart;
+                int selectStart = textbox.SelectionStart;
 
-                while ((index = this.codeTextBox.Text.IndexOf(word, (index + 1))) != -1)
+                while ((index = textbox.Text.IndexOf(word, (index + 1))) != -1)
                 {
-                    this.codeTextBox.Select(index, word.Length);
-                    this.codeTextBox.SelectionColor = color;
-                    this.codeTextBox.Select(selectStart, 0);
-                    this.codeTextBox.SelectionColor = Color.Black;
+                    textbox.Select(index, word.Length);
+                    textbox.SelectionColor = color;
+                    textbox.Select(selectStart, 0);
+                    textbox.SelectionColor = Color.Black;
                 }
             }
         }
+
+        /// <summary>
+        /// Put colors on syntax
+        /// </summary>
+        private void BeautifyGenerated()
+        {
+            this.textBoxGenerated.Visible = false;
+            this.textBoxGenerated.SuspendLayout();
+
+            CheckKeyword("add", Color.Green, textBoxGenerated);
+            CheckKeyword("addf", Color.Green, textBoxGenerated);
+            CheckKeyword("addi", Color.Green, textBoxGenerated);
+            CheckKeyword("addfi", Color.Green, textBoxGenerated);
+            CheckKeyword("sub", Color.Green, textBoxGenerated);
+            CheckKeyword("subf", Color.Green, textBoxGenerated);
+            CheckKeyword("mul", Color.Green, textBoxGenerated);
+            CheckKeyword("mulf", Color.Green, textBoxGenerated);
+            CheckKeyword("muli", Color.Green, textBoxGenerated);
+            CheckKeyword("mulfi", Color.Green, textBoxGenerated);
+            CheckKeyword("div", Color.Green, textBoxGenerated);
+            CheckKeyword("divf", Color.Green, textBoxGenerated);
+
+            CheckKeyword("or", Color.Green, textBoxGenerated);
+            CheckKeyword("xor", Color.Green, textBoxGenerated);
+            CheckKeyword("and", Color.Green, textBoxGenerated);
+            CheckKeyword("not", Color.Green, textBoxGenerated);
+            CheckKeyword("sfl", Color.Green, textBoxGenerated);
+            CheckKeyword("sfr", Color.Green, textBoxGenerated);
+
+            CheckKeyword("jr", Color.Green, textBoxGenerated);
+            CheckKeyword("j", Color.Green, textBoxGenerated);
+            CheckKeyword("beq", Color.Green, textBoxGenerated);
+            CheckKeyword("bne", Color.Green, textBoxGenerated);
+            CheckKeyword("jal", Color.Green, textBoxGenerated);
+
+            CheckKeyword("se", Color.Green, textBoxGenerated);
+            CheckKeyword("sne", Color.Green, textBoxGenerated);
+            CheckKeyword("slt", Color.Green, textBoxGenerated);
+            CheckKeyword("sgt", Color.Green, textBoxGenerated);
+            CheckKeyword("slte", Color.Green, textBoxGenerated);
+            CheckKeyword("sgte", Color.Green, textBoxGenerated);
+            CheckKeyword("sltf", Color.Green, textBoxGenerated);
+            CheckKeyword("sgtf", Color.Green, textBoxGenerated);
+            CheckKeyword("sltof", Color.Green, textBoxGenerated);
+            CheckKeyword("sgtef", Color.Green, textBoxGenerated);
+            CheckKeyword("slt", Color.Green, textBoxGenerated);
+            CheckKeyword("sgt", Color.Green, textBoxGenerated);
+
+            CheckKeyword("lbr", Color.Green, textBoxGenerated);
+            CheckKeyword("lcr", Color.Green, textBoxGenerated);
+            CheckKeyword("lir", Color.Green, textBoxGenerated);
+            CheckKeyword("lfr", Color.Green, textBoxGenerated);
+            CheckKeyword("cfi", Color.Green, textBoxGenerated);
+            CheckKeyword("cif", Color.Green, textBoxGenerated);
+
+            CheckKeyword("lw", Color.Green, textBoxGenerated);
+            CheckKeyword("sw", Color.Green, textBoxGenerated);
+            CheckKeyword("sb", Color.Green, textBoxGenerated);
+            CheckKeyword("lb", Color.Green, textBoxGenerated);
+            CheckKeyword("move", Color.Green, textBoxGenerated);
+
+            CheckKeyword("syscall", Color.HotPink, textBoxGenerated);
+
+            foreach (var register in new Emulator(null, null, null).GetRegisters())
+                CheckKeyword(register.Name, Color.Blue, textBoxGenerated);
+
+            CheckKeyword(new Regex(".*--.*"), Color.DarkGreen, textBoxGenerated);
+            CheckKeyword(":", Color.HotPink, textBoxGenerated);
+
+            CheckKeyword(new Regex("\\s(\\d+)"), Color.Orange, textBoxGenerated);
+            CheckKeyword(new Regex("\\s(\\d+\\.\\d+)"), Color.Orange, textBoxGenerated);
+
+            CheckKeyword(new Regex("\\s(0x[0-9A-Fa-f]+)"), Color.HotPink, textBoxGenerated);
+            CheckKeyword(new Regex("'(.)'"), Color.Brown, textBoxGenerated);
+
+            this.textBoxGenerated.ResumeLayout();
+            this.textBoxGenerated.Visible = true;
+        }
+
+        #endregion
     }
 }
