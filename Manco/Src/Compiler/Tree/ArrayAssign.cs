@@ -78,25 +78,14 @@ namespace Language.Compiler.Tree
             }
 
             // Conversão quando retorno é float para int
-            if (variable.Type == TokenType.INTEGER_DECL && expr.GetResult()?.Type == TokenType.DECIMAL_VAL)
+            if (variable?.Type == TokenType.INTEGER_DECL && expr.GetResult()?.Type == TokenType.DECIMAL_VAL)
                 info.Lines.Add("cfi t0 t0");
 
             // Conversão quando retorno é int pra float
-            if (variable.Type == TokenType.DECIMAL_DECL && expr.GetResult()?.Type == TokenType.INTEGER_VAL)
+            if (variable?.Type == TokenType.DECIMAL_DECL && expr.GetResult()?.Type == TokenType.INTEGER_VAL)
                 info.Lines.Add("cfi t0 t0");
 
             info.Lines.Add($"s{opType} t0 0 t5");
         }
-
-        private void AssignForReference()
-        {
-
-        }
-
-        private void AssignForLocal()
-        {
-
-        }
-
     }
 }
