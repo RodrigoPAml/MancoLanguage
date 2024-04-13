@@ -27,7 +27,7 @@ Error in the editor
 ## Compiled or Interpreted?
 
   The language is compiled into a set of assembly based on the mips architecture, with do not runs on current computers, but runs on my Assembler Simulator (used as a submodule) that
-  i have developed. I choose this type of assembly because already learn it from university. So while the language compiles to assembly, the assembly is getting interpreted, wich is slow.
+  i have developed. I choose this type of assembly because already learn it from university. So while the language compiles to assembly, the assembly is getting interpreted, wich is slow, and also it kinda waits the GUI to render after a syscall, wich make worse, but can be disabled.
 
 ## Compilation Phases
 
