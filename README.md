@@ -19,7 +19,7 @@ Error in the editor
 
 If u are going to build and run the project dont forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
 
-The files examples are on the Manco/Files
+The files examples are on the **Manco/Files**
 
 ## Features
 - Primitive types like integer, decimal, bool and string
