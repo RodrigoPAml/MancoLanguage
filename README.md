@@ -6,7 +6,7 @@ No external tools was used like yacc, bison, etc.
 
 Implemented in C#, with a GUI to interact in Windows Forms.
 
-If u are going to build and run the project dont forget to do git submodule init and git submodule update before that.
+If u are going to build and run the project dont forget to do ´git submodule init´ and ´git submodule update´ before that.
 
 ## Preview
 In the left there is the code, and in the right the assembly generated. The compiler output and program output are in bottom.
