@@ -22,7 +22,7 @@ Error in the editor
 - Strings and list are always passed by reference
 - While loop, if, elif and else
 - Functions do not return values, instead use reference values for return
-- The language only used the stack, no heap is used, wich means no dynamic allocation, and fixed array sizes
+- The language only uses the stack, no heap is used, wich means no dynamic allocation, and fixed array sizes
   
 ## Compiled or Interpreted?
 
