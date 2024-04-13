@@ -47,7 +47,7 @@ Error in the editor
 
 - **Description:** This phase examines the syntactic structure of the program to enforce the language's semantics, including type checking and scope analysis. For example in the syntax phase comparing a integer to a bool is valid, but in this phase is not.
 - **Purpose:** To ensure that the program adheres to the language's semantic rules beyond its syntax.
-- **Implementation Details:** Tokens are parsed, and each line is validated acording to a tree-like structure, also a stack is also used to control the open and close of scopes. But in this phase if validate if the operations make sense. Like if a variable exists, and if the assign values match the expected type.
+- **Implementation Details:** Tokens are parsed, and each line is validated acording to a tree-like structure (FSM), also a stack is also used to control the scopes. But in this phase it validate if the operations make sense. For example: if a variable exists, and if the assign values match the expected type. 
 
 ### 4. Assembly generation (Compilation final phase)
 
