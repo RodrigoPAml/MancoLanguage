@@ -30,7 +30,9 @@ The files examples are on the **Manco/Files**
 - Functions do not return values, instead use reference values for return
 - The language only uses the stack, no heap is used, which means no dynamic allocation, and fixed array sizes
 - The language syntax is based on lua
-  
+- 
+Program 1
+
 ```lua
 -- A sum program, that passes a number with reference for the returned value
 
@@ -51,6 +53,8 @@ Output
 The sum of 1 + 3 is 4
 Program exited 0
 ```
+
+Program 2
 
 ```lua
 -- Program that prints pair numbers up to N
