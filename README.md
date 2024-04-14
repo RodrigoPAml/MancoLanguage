@@ -46,6 +46,12 @@ function main()
 end
 ```
 
+Output
+```
+The sum of 1 + 3 is 4
+Program exited 0
+```
+
 ```lua
 -- Program that prints pair numbers up to N
 
@@ -63,6 +69,12 @@ end
 function main()
     pairs(150)     
 end
+```
+
+Output
+```
+30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138 140 142 144 146 148 
+Program exited 0
 ```
 
 ## Compiled or Interpreted?
