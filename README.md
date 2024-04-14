@@ -29,7 +29,22 @@ The files examples are on the **Manco/Files**
 - While loop, if, elif and else
 - Functions do not return values, instead use reference values for return
 - The language only uses the stack, no heap is used, wich means no dynamic allocation, and fixed array sizes
-  
+
+```lua
+-- A sum program, that passes a number with reference for the returned value
+
+function sum(integer a, integer b, integer& ret)
+    ret = a + b
+end
+
+function main()
+    integer ret = 0
+    sum(1, 3, ret)     
+    print("The sum of 1 + 3 is ")
+    print(ret)
+end
+```
+
 ## Compiled or Interpreted?
 
   The language is compiled into a set of assembly based on the mips architecture, with do not runs on current computers, but runs on my Assembler Simulator (used as a submodule) that
