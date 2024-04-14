@@ -29,7 +29,8 @@ The files examples are on the **Manco/Files**
 - While loop, if, elif and else
 - Functions do not return values, instead use reference values for return
 - The language only uses the stack, no heap is used, which means no dynamic allocation, and fixed array sizes
-
+- The language syntax is based on lua
+- 
 ```lua
 -- A sum program, that passes a number with reference for the returned value
 
@@ -42,6 +43,25 @@ function main()
     sum(1, 3, ret)     
     print("The sum of 1 + 3 is ")
     print(ret)
+end
+```
+
+```lua
+-- Program that prints pair numbers up to N
+
+function pairs(integer n)
+    integer idx = 2
+    while idx < n
+        if idx % 2 == 0
+            print(idx)
+            print(" ")
+        end
+        idx = idx + 1
+    end
+end
+
+function main()
+    pairs(150)     
 end
 ```
 
