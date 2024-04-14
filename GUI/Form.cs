@@ -67,7 +67,7 @@ namespace GUI
             _timerBeautify.Start();
 
             _timerCodeVerify = new Timer();
-            _timerCodeVerify.Interval = 500;
+            _timerCodeVerify.Interval = 200;
             _timerCodeVerify.Tick += this.VerifyCode;
             _timerCodeVerify.Start();
         }
@@ -167,9 +167,6 @@ namespace GUI
             if (!_hasChanged)
                 return;
             
-            if (_hasCodeError)
-                return;
-
             if ((DateTime.Now - _lastTyped).TotalSeconds < 3)
                 return;
 
@@ -220,6 +217,9 @@ namespace GUI
                 codeTextBox.Text = fileContent;
                 codeTextBox.ResumeLayout();
                 MessageBox.Show("Opened with success");
+
+                _lastTyped = DateTime.Now.AddSeconds(-4);
+                Beautify(null, null);
             }
         }
 
@@ -251,8 +251,8 @@ namespace GUI
             _lastTyped = DateTime.Now;
             _hasChanged = true;
 
-            if (_hasCodeError)
-                RemoveHighlight();
+            if(_hasCodeError)
+                listBoxOutput.Items.Clear();
 
             _hasCodeError = false;
         }
@@ -271,8 +271,9 @@ namespace GUI
                 return;
 
             if ((DateTime.Now - _lastTyped).TotalSeconds < 3)
-                return; 
+                return;
 
+            int originalCaretPosition = codeTextBox.SelectionStart;
             this.codeTextBox.Visible = false;
             this.codeTextBox.SuspendLayout();
 
@@ -325,9 +326,16 @@ namespace GUI
             CheckKeyword(new Regex("\\d+\\.\\d+"), Color.DarkOliveGreen, codeTextBox);
             CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
 
+            if (originalCaretPosition < codeTextBox.TextLength)
+            {
+                codeTextBox.SelectionStart = originalCaretPosition;
+                codeTextBox.SelectionLength = 0;
+            }
+
             this.codeTextBox.ResumeLayout();
             this.codeTextBox.Visible = true;
-
+            this.codeTextBox.Focus();
+            
             _hasChanged = false;
         }
 
@@ -404,6 +412,7 @@ namespace GUI
 
             codeTextBox.SelectionStart = 0;
             codeTextBox.SelectionLength = codeTextBox.Text.Length;
+
             codeTextBox.SelectionBackColor = Color.Transparent;
             codeTextBox.SelectionLength = 0;
 
