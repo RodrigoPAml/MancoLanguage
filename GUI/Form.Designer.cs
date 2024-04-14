@@ -34,6 +34,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.ButtonRun = new System.Windows.Forms.Button();
+            this.buttonDisableHighlight = new System.Windows.Forms.Button();
             this.codeTextBox = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.listBoxOutput = new System.Windows.Forms.ListBox();
@@ -80,6 +81,7 @@
             this.tableLayoutPanel2.Controls.Add(this.buttonSave, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.buttonLoad, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.ButtonRun, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.buttonDisableHighlight, 4, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
@@ -127,6 +129,17 @@
             this.ButtonRun.UseVisualStyleBackColor = true;
             this.ButtonRun.Click += new System.EventHandler(this.ButtonRun_Click);
             // 
+            // buttonDisableHighlight
+            // 
+            this.buttonDisableHighlight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonDisableHighlight.Location = new System.Drawing.Point(450, 3);
+            this.buttonDisableHighlight.Name = "buttonDisableHighlight";
+            this.buttonDisableHighlight.Size = new System.Drawing.Size(117, 23);
+            this.buttonDisableHighlight.TabIndex = 5;
+            this.buttonDisableHighlight.Text = "Disable Highlight";
+            this.buttonDisableHighlight.UseVisualStyleBackColor = true;
+            this.buttonDisableHighlight.Click += new System.EventHandler(this.buttonDisableHighlight_Click);
+            // 
             // codeTextBox
             // 
             this.codeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -146,8 +159,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 71.42857F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.57143F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.13844F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.86156F));
             this.tableLayoutPanel4.Controls.Add(this.listBoxOutput, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.listBoxCodeOutput, 1, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 417);
@@ -167,7 +180,7 @@
             this.listBoxOutput.ItemHeight = 30;
             this.listBoxOutput.Location = new System.Drawing.Point(3, 3);
             this.listBoxOutput.Name = "listBoxOutput";
-            this.listBoxOutput.Size = new System.Drawing.Size(401, 94);
+            this.listBoxOutput.Size = new System.Drawing.Size(370, 94);
             this.listBoxOutput.TabIndex = 2;
             // 
             // listBoxCodeOutput
@@ -176,10 +189,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxCodeOutput.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listBoxCodeOutput.Location = new System.Drawing.Point(410, 3);
+            this.listBoxCodeOutput.Location = new System.Drawing.Point(379, 3);
             this.listBoxCodeOutput.Multiline = true;
             this.listBoxCodeOutput.Name = "listBoxCodeOutput";
-            this.listBoxCodeOutput.Size = new System.Drawing.Size(157, 123);
+            this.listBoxCodeOutput.Size = new System.Drawing.Size(188, 123);
             this.listBoxCodeOutput.TabIndex = 3;
             // 
             // tableLayoutPanel3
@@ -244,5 +257,6 @@
         private Button btnCompile;
         private TableLayoutPanel tableLayoutPanel4;
         private TextBox listBoxCodeOutput;
+        private Button buttonDisableHighlight;
     }
 }

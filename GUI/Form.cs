@@ -1,7 +1,6 @@
 using AssemblerEmulator;
 using Language.Common.Exceptions;
 using Manco;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using Timer = System.Windows.Forms.Timer;
@@ -39,6 +38,11 @@ namespace GUI
         /// If code hasError
         /// </summary>
         private bool _hasCodeError = false;
+
+        /// <summary>
+        /// To disable text highlighting
+        /// </summary>
+        private bool _disableHighlighting = false;
 
         /// <summary>
         /// Referencia para formulario
@@ -171,13 +175,13 @@ namespace GUI
 
             try
             {
-                listBoxOutput.Items.Clear();
-
                 _provider.SetCode(string.Join('\n', codeTextBox.Text));
                 _provider.Validate();
             }
             catch (BaseException bex)
             {
+                listBoxOutput.Items.Clear();
+
                 textBoxGenerated.Text = "";
 
                 if (bex.Token != null)
@@ -188,6 +192,8 @@ namespace GUI
             }
             catch (Exception ex)
             {
+                listBoxOutput.Items.Clear();
+
                 textBoxGenerated.Text = "";
 
                 listBoxOutput.Items.Add($"Fatal error: {ex.Message}");
@@ -258,6 +264,9 @@ namespace GUI
         /// </summary>
         private void Beautify(object? sender, EventArgs e)
         {
+            if (_disableHighlighting)
+                return;
+
             if (!_hasChanged)
                 return;
 
@@ -353,6 +362,9 @@ namespace GUI
         /// <param name="color"></param>
         private void HighlightLine(int line, int start, int end, Color color)
         {
+            if (_disableHighlighting)
+                return;
+
             if (line < 0)
                 return;
 
@@ -382,6 +394,9 @@ namespace GUI
         /// </summary>
         private void RemoveHighlight()
         {
+            if (_disableHighlighting)
+                return;
+
             this.codeTextBox.SuspendLayout();
 
             int originalSelectionStart = codeTextBox.SelectionStart;
@@ -425,6 +440,9 @@ namespace GUI
         /// </summary>
         private void BeautifyGenerated()
         {
+            if (_disableHighlighting)
+                return;
+
             this.textBoxGenerated.Visible = false;
             this.textBoxGenerated.SuspendLayout();
 
@@ -496,6 +514,20 @@ namespace GUI
 
             this.textBoxGenerated.ResumeLayout();
             this.textBoxGenerated.Visible = true;
+        }
+
+        private void buttonDisableHighlight_Click(object sender, EventArgs e)
+        {
+            this._disableHighlighting = !this._disableHighlighting;
+
+            if (this._disableHighlighting)
+            {
+                this.buttonDisableHighlight.Text = "Enable Highlight";
+            }
+            else
+            {
+                this.buttonDisableHighlight.Text = "Disable Highlight";
+            }
         }
 
         #endregion
