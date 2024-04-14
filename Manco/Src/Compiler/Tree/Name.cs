@@ -25,6 +25,9 @@ namespace Language.Compiler.Tree
             // Cai aqui quando se esta atribuindo a uma variavel existente ou chamada de função
             if(_isAttribution)
             {
+                info.Lines.Add(string.Empty);
+                info.Lines.Add($"-- Instrução {string.Join(' ', tokens.Select(x => x.Content.Replace("\n", "\\n")))}");
+
                 switch (tokens[position].Type)
                 {
                     // Valida Chamada de função
@@ -122,6 +125,7 @@ namespace Language.Compiler.Tree
             if (variable?.Type == TokenType.DECIMAL_DECL && returnedType == TokenType.INTEGER_VAL)
                 info.Lines.Add("cfi t0 t0");
 
+            // Quando passado o endereço da variave
             if(variable?.AddressStackPos != -1)
             {
                 info.Lines.Add($"lw t5 {-variable!.AddressStackPos - info.StackPointer} sp");
@@ -141,7 +145,7 @@ namespace Language.Compiler.Tree
         {
             info.Lines.Add("lir t0 0");
 
-            foreach (var i in Enumerable.Range(0, size/sizeItem))
+            foreach (var _ in Enumerable.Range(0, size/sizeItem))
             {
                 if(sizeItem == 4)
                 {

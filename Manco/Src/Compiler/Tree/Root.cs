@@ -36,8 +36,6 @@ namespace Language.Compiler.Tree
                     new End().Validate(position + 1, tokens, scopes, info);
                     break;
                 case TokenType.IDENTIFIER:
-                    info.Lines.Add(string.Empty);
-                    info.Lines.Add($"-- Instrução {string.Join(' ', tokens.Select(x => x.Content.Replace("\n", "\\n")))}");
                     new Name(true).Validate(position + 1, tokens, scopes, info);
                     break;
                 case TokenType.INTEGER_DECL:
@@ -54,8 +52,9 @@ namespace Language.Compiler.Tree
                 case TokenType.CONTINUE:
                     new Continue().Validate(position + 1, tokens, scopes, info);
                     break;
-                    /*case TokenType.RETURN:
-                        break;*/
+                case TokenType.RETURN:
+                    new Return().Validate(position + 1, tokens, scopes, info);
+                    break;
             }
         }
     }

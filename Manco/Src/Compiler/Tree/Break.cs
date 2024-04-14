@@ -6,7 +6,7 @@ using Language.Compiler.Enums;
 namespace Language.Compiler.Tree
 {
     /// <summary>
-    /// Compila continue de loops
+    /// Compila break de loops
     /// </summary>
     public class Break : CompilerTree
     {

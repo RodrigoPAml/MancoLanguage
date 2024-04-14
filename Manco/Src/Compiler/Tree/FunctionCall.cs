@@ -22,9 +22,6 @@ namespace Language.Compiler.Tree
 
             var functionName = tokens[position - 1].Content;
 
-            if (functionName == "main")
-                throw new CompilerException($"Function main can't be called", tokens[position], ErrorCode.FunctionCall);
-
             var functionVar = scopes
                 .SelectMany(x => x.Variables)
                 .Where(x => x.Name == functionName && x.Type == TokenType.FUNCTION)
@@ -35,12 +32,8 @@ namespace Language.Compiler.Tree
                 .Where(x => x.Type != TokenType.FUNCTION)
                 .ToList();
 
-            if (functionVar == null)
-                throw new CompilerException($"Function {functionName} was not founded in the global scope", tokens[position], ErrorCode.FunctionCall);
-
-
             // Função sem argumentos 
-            if (currentTokens.Count() == 2 && functionVar.ChildVariables.Count == 0)
+            if (currentTokens.Count() == 2 && functionVar?.ChildVariables.Count == 0)
             {
                 if (functionName != "main" && functionName != "print")
                     info.Lines.Add($"jal {functionName}");
@@ -54,16 +47,12 @@ namespace Language.Compiler.Tree
                     .ToList()
             );
 
-            // Não bate número de argumentos
-            if (groups.Count != functionVar.ChildVariables.Count)
-                throw new CompilerException($"Function {functionName} expects {functionVar.ChildVariables.Count} arguments but recieved {groups.Count}", tokens[position], ErrorCode.FunctionCall);
-
             var indexVariable = 0;
             var results = new List<Tuple<int, bool>>();
 
             foreach (var group in groups)
             {
-                var functionVariable = functionVar.ChildVariables[indexVariable];
+                var functionVariable = functionVar?.ChildVariables[indexVariable];
                 var restriction = ExpressionRestriction.None;
 
                 List<TokenType> referenceTypes = new List<TokenType>()
@@ -74,13 +63,14 @@ namespace Language.Compiler.Tree
                 };
 
                 // Por referencia
-                if (referenceTypes.Contains(functionVariable.Type))
+                if (referenceTypes.Contains(functionVariable!.Type))
                     restriction = ExpressionRestriction.SingleReferenceVariable;
 
                 // Quando é array é referencia sempre
                 if (functionVariable.IsArray)
                     restriction = ExpressionRestriction.ArrayReferenceVariable;
 
+                // Função especial do sistema, o print
                 if (functionName == "print")
                 {
                     var expr = new Expression();
@@ -113,7 +103,7 @@ namespace Language.Compiler.Tree
                         var variableRef = variables.Find(x => x.Name == group[0].Content);
 
                         if (variableRef != null && variableRef.FromFunction)
-                            results.Add(new Tuple<int, bool>(-groups.Count()/(indexVariable+1)* 4, true));
+                            results.Add(new Tuple<int, bool>(-groups.Count()/(indexVariable+1)* 4, true)); // -4, -8, -12 (reference variables passed to function)
                         else
                             results.Add(new Tuple<int, bool>(variableRef?.StackPos ?? 0, false));
                     }
@@ -121,6 +111,7 @@ namespace Language.Compiler.Tree
                     {
                         info.Lines.Add(string.Empty);
                         info.Lines.Add($"-- Criando valor para enviar em nome de '{functionVariable.Name}'");
+
                         var expectedResult = TypeConverter.ExpectedResult(functionVariable.Type, tokens[position]);
                         var expr = new Expression(restriction);
                         expr.Validate(0, group, scopes, info);
@@ -136,12 +127,12 @@ namespace Language.Compiler.Tree
             indexVariable = 0;
             foreach (var result in results)
             {
-                var functionVariable = functionVar.ChildVariables[indexVariable];
+                var functionVariable = functionVar?.ChildVariables[indexVariable];
 
                 if (functionName != "print")
                 {
                     info.Lines.Add(string.Empty);
-                    info.Lines.Add($"-- Guardando endereço para variavel '{functionVariable.Name}' para chamada de função");
+                    info.Lines.Add($"-- Guardando endereço para variavel '{functionVariable?.Name}' para chamada de função");
                     info.Lines.Add("move t6 sp");
                     info.Lines.Add($"addi t6 t6 {result.Item1 - info.StackPointer}");
                     

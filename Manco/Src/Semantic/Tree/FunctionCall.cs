@@ -1,4 +1,5 @@
 ﻿using Language.Common.Enums;
+using Language.Compiler.Exceptions;
 using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Semantic.Base;
@@ -21,6 +22,10 @@ namespace Language.Semantic.Tree
                 .ToList();
 
             var functionName = tokens[position - 1].Content;
+
+            if (functionName == "main")
+                throw new SemanticException($"Function main can't be called", tokens[position], ErrorCode.FunctionCall);
+
             var functionVar = scopes
                 .SelectMany(x => x.Variables)
                 .Where(x => x.Name == functionName && x.Type == TokenType.FUNCTION)

@@ -22,12 +22,12 @@ namespace Language.Compiler.Tree
             var expectedResult = TypeConverter.ExpectedResult(variable.Type, tokens[position - 1]);
             var expr = new Expression(
                 variable.Type == TokenType.STRING_DECL 
-                    ? ExpressionRestriction.StringArrayIndex // Se for assign de indice em array de string, resultado precisa ser 1 número, ou quantidade de caracter já determinada 
+                    ? ExpressionRestriction.StringArrayIndex
                     : ExpressionRestriction.None,
                   string.Empty
             );
 
-            // Valida expressão da atribuição ao índice
+            // Valida/Comila expressão da atribuição ao índice
             expr.Validate(position+3, tokens, scopes, info);
 
             var indexVariable = scopes

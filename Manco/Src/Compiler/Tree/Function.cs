@@ -30,6 +30,7 @@ namespace Language.Compiler.Tree
             info.Lines.Add($"-- Instrução para função {tokens[position].Content} with id {scope.Id}");
             info.Lines.Add($"{functionName}:");
 
+            // Função main não foi chamada por nenhuma outra, nã oprecisa de return address
             if(functionName != "main")
             {
                 info.Lines.Add($"sw ra 0 sp");
@@ -188,8 +189,11 @@ namespace Language.Compiler.Tree
             {
                 variable.StackPos = 0;
                 variable.Size = -1;
+
+                // Variaveis passada por função sempre terão so endereços na ordem -4, -8, -12... na stack, ante de chamar a função.
                 variable.AddressStackPos = accumulatedStackPos;
-                accumulatedStackPos -= 4;
+
+                accumulatedStackPos -= 4; // Endereço = 4 bytes
 
                 scopes.First().Variables.Add(variable);
                 functionVar.ChildVariables.Add(variable);

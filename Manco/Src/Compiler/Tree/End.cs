@@ -14,6 +14,7 @@ namespace Language.Compiler.Tree
         {
             var removed = scopes.Pop();
 
+            // Fim de scopo de if
             if(removed.Type == ScopeType.If)
             {
                 info.Lines.Add(string.Empty);
@@ -27,6 +28,7 @@ namespace Language.Compiler.Tree
                 info.Lines.Add($"#END_{removed.Id}:");
             }
 
+            // Fim de scopo de else if
             if (removed.Type == ScopeType.ElseIf)
             {
                 info.Lines.Add(string.Empty);
@@ -42,6 +44,7 @@ namespace Language.Compiler.Tree
                 info.Lines.Add($"#END_{removed.Id}:");
             }
 
+            // Fim de scopo do else
             if (removed.Type == ScopeType.Else)
             {
                 info.Lines.Add(string.Empty);
@@ -54,6 +57,7 @@ namespace Language.Compiler.Tree
                 info.Lines.Add($"#ENDALL_{previousScope}:");
             }
 
+            // Fim de scopo do while
             if (removed.Type == ScopeType.Loop)
             {
                 info.Lines.Add(string.Empty);
@@ -64,6 +68,7 @@ namespace Language.Compiler.Tree
                 info.Lines.Add($"#END_LOOP{removed.Id}:");
             }
 
+            // Fim de scopo de uma função
             if (removed.Type == ScopeType.Function)
             {
                 info.Lines.Add(string.Empty);
