@@ -1,0 +1,32 @@
+-- Program that prints prime numbers up to N
+
+function is_prime(integer n, bool& prime)
+   integer idx = 2
+   prime = true
+   while idx < n
+      if n % idx == 0
+          prime = false
+          break
+      end
+      idx = idx + 1
+   end
+end
+
+function show_primes(integer n)
+   integer number = 2
+   bool prime = false
+   while number < n
+      is_prime(number, prime)
+      
+      if prime
+           print(number)
+           print(" ")
+      end
+   
+      number = number + 1
+   end
+end
+
+function main()
+     show_primes(200)
+end 

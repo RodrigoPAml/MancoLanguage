@@ -1,0 +1,4 @@
+-- Simple hello world program in manco language
+function main()
+    print("Hello world") 
+end

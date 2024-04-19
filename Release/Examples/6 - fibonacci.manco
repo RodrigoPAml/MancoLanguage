@@ -1,0 +1,17 @@
+function fibonacci(integer n)
+    integer a = 0
+    integer b = 1
+    integer idx = 0
+    while idx < n
+        print(a)
+        print(" ")
+        integer temp = a + b
+        a = b
+        b = temp
+        idx = idx + 1
+    end
+end
+
+function main()
+    fibonacci(26)
+end

@@ -1,0 +1,19 @@
+-- calculo da raiz quadrada, para testar funcionalidade dos decimais
+
+function sqrt(decimal v, decimal precision, decimal& ret)
+    decimal idx = 0
+    while idx < v
+        decimal res = idx * idx
+        if res > v
+            ret = idx
+            break
+        end
+        idx = idx + precision
+    end
+end
+
+function main()
+    decimal ret = 0
+    sqrt(100, 0.03, ret)
+    print(ret)
+end
