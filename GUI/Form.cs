@@ -258,7 +258,25 @@ namespace GUI
             if(_hasCodeError)
                 listBoxOutput.Items.Clear();
 
+            PutTokens();
+
             _hasCodeError = false;
+        }
+
+        /// <summary>
+        /// Put tokens in the textbox
+        /// </summary>
+        private void PutTokens()
+        {
+            try
+            {
+                _provider.SetCode(string.Join('\n', codeTextBox.Text));
+                textBoxTokens.Text = _provider.GetTokensToString();
+            }
+            catch
+            {
+                textBoxTokens.Text = string.Empty;
+            }
         }
 
         #region ColorHighlight

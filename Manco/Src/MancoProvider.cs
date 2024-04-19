@@ -38,6 +38,26 @@ namespace Manco
             semanticChecker.Parse(tokens);
         }
 
+        public string GetTokensToString()
+        {
+            string result = string.Empty;   
+
+            Lexer lexer = new Lexer();
+            lexer.Parse(_text);
+
+            foreach(var tokens in lexer.GetResult())
+            {
+                foreach(var token in tokens)
+                {
+                    result += token.Type.ToString() + $" ({token.Content}) "; 
+                }
+
+                result += "\n";
+            }
+
+            return result;
+        }
+
         public List<string> Compile()
         {
             Lexer lexer = new Lexer();
