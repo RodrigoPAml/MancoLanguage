@@ -1,0 +1,21 @@
+-- encontra maior decimal dentro do array
+function greater(decimal arr<>, integer size, decimal& gr)
+    integer idx = 0
+    while idx < size
+        if arr[idx] > gr
+            gr = arr[idx]
+        end
+        idx = idx + 1
+    end
+end
+
+function main()
+    decimal arr<3>
+    arr[0] = 1.3
+    arr[1] = 1.4
+    arr[2] = 1.45
+    
+    decimal gr = -1
+    greater(arr, 3, gr)
+    print(gr)
+end

@@ -91,6 +91,7 @@ namespace GUI
                 listBoxOutput.Items.Clear();
                 listBoxOutput.Items.Add($"Code compiled in {(DateTime.Now - now).TotalMilliseconds} ms");
 
+                RemoveHighlight();
                 BeautifyGenerated();
             }
             catch (BaseException bex)
@@ -167,8 +168,11 @@ namespace GUI
             if (!_hasChanged)
                 return;
             
-            if ((DateTime.Now - _lastTyped).TotalSeconds < 3)
+            if ((DateTime.Now - _lastTyped).TotalSeconds < 1)
                 return;
+
+            if(listBoxOutput.Items.Count == 0)
+                RemoveHighlight();
 
             try
             {
@@ -270,7 +274,7 @@ namespace GUI
             if (!_hasChanged)
                 return;
 
-            if ((DateTime.Now - _lastTyped).TotalSeconds < 3)
+            if ((DateTime.Now - _lastTyped).TotalSeconds < 1)
                 return;
 
             int originalCaretPosition = codeTextBox.SelectionStart;

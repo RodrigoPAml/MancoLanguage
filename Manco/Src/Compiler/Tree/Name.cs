@@ -123,7 +123,7 @@ namespace Language.Compiler.Tree
 
             // Conversão quando retorno é int pra float
             if (variable?.Type == TokenType.DECIMAL_DECL && returnedType == TokenType.INTEGER_VAL)
-                info.Lines.Add("cfi t0 t0");
+                info.Lines.Add("cif t0 t0");
 
             // Quando passado o endereço da variave
             if(variable?.AddressStackPos != -1)
@@ -242,7 +242,7 @@ namespace Language.Compiler.Tree
             // Conversão quando retorno é int pra float
             if (variable.Type == TokenType.DECIMAL_DECL && token?.Type == TokenType.INTEGER_VAL)
             {
-                info.Lines.Add("cfi t0 t0");
+                info.Lines.Add("cif t0 t0");
                 info.Lines.Add("sw t0 -4 sp");
             }
 

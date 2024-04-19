@@ -83,7 +83,7 @@ namespace Language.Compiler.Tree
 
             // Conversão quando retorno é int pra float
             if (variable?.Type == TokenType.DECIMAL_DECL && expr.GetResult()?.Type == TokenType.INTEGER_VAL)
-                info.Lines.Add("cfi t0 t0");
+                info.Lines.Add("cif t0 t0");
 
             info.Lines.Add($"s{opType} t0 0 t5");
         }

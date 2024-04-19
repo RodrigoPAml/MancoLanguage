@@ -52,8 +52,8 @@ namespace Language.Lexer
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "\\[", TokenType.OPEN_BRACKET));
             _patterns.Add(new TokenPattern(MatchType.ExactWithMore, "\\]", TokenType.CLOSE_BRACKET));
 
-            _patterns.Add(new TokenPattern(MatchType.Exact, "OR", TokenType.OR));
-            _patterns.Add(new TokenPattern(MatchType.Exact, "AND", TokenType.AND));
+            _patterns.Add(new TokenPattern(MatchType.Exact, "or", TokenType.OR));
+            _patterns.Add(new TokenPattern(MatchType.Exact, "and", TokenType.AND));
 
             _patterns.Add(new TokenPattern(MatchType.Exact, "continue", TokenType.CONTINUE));
             _patterns.Add(new TokenPattern(MatchType.Exact, "break", TokenType.BREAK));

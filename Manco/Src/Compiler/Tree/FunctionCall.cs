@@ -111,10 +111,24 @@ namespace Language.Compiler.Tree
                     {
                         info.Lines.Add(string.Empty);
                         info.Lines.Add($"-- Criando valor para enviar em nome de '{functionVariable.Name}'");
-
+                       
                         var expectedResult = TypeConverter.ExpectedResult(functionVariable.Type, tokens[position]);
                         var expr = new Expression(restriction);
                         expr.Validate(0, group, scopes, info);
+
+                        // Conversão quando retorno é float para int
+                        if (functionVariable?.Type == TokenType.INTEGER_DECL && expr.GetResult()?.Type == TokenType.DECIMAL_VAL)
+                        {
+                            info.Lines.Add("cfi t0 t0");
+                            info.Lines.Add("sw t0 -4 sp");
+                        }
+
+                        // Conversão quando retorno é int pra float
+                        if (functionVariable?.Type == TokenType.DECIMAL_DECL && expr.GetResult()?.Type == TokenType.INTEGER_VAL)
+                        {
+                            info.Lines.Add("cif t0 t0");
+                            info.Lines.Add("sw t0 -4 sp");
+                        }
 
                         results.Add(new Tuple<int, bool>(expr.GetResult()?.StackPos ?? 0, false));
                     }
