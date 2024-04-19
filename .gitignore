@@ -7,3 +7,5 @@
 /Manco/bin/Debug/net6.0
 /GUI/bin/Debug/net6.0-windows
 /GUI/obj
+/GUI/bin/Release/net6.0-windows
+/Manco/bin/Release/net6.0
