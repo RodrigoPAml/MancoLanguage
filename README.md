@@ -23,7 +23,7 @@ If u are going to build and run the project dont forget to do **git submodule in
 
 The files examples are on the **Manco/Files**
 
-Or you can run the release (Release Folder) that contains an Examples Folder to run.
+Or you can run the executable in the Release folder that contains an Examples Folder to run.
 
 ## Features
 - Primitive types like integer, decimal, bool and string
