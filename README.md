@@ -7,19 +7,23 @@ No external tools were used like yacc, bison, etc.
 Implemented in C#, with a GUI to interact in Windows Forms.
 
 ## Preview
-In the left there is the code, and in the right the assembly generated. The compiler output and program output are in bottom.
+In the left there is the code, and in the right the assembly generated and also tokens of the ode. 
 
-![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/ac3ac22d-f5cb-4ad9-9aed-845d563f25a4)
+The compiler output and program output are in bottom.
 
-Error in the editor
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/3b9d3f97-50ae-4071-b7e7-efcd6d2ee2c3)
 
-![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/fcdcb4ac-7b42-4335-b7f1-0df998aef81f)
+Error in the editor and tokens on the left
+
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/88f8a005-a00e-43b0-9842-dfde914439b1)
 
 # Running the project 
 
 If u are going to build and run the project dont forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
 
 The files examples are on the **Manco/Files**
+
+Or you can run the release (Release Folder) that contains an Examples Folder to run.
 
 ## Features
 - Primitive types like integer, decimal, bool and string
