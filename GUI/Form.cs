@@ -171,9 +171,6 @@ namespace GUI
             if ((DateTime.Now - _lastTyped).TotalSeconds < 1)
                 return;
 
-            if(listBoxOutput.Items.Count == 0)
-                RemoveHighlight();
-
             try
             {
                 _provider.SetCode(string.Join('\n', codeTextBox.Text));
