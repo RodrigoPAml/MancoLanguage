@@ -175,6 +175,8 @@ namespace GUI
             {
                 _provider.SetCode(string.Join('\n', codeTextBox.Text));
                 _provider.Validate();
+
+                RemoveHighlight();
             }
             catch (BaseException bex)
             {
@@ -251,9 +253,6 @@ namespace GUI
         {
             _lastTyped = DateTime.Now;
             _hasChanged = true;
-
-            if(_hasCodeError)
-                listBoxOutput.Items.Clear();
 
             PutTokens();
 
