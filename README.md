@@ -7,7 +7,7 @@ No external tools were used like yacc, bison, etc.
 Implemented in C#, with a GUI to interact in Windows Forms.
 
 ## Preview
-In the left there is the code, and in the right the assembly generated and also tokens of the ode. 
+In the left there is the code, and in the right the assembly generated and also tokens of the code. 
 
 The compiler output and program output are in bottom.
 
