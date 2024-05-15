@@ -1,0 +1,18 @@
+-- prints triangle of height "n"
+function print_triangle(integer n)
+   integer row = 1
+   while row <= n
+      integer count = 1
+      while count <= row
+         print("* ")
+         count = count + 1
+      end
+      print("\n")
+      row = row + 1
+   end
+end
+
+function main()
+   integer size = 5 
+   print_triangle(size)
+end
