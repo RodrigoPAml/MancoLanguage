@@ -96,6 +96,34 @@ To use the API provider to compile code, use the Manco Project and take a look a
 
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/cac9466e-0e92-49ac-8588-8b43ee60f88c)
 
+Output:
+```assembly
+j main
+
+-- Instrução para função main with id 1
+main:
+
+-- Instrução print ( 10 * 2 )
+lir t0 10
+lir t1 2
+mul t0 t0 t1
+sw t0 0 sp
+addi sp sp 4
+jal #print_int
+
+-- Fim scopo da função main
+addi sp sp -4
+j end
+
+#print_int:
+lw t0 -4 sp
+lir v0 1
+move a0 t0
+syscall
+jr ra
+end:
+```
+
 ## Compiled or Interpreted?
 
   The language is compiled into a set of assembly based on the mips architecture, which does not run on current computers, but runs on my Assembler Simulator (used as a submodule) that
