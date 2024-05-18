@@ -40,9 +40,15 @@ namespace Language.Compiler
             foreach (var line in tokens)
                 new Root().Validate(0, line, scopes, info);
 
-            AddPrintStringFunction(info);
-            AddPrintIntegerFunction(info);
-            AddPrintDecimalFunction(info);
+            if(info.UsePrintString)
+                AddPrintStringFunction(info);
+            
+            if(info.UsePrintInt)
+                AddPrintIntegerFunction(info);
+
+            if (info.UsePrintFloat)
+                AddPrintDecimalFunction(info);
+
             info.Lines.Add("end:");
             return info.Lines;
         }

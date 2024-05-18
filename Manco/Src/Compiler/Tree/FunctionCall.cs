@@ -82,13 +82,17 @@ namespace Language.Compiler.Tree
                     if(result?.Type == TokenType.INTEGER_VAL || result?.Type == TokenType.BOOL_VAL)
                     {
                         info.Lines.Add("jal #print_int");
+                        info.UsePrintInt = true;
                     }
                     else if(result?.Type == TokenType.DECIMAL_VAL)
                     {
                         info.Lines.Add("jal #print_decimal");
+                        info.UsePrintFloat = true;
                     }
                     else if (result?.Type == TokenType.STRING_VAL)
                     {
+                        info.UsePrintString = true;
+
                         if (result.StackSize == -1)
                             throw new CompilerException($"Function {functionName} can't determine string size to print it, only scoped declared strings are allowed", tokens[position], ErrorCode.FunctionCall);
 
