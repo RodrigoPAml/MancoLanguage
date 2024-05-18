@@ -10,22 +10,17 @@ namespace GUI
     public partial class Form : System.Windows.Forms.Form
     {
         /// <summary>
-        /// Timer for events for editor
+        /// Timer para eventos do editor para verificar código e highlight visual
         /// </summary>
-        private Timer _timerBeautify = new Timer();
+        private Timer _timerVerify = new Timer();
 
         /// <summary>
-        /// Timer for code verification
-        /// </summary>
-        private Timer _timerCodeVerify = new Timer();
-
-        /// <summary>
-        /// Time when last typed
+        /// Guarda ultima vez que algo foi digitado
         /// </summary>
         private DateTime _lastTyped = DateTime.Now;
 
         /// <summary>
-        /// Opened file
+        /// Arquivo que foi aberto
         /// </summary>
         private string _openFile = string.Empty;
 
@@ -35,12 +30,12 @@ namespace GUI
         private bool _hasChanged = false;
 
         /// <summary>
-        /// If code hasError
+        /// Se o código possui erros
         /// </summary>
         private bool _hasCodeError = false;
 
         /// <summary>
-        /// To disable text highlighting
+        /// Para desabilitar text highlighting
         /// </summary>
         private bool _disableHighlighting = false;
 
@@ -50,7 +45,7 @@ namespace GUI
         private static Form _form = null;
 
         /// <summary>
-        /// The manco language provider
+        /// Provedor da linguagem manco
         /// </summary>
         private MancoProvider _provider = new MancoProvider();
 
@@ -61,23 +56,21 @@ namespace GUI
             _form = this;
             WindowState = FormWindowState.Maximized;
 
-            _timerBeautify = new Timer();
-            _timerBeautify.Interval = 2000;
-            _timerBeautify.Tick += this.Beautify;
-            _timerBeautify.Start();
-
-            _timerCodeVerify = new Timer();
-            _timerCodeVerify.Interval = 200;
-            _timerCodeVerify.Tick += this.VerifyCode;
-            _timerCodeVerify.Start();
+            _timerVerify = new Timer();
+            _timerVerify.Interval = 2000;
+            _timerVerify.Tick += this.Verify;
+            _timerVerify.Start();
         }
 
+        /// <summary>
+        /// Botão para evento de compilação
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCompile_Click(object sender, EventArgs e)
         {
-            if (_hasCodeError)
-                return;
-
-            textBoxGenerated.Text = "";
+            textBoxGenerated.Text = string.Empty;
+            this.codeTextBox.TextChanged -= this.richTextBoxCode_TextChanged!;
 
             try
             {
@@ -104,8 +97,17 @@ namespace GUI
                 listBoxOutput.Items.Clear();
                 listBoxOutput.Items.Add($"Fatal error: {ex.Message}");
             }
+            finally
+            {
+                this.codeTextBox.TextChanged += this.richTextBoxCode_TextChanged!;
+            }
         }
 
+        /// <summary>
+        /// Botão para execução do código
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonRun_Click(object sender, EventArgs e)
         {
             if (_hasCodeError)
@@ -137,7 +139,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// When a syscall is made
+        /// Syscalls
         /// </summary>
         private static void OnSyscall(int code, byte[] value)
         {
@@ -161,16 +163,10 @@ namespace GUI
         }
 
         /// <summary>
-        /// Verify code
+        /// Verifica se código esta com erro
         /// </summary>
-        private void VerifyCode(object? sender, EventArgs e)
+        private void VerifyCode()
         {
-            if (!_hasChanged)
-                return;
-            
-            if ((DateTime.Now - _lastTyped).TotalSeconds < 1)
-                return;
-
             try
             {
                 _provider.SetCode(string.Join('\n', codeTextBox.Text));
@@ -202,7 +198,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Loads the code
+        /// Carrega código
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -222,7 +218,8 @@ namespace GUI
                 MessageBox.Show("Opened with success");
 
                 _lastTyped = DateTime.Now.AddSeconds(-4);
-                Beautify(null, null);
+                _hasChanged = true;
+                Verify(null, null!);
             }
         }
 
@@ -253,10 +250,7 @@ namespace GUI
         {
             _lastTyped = DateTime.Now;
             _hasChanged = true;
-
             PutTokens();
-
-            _hasCodeError = false;
         }
 
         /// <summary>
@@ -278,9 +272,9 @@ namespace GUI
         #region ColorHighlight
 
         /// <summary>
-        /// Put colors on syntax
+        /// Faz verificação de erros do código visualmente e highlight de sintaxe
         /// </summary>
-        private void Beautify(object? sender, EventArgs e)
+        private void Verify(object? sender, EventArgs e)
         {
             if (_disableHighlighting)
                 return;
@@ -290,6 +284,10 @@ namespace GUI
 
             if ((DateTime.Now - _lastTyped).TotalSeconds < 1)
                 return;
+
+            _hasChanged = false;
+
+            this.codeTextBox.TextChanged -= this.richTextBoxCode_TextChanged!;
 
             int originalCaretPosition = codeTextBox.SelectionStart;
             this.codeTextBox.Visible = false;
@@ -353,8 +351,9 @@ namespace GUI
             this.codeTextBox.ResumeLayout();
             this.codeTextBox.Visible = true;
             this.codeTextBox.Focus();
-            
-            _hasChanged = false;
+
+            this.VerifyCode();
+            this.codeTextBox.TextChanged += this.richTextBoxCode_TextChanged!;
         }
 
         /// <summary>
@@ -463,7 +462,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Put colors on syntax
+        /// Faz syntax highlighting do assembly
         /// </summary>
         private void BeautifyGenerated()
         {
@@ -543,11 +542,16 @@ namespace GUI
             this.textBoxGenerated.Visible = true;
         }
 
+        /// <summary>
+        /// Disabilita syntax highlighting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonDisableHighlight_Click(object sender, EventArgs e)
         {
-            this._disableHighlighting = !this._disableHighlighting;
+            _disableHighlighting = !_disableHighlighting;
 
-            if (this._disableHighlighting)
+            if (_disableHighlighting)
             {
                 this.buttonDisableHighlight.Text = "Enable Highlight";
             }

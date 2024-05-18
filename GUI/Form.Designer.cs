@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form));
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
             btnCompile = new Button();
@@ -174,6 +175,7 @@
             listBoxOutput.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             listBoxOutput.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             listBoxOutput.FormattingEnabled = true;
+            listBoxOutput.HorizontalScrollbar = true;
             listBoxOutput.ItemHeight = 30;
             listBoxOutput.Location = new Point(3, 3);
             listBoxOutput.Name = "listBoxOutput";
@@ -187,6 +189,7 @@
             listBoxCodeOutput.Location = new Point(379, 3);
             listBoxCodeOutput.Multiline = true;
             listBoxCodeOutput.Name = "listBoxCodeOutput";
+            listBoxCodeOutput.ScrollBars = ScrollBars.Both;
             listBoxCodeOutput.Size = new Size(188, 123);
             listBoxCodeOutput.TabIndex = 3;
             // 
@@ -265,8 +268,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(992, 579);
             Controls.Add(tableLayoutPanel3);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form";
-            Text = "Manco Language Playground";
+            Text = "Manco Playground";
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
