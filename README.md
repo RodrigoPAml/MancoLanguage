@@ -6,7 +6,7 @@
   </tr>
 </table
 
-Manco is my own compiled programming language made from scratch for fun. 
+Manco is my own compiled programming language made from scratch for fun that compiles to a MIPS based assembly architecture. 
 
 No external tools were used like yacc, bison, etc.
 
