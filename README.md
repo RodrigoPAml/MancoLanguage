@@ -92,7 +92,7 @@ Program exited 0
 ```
 ## Running the API
 
-To use the API provider to compile code, use the Manco Project and take a look at the main, there is an example of how to use the compiler the generate assembly. With the compiled code you case use the AssemblerEmulator project to run the code, or just use the GUI to have fun.
+To use the API provider to compile code, use the Manco Project and take a look at the main, there is an example of how to use the compiler to generate assembly. With the compiled code you case use the AssemblerEmulator project to run the code, or just use the GUI to have fun.
 
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/cac9466e-0e92-49ac-8588-8b43ee60f88c)
 
