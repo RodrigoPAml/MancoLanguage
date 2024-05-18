@@ -1,69 +1,23 @@
-﻿using Language.Lexer;
-using Language.Lexer.Exceptions;
-using Language.Semantic;
-using Language.Semantic.Exceptions;
-using Language.Syntatic;
-using Language.Syntatic.Exceptions;
-using System.Globalization;
+﻿using Manco;
 
 public class Program
 {
     private static void Main(string[] args)
     {
-        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
-        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+        MancoProvider provider = new MancoProvider();
 
-        Lexer lexer = new Lexer();
+        string code = "function main()\n" +
+                      "    print(10 * 2)\n" +
+                      "end";
 
-        try
-        {
-            lexer.ParseFromFile("C:\\Users\\Rodrigo\\Desktop\\Manco\\Manco\\Files\\hello_world.manco");
-        }
-        catch (LexerException le)
-        {
-            Console.WriteLine("Lexical error:" + le.Message);
-            return;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Fatal error:" + e.Message);
-            return;
-        }
+        provider.SetCode(code);
 
-        var tokens = lexer.GetResult();
+        // Valida faz executar a parte lexica, sintatica e semantica, mas não compila o código
+        provider.Validate();
 
-        SyntaxChecker checker = new SyntaxChecker();
+        // ou então chame compilar, que faz toda parte acima mais a compilação
+        var compiledCode = provider.Compile();
 
-        try
-        {
-            checker.Parse(tokens);
-        }
-        catch (SyntaxException le)
-        {
-            Console.WriteLine("Syntax error:" + le.Message);
-            return;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Fatal error:" + e.Message);
-            return;
-        }
-
-        SemanticChecker semanticChecker = new SemanticChecker();
-
-        try
-        {
-            semanticChecker.Parse(tokens);
-        }
-        catch (SemanticException le)
-        {
-            Console.WriteLine("Semantic error:" + le.Message);
-            return;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Fatal error:" + e.Message);
-            return;
-        }
+        compiledCode.ForEach(x => Console.WriteLine(x));
     }
 }
