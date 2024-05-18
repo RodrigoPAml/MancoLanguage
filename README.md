@@ -39,7 +39,7 @@ Or you can run the executable in the Release folder that contains an Examples Fo
 - While loop, if, elif and else
 - Functions do not return values, instead use reference values for return
 - The language only uses the stack, no heap is used, which means no dynamic allocation, and fixed array sizes
-- The language syntax is based on lua
+- The language syntax is based on lua with some mix of c++ and imagination
   
 ### Program 1
 
