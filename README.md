@@ -169,7 +169,7 @@ end:
 Some examples available in the folder to open and run.
   
 ### Hello world
-![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/c2c9fe85-883c-447d-9053-05573505cc40)
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/7f8463c7-59a2-464a-84a0-9546daf771ee)
 
 ### Prime numbers
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/d79d81b1-83d7-484f-ac27-9400a0b16fc2)
@@ -177,4 +177,6 @@ Some examples available in the folder to open and run.
 ### Bubble Sort
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/6c42934c-73da-4be2-829d-68faa7a0c286)
 
+### Draw a tringle
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/dfed84e9-3503-4708-9886-6bb4fb3cc74b)
 
