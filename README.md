@@ -33,6 +33,7 @@ Or you can run the executable in the Release folder that contains an Examples Fo
 
 ## Features
 - Primitive types like integer, decimal, bool and string
+- Complex expression compilation like (10+20*2) > 200 and (true or false) and so on
 - Array of primitives types with index access
 - Functions that can receive primitives as value or by reference
 - Strings and list are always passed by reference
