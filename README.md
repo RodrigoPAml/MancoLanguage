@@ -1,4 +1,10 @@
-# Manco language 
+# Manco Language
+<table>
+  <tr>
+    <td><img src="https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/d73ac874-72e8-4f94-8ff1-1bc97daca54f" alt="Manco language logo" style="width: 100px; height: auto; margin-right: 20px;"></td>
+    <td><h1 style="margin: 0; line-height: 1;">The Manco programming language</h1></td>
+  </tr>
+</table
 
 Manco is my own compiled programming language made from scratch for fun. 
 
@@ -11,15 +17,15 @@ In the left there is the code, and in the right the assembly generated and also 
 
 The compiler output and program output are in bottom.
 
-![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/3b9d3f97-50ae-4071-b7e7-efcd6d2ee2c3)
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/eacbdfed-38b3-4920-b7e9-2422cd8837ea)
 
 Error in the editor and tokens on the left
 
-![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/88f8a005-a00e-43b0-9842-dfde914439b1)
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/f0078c33-f456-4fd9-b01e-6cb63d11eb05)
 
 # Running the project 
 
-If u are going to build and run the project dont forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
+If you are going to build and run the project dont forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
 
 The files examples are on the **Manco/Files**
 
@@ -84,6 +90,11 @@ Output
 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138 140 142 144 146 148 
 Program exited 0
 ```
+## Running the API
+
+To use the API provider to compile code, use the Manco Project and take a look at the main, there is an example of how to use the compiler the generate assembly. With the compiled code you case use the AssemblerEmulator project to run the code, or just use the GUI to have fun.
+
+![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/cac9466e-0e92-49ac-8588-8b43ee60f88c)
 
 ## Compiled or Interpreted?
 
