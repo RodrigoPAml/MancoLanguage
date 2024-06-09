@@ -86,6 +86,8 @@ namespace GUI
 
                 RemoveHighlight();
                 BeautifyGenerated();
+
+                _hasCodeError = false;
             }
             catch (BaseException bex)
             {

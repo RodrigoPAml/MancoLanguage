@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AssemblerSimulator\AssemblerEmulator.csproj" />
+    <ProjectReference Include="..\AssemblerSimulator\AssemblerSimulator\AssemblerSimulator.csproj" />
     <ProjectReference Include="..\Manco\Manco.csproj" />
   </ItemGroup>
 
