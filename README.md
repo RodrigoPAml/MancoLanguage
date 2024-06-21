@@ -23,9 +23,9 @@ Error in the editor and tokens on the left
 
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/f0078c33-f456-4fd9-b01e-6cb63d11eb05)
 
-A nice GIF
+### A nice GIF
 
-![ezgif-7-7857990795](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/183501da-c110-4f95-9f18-f6e5ec3cbc63)
+![ezgif-7-945f170853](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/4e5b9709-5f1a-496b-9da9-5f148204bc6d)
 
 # Running the project 
 
