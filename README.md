@@ -23,6 +23,10 @@ Error in the editor and tokens on the left
 
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/f0078c33-f456-4fd9-b01e-6cb63d11eb05)
 
+A nice GIF
+
+![ezgif-7-7857990795](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/183501da-c110-4f95-9f18-f6e5ec3cbc63)
+
 # Running the project 
 
 If you are going to build and run the project dont forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
