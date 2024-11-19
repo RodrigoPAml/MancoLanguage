@@ -99,10 +99,12 @@ Program exited 0
 
 To use the API provider to compile code, use the Manco Project and take a look at the main, there is an example of how to use the compiler to generate assembly. With the compiled code you case use the AssemblerEmulator project to run the code, or just use the GUI to have fun.
 
-![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/cac9466e-0e92-49ac-8588-8b43ee60f88c)
+![image](https://github.com/user-attachments/assets/b7125036-4fa6-4d5f-a443-110118e2c3fc)
 
 Output:
 ```assembly
+Código compilado:
+
 j main
 
 -- Instrução para função main with id 1
@@ -127,6 +129,10 @@ move a0 t0
 syscall
 jr ra
 end:
+
+Saída:
+
+20
 ```
 
 ## Compiled or Interpreted?
