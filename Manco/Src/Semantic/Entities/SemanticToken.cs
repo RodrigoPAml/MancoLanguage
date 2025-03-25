@@ -10,7 +10,7 @@ namespace Language.Semantic.Entities
         /// <summary>
         /// Variavel relacionada a token
         /// </summary>
-        public Variable? Variable { get; set; } = null;
+        public Variable Variable { get; set; } = null;
 
         /// <summary>
         /// Se é array

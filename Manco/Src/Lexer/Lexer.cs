@@ -3,7 +3,6 @@ using Language.Lexer.Entities;
 using Language.Lexer.Enums;
 using Language.Lexer.Exceptions;
 using Language.Lexer.Utils;
-using System.Globalization;
 using MatchType = Language.Lexer.Enums.MatchType;
 
 namespace Language.Lexer
@@ -129,9 +128,9 @@ namespace Language.Lexer
                         continue;
 
                     _lineTokens = new List<Token>();
-                    StringParser _parser = new StringParser(line);
+                    var parser = new StringParser(line);
 
-                    foreach (var (tokenStr, start) in _parser.GetStrings())
+                    foreach (var (tokenStr, start) in parser.GetStrings())
                     {
                         Work(tokenStr, lineIndex, start);
                     }

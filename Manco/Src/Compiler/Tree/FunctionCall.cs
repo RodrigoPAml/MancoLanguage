@@ -55,7 +55,7 @@ namespace Language.Compiler.Tree
                 var functionVariable = functionVar?.ChildVariables[indexVariable];
                 var restriction = ExpressionRestriction.None;
 
-                List<TokenType> referenceTypes = new List<TokenType>()
+                var referenceTypes = new List<TokenType>()
                 {
                     TokenType.BOOLEAN_DECL_REF,
                     TokenType.DECIMAL_DECL_REF,
@@ -176,8 +176,8 @@ namespace Language.Compiler.Tree
         /// <returns></returns>
         private static List<List<Token>> SplitTokens(List<Token> tokens)
         {
-            List<List<Token>> tokenGroups = new List<List<Token>>();
-            List<Token> currentGroup = new List<Token>();
+            var tokenGroups = new List<List<Token>>();
+            var currentGroup = new List<Token>();
 
             foreach (var token in tokens)
             {

@@ -14,7 +14,7 @@ namespace Language.Compiler.Tree
         /// <summary>
         /// Resultado 
         /// </summary>
-        private CompilerToken? _result = null;
+        private CompilerToken _result = null;
 
         /// <summary>
         /// Variavel atual, deve ser desconsiderado seu uso na expressão
@@ -36,7 +36,7 @@ namespace Language.Compiler.Tree
         /// Retorna resultado
         /// </summary>
         /// <returns></returns>
-        public CompilerToken? GetResult()
+        public CompilerToken GetResult()
         { 
             return _result; 
         }

@@ -8,11 +8,11 @@ namespace Language.Common.Exceptions
     /// </summary>
     public class BaseException : Exception
     {
-        public Token? Token { get; set; }
+        public Token Token { get; set; }
 
         public ErrorCode? Code { get; set; }
 
-        public BaseException(string message, Token? token, ErrorCode? code) : base(message)
+        public BaseException(string message, Token token, ErrorCode? code) : base(message)
         {
             Token = token;
             Code = code;

@@ -9,7 +9,7 @@ namespace Language.Semantic.Exceptions
     /// </summary>
     public class SemanticException : BaseException
     {
-        public SemanticException(string message, Token? token, ErrorCode? code) : base(message, token, code)
+        public SemanticException(string message, Token token, ErrorCode? code) : base(message, token, code)
         {
         }
     }

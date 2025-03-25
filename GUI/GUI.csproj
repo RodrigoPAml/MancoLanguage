@@ -1,21 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>res\icon.ico</ApplicationIcon>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="res\icon.ico" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\AssemblerSimulator\AssemblerSimulator\AssemblerSimulator.csproj" />
     <ProjectReference Include="..\Manco\Manco.csproj" />
   </ItemGroup>
-
 </Project>

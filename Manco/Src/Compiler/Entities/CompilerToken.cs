@@ -10,7 +10,7 @@ namespace Language.Compiler.Entities
         /// <summary>
         /// Variavel relacionada a token
         /// </summary>
-        public Variable? Variable { get; set; } = null;
+        public Variable Variable { get; set; } = null;
 
         /// <summary>
         /// Se é array
@@ -30,7 +30,7 @@ namespace Language.Compiler.Entities
         /// <summary>
         /// Variavel de indice, usualmente usado para acesso por indice de array na stack
         /// </summary>
-        public Variable? IndexVariable = null;
+        public Variable IndexVariable = null;
 
         /// <summary>
         /// Tamamho da stack que ocupa

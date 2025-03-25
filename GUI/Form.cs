@@ -1,9 +1,9 @@
-using AssemblerEmulator;
-using Language.Common.Exceptions;
 using Manco;
+using AssemblerEmulator;
 using System.Text;
 using System.Text.RegularExpressions;
 using Timer = System.Windows.Forms.Timer;
+using Language.Common.Exceptions;
 
 namespace GUI
 {
@@ -58,7 +58,7 @@ namespace GUI
 
             _timerVerify = new Timer();
             _timerVerify.Interval = 2000;
-            _timerVerify.Tick += this.Verify;
+            _timerVerify.Tick += this.VerifyAndHighligth;
             _timerVerify.Start();
         }
 
@@ -121,14 +121,13 @@ namespace GUI
             listBoxCodeOutput.Clear();
             _form.listBoxOutput.Items.Add("Executing program");
 
-            Emulator emulator = new Emulator(null, null, OnSyscall);
+            var emulator = new Emulator(null, null, OnSyscall);
 
             emulator.AddInstructions(textBoxGenerated.Text.Split('\n').ToList());
             
             try
             {
-                while (emulator.ExecuteLine())
-                { }
+                emulator.ExecuteAll();
 
                 _form.listBoxCodeOutput.AppendText(Environment.NewLine + "Program exited 0");
             }
@@ -141,7 +140,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Syscalls
+        /// Syscalls sendo inseridas na UI
         /// </summary>
         private static void OnSyscall(int code, byte[] value)
         {
@@ -165,7 +164,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Verifica se código esta com erro
+        /// Verifica se código esta com erro e atualiza UI
         /// </summary>
         private void VerifyCode()
         {
@@ -221,7 +220,8 @@ namespace GUI
 
                 _lastTyped = DateTime.Now.AddSeconds(-4);
                 _hasChanged = true;
-                Verify(null, null!);
+
+                VerifyAndHighligth();
             }
         }
 
@@ -252,6 +252,7 @@ namespace GUI
         {
             _lastTyped = DateTime.Now;
             _hasChanged = true;
+
             PutTokens();
         }
 
@@ -271,12 +272,13 @@ namespace GUI
             }
         }
 
+        // Funções relacioandas a colorização da UI abaixo
         #region ColorHighlight
 
         /// <summary>
         /// Faz verificação de erros do código visualmente e highlight de sintaxe
         /// </summary>
-        private void Verify(object? sender, EventArgs e)
+        private void VerifyAndHighligth(object sender = null, EventArgs e = null)
         {
             if (_disableHighlighting)
                 return;
@@ -359,7 +361,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Change the color of a word based on regex in the text
+        /// Muda a cor do texto baseado no regex
         /// </summary>
         /// <param name="regex"></param>
         /// <param name="color"></param>

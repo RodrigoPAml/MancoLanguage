@@ -1,5 +1,4 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
+﻿using Language.Lexer.Enums;
 using Language.Semantic.Entities;
 
 namespace Language.Semantic.Resolver

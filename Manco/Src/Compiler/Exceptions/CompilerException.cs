@@ -9,7 +9,7 @@ namespace Language.Compiler.Exceptions
     /// </summary>
     public class CompilerException : BaseException
     {
-        public CompilerException(string message, Token? token, ErrorCode? code) : base(message, token, code)
+        public CompilerException(string message, Token token, ErrorCode code) : base(message, token, code)
         {
         }
     }
