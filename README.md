@@ -6,20 +6,17 @@
   </tr>
 </table
 
-Manco is my own compiled programming language made from scratch for fun that compiles to a MIPS based assembly architecture. 
-
-No external tools were used like yacc, bison, etc.
-
-Implemented in C#, with a GUI to interact in Windows Forms.
+Manco is a programming language I created from scratch for fun, designed to compile to a MIPS-based assembly architecture. No external tools like Yacc or Bison were used in its development. It's implemented in C# with a Windows Forms GUI for user interaction.
 
 ## Preview
-In the left there is the code, and in the right the assembly generated and also tokens of the code. 
+
+On the left is the code, and on the right are the generated assembly and the corresponding tokens of the code.
 
 The compiler output and program output are in bottom.
 
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/eacbdfed-38b3-4920-b7e9-2422cd8837ea)
 
-Error in the editor and tokens on the left
+An error in the editor and tokens involved on the left
 
 ![image](https://github.com/RodrigoPAml/MancoLanguage/assets/41243039/f0078c33-f456-4fd9-b01e-6cb63d11eb05)
 
@@ -29,13 +26,14 @@ Error in the editor and tokens on the left
 
 # Running the project 
 
-If you are going to build and run the project dont forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
+If you are going to build and run the project don't forget to do **git submodule init** and **git submodule update** before that and run the project **GUI** as the initial project.
 
-The files examples are on the **Manco/Files**
+The files examples are on the folder **Examples**
 
-Or you can run the executable in the Release folder that contains an Examples Folder to run.
+Or you can download tha **available release** that contains the gui and some examples.
 
 ## Features
+
 - Primitive types like integer, decimal, bool and string
 - Complex expression compilation like (10+20*2) > 200 and (true or false) and so on
 - Array of primitives types with index access
@@ -46,7 +44,7 @@ Or you can run the executable in the Release folder that contains an Examples Fo
 - The language only uses the stack, no heap is used, which means no dynamic allocation, and fixed array sizes
 - The language syntax is based on lua with some mix of c++ and imagination
   
-### Program 1
+### Example 1
 
 ```lua
 -- A sum program, that passes a number with reference for the returned value
@@ -69,7 +67,7 @@ The sum of 1 + 3 is 4
 Program exited 0
 ```
 
-### Program 2
+### Example 2
 
 ```lua
 -- Program that prints pair numbers up to N
@@ -95,9 +93,13 @@ Output
 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138 140 142 144 146 148 
 Program exited 0
 ```
-## Running the API
+## Running the compiler API
 
-To use the API provider to compile code, use the Manco Project and take a look at the main, there is an example of how to use the compiler to generate assembly. With the compiled code you case use the AssemblerEmulator project to run the code, or just use the GUI to have fun.
+To use the API provider to compile the code, use the Manco Project and take a look at the main, there is an example of how to use the compiler to generate assembly. 
+
+~~With the compiled code you can use the GUI of the [AssemblerSimulator](https://github.com/RodrigoPAml/AssemblerSimulator) project to run the code.~~
+
+With the compiled code, the project already include the assembler simulator to run and have an ouput.
 
 ![image](https://github.com/user-attachments/assets/b7125036-4fa6-4d5f-a443-110118e2c3fc)
 
@@ -137,10 +139,10 @@ Saída:
 
 ## Compiled or Interpreted?
 
-  The language is compiled into a set of assembly based on the mips architecture, which does not run on current computers, but runs on my Assembler Simulator (used as a submodule) that
+  The language is compiled into a set of assembly based on the mips architecture, which does not run on current computers, but runs on my [AssemblerSimulator](https://github.com/RodrigoPAml/AssemblerSimulator) (used as a submodule) that
   i have developed. I choose this type of assembly because already learn it from university. So while the language is compiled into assembly, the assembly is getting interpreted, which is slow, it also waits the GUI to render after a syscall for print, which makes it worse, but can be disabled.
 
-## Compilation Phases
+## Compilation Phases implemented
 
 ### 1. Lexical Analysis
 
@@ -173,7 +175,7 @@ Saída:
 
 ### 6. Execution
 
-- **Description:** The execution of the assembler is done by a Assembler Simulator which is a public repository of mine, this is used as a submodule of this project.
+- **Description:** The execution of the assembler is done by a [AssemblerSimulator](https://github.com/RodrigoPAml/AssemblerSimulator) which is a public repository of mine, this is used as a submodule of this project.
 - **Purpose:** To produce the final output that can be executed by the target platform.
 
 ## Examples
