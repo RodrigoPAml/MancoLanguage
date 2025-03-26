@@ -1,10 +1,10 @@
-﻿using Language.Lexer.Entities;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Resolver;
+﻿using Manco.Lexer.Entities;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Resolver;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary> 
     /// Valida se expressão é valida semanticamente
@@ -41,7 +41,7 @@ namespace Language.Semantic.Tree
             return _result; 
         }
 
-        public bool IsResultValid(VariableType expectedResult)
+        public bool IsResultValid(VariableType expectedResult, ExpressionRestriction restriction = ExpressionRestriction.None)
         {
             switch(expectedResult)
             {
@@ -49,7 +49,12 @@ namespace Language.Semantic.Tree
                     return (_result == VariableType.Integer || _result == VariableType.String);
                 case VariableType.Integer:
                 case VariableType.Decimal:
-                    return (_result == VariableType.Integer || _result == VariableType.Decimal);
+                    {
+                        if(restriction == ExpressionRestriction.SingleReferenceVariable)
+                            return _result == expectedResult;
+
+                        return (_result == VariableType.Integer || _result == VariableType.Decimal);
+                    }
                 default:
                     return _result == expectedResult;
             }

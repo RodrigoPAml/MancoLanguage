@@ -1,8 +1,8 @@
-﻿using Language.Lexer.Entities;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
+﻿using Manco.Lexer.Entities;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida fim de escopo

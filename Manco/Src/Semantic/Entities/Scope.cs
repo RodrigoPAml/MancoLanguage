@@ -1,9 +1,11 @@
-﻿using Language.Semantic.Enums;
+﻿using Manco.Semantic.Enums;
 
-namespace Language.Semantic.Entities
+namespace Manco.Semantic.Entities
 {
     /// <summary>
     /// Scopo
+    /// Um scopo não contêm outro scopo, apesar de poder estar dentro de um
+    /// Stack determina isso
     /// </summary>
     public class Scope
     {
@@ -18,9 +20,9 @@ namespace Language.Semantic.Entities
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Variaveis do Scopo
+        /// Filhos do Scopo
         /// </summary>
-        public List<Variable> Variables { get; set; } = new List<Variable>();
+        public List<ScopeVariable> Childrens { get; set; } = new List<ScopeVariable>();
 
         public Scope(ScopeType type)
         {

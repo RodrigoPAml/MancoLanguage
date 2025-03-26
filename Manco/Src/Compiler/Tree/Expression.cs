@@ -1,10 +1,10 @@
-﻿using Language.Lexer.Entities;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
-using Language.Compiler.Resolver;
+﻿using Manco.Lexer.Entities;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
+using Manco.Compiler.Resolver;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary> 
     /// Compila expressão
@@ -41,7 +41,7 @@ namespace Language.Compiler.Tree
             return _result; 
         }
 
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             _result = new ExpressionCompiler().Evaluate(info, tokens.Skip(position).ToList(), scopes, _currentVariable, _restriction);
         }

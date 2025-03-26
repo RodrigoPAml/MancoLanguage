@@ -1,13 +1,14 @@
-using Manco;
-using AssemblerEmulator;
 using System.Text;
-using System.Text.RegularExpressions;
+using Manco;
+using AssemblerSimulator;
+using Manco.Common.Exceptions;
+using Manco.Common.Enums;
 using Timer = System.Windows.Forms.Timer;
-using Language.Common.Exceptions;
+using WinForm = System.Windows.Forms.Form;
 
 namespace GUI
 {
-    public partial class Form : System.Windows.Forms.Form
+    public partial class Form : WinForm
     {
         /// <summary>
         /// Timer para eventos do editor para verificar código e highlight visual
@@ -60,6 +61,8 @@ namespace GUI
             _timerVerify.Interval = 2000;
             _timerVerify.Tick += this.VerifyAndHighligth;
             _timerVerify.Start();
+
+            comboBoxTransformer.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -74,15 +77,37 @@ namespace GUI
 
             try
             {
+                // Limpa saída
                 listBoxOutput.Items.Clear();
 
+                // Insere código
                 _provider.SetCode(string.Join('\n', codeTextBox.Text));
 
-                DateTime now = DateTime.Now;
-                textBoxGenerated.Text = string.Join('\n', _provider.Compile().Select(x => x).ToList());
+                var now = DateTime.Now;
+                var type = (TransformerType)comboBoxTransformer.SelectedIndex;
 
+                // Compila/transpila código
+                var lines = _provider
+                        .Transform(type)
+                        .Select(x => x)
+                        .ToList();
+
+                textBoxGenerated.Text = string.Join('\n', lines);
                 listBoxOutput.Items.Clear();
-                listBoxOutput.Items.Add($"Code compiled in {(DateTime.Now - now).TotalMilliseconds} ms");
+
+                if (type == TransformerType.TranspiledCPlusPlus)
+                {
+                    var result = CPlusPlusWraper.Compile(textBoxGenerated.Text);
+
+                    if(!string.IsNullOrEmpty(result.Output))
+                        listBoxOutput.Items.Add($"g++ compilation output: {result.Output}");
+
+                    listBoxOutput.Items.Add($"Code compiled with g++ in {(DateTime.Now - now).TotalMilliseconds} ms");
+                }
+                else
+                {
+                    listBoxOutput.Items.Add($"Code compiled with mips in {(DateTime.Now - now).TotalMilliseconds} ms");
+                }
 
                 RemoveHighlight();
                 BeautifyGenerated();
@@ -115,28 +140,51 @@ namespace GUI
             if (_hasCodeError)
                 return;
 
-            DateTime now = DateTime.Now;
+
+            if(string.IsNullOrEmpty(textBoxGenerated.Text))
+            {
+                MessageBox.Show("Code to execute is empty");
+                return;
+            }
 
             listBoxOutput.Items.Clear();
             listBoxCodeOutput.Clear();
+
             _form.listBoxOutput.Items.Add("Executing program");
 
-            var emulator = new Emulator(null, null, OnSyscall);
+            var type = (TransformerType)comboBoxTransformer.SelectedIndex;
+            var now = DateTime.Now;
+            var elapsed = 0.0;
 
-            emulator.AddInstructions(textBoxGenerated.Text.Split('\n').ToList());
-            
-            try
+            if (type == TransformerType.TranspiledCPlusPlus)
             {
-                emulator.ExecuteAll();
+                var result = CPlusPlusWraper.Execute();
+                elapsed = (DateTime.Now - now).TotalMilliseconds;
 
-                _form.listBoxCodeOutput.AppendText(Environment.NewLine + "Program exited 0");
+                _form.listBoxCodeOutput.AppendText(result.Output);
             }
-            catch(Exception ex)
+            else
             {
-                listBoxCodeOutput.AppendText(Environment.NewLine + $"Program exited 1: {ex.Message}");
+                var emulator = new Emulator(null, null, OnSyscall);
+                emulator.AddInstructions(textBoxGenerated.Text.Split('\n').ToList());
+                emulator.PostergateCallbacks = true;
+
+                try
+                {
+                    emulator.ExecuteAll();
+                    elapsed = (DateTime.Now - now).TotalMilliseconds;
+
+                    emulator.InvokeCallbacks();
+                    _form.listBoxCodeOutput.AppendText(Environment.NewLine + "Program exited 0");
+                }
+                catch (Exception ex)
+                {
+                    elapsed = (DateTime.Now - now).TotalMilliseconds;
+                    listBoxCodeOutput.AppendText(Environment.NewLine + $"Program exited 1: {ex.Message}");
+                }
             }
 
-            listBoxOutput.Items.Add($"Code executed in {(DateTime.Now - now).TotalMilliseconds} ms");
+            listBoxOutput.Items.Add($"Executed in {elapsed} ms (aprox)");
         }
 
         /// <summary>
@@ -272,299 +320,14 @@ namespace GUI
             }
         }
 
-        // Funções relacioandas a colorização da UI abaixo
-        #region ColorHighlight
-
         /// <summary>
-        /// Faz verificação de erros do código visualmente e highlight de sintaxe
-        /// </summary>
-        private void VerifyAndHighligth(object sender = null, EventArgs e = null)
-        {
-            if (_disableHighlighting)
-                return;
-
-            if (!_hasChanged)
-                return;
-
-            if ((DateTime.Now - _lastTyped).TotalSeconds < 1)
-                return;
-
-            _hasChanged = false;
-
-            this.codeTextBox.TextChanged -= this.richTextBoxCode_TextChanged!;
-
-            int originalCaretPosition = codeTextBox.SelectionStart;
-            this.codeTextBox.Visible = false;
-            this.codeTextBox.SuspendLayout();
-
-            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
-
-            CheckKeyword("function", Color.DarkBlue, codeTextBox);
-            CheckKeyword("end", Color.DarkBlue, codeTextBox);
-            CheckKeyword("while", Color.DarkBlue, codeTextBox);
-            CheckKeyword("or", Color.DarkBlue, codeTextBox);
-            CheckKeyword("and", Color.DarkBlue, codeTextBox);
-            CheckKeyword("break", Color.DarkBlue, codeTextBox);
-            CheckKeyword("continue", Color.DarkBlue, codeTextBox);
-            CheckKeyword("break", Color.DarkBlue, codeTextBox);
-            CheckKeyword("if", Color.DarkBlue, codeTextBox);
-            CheckKeyword("elif", Color.DarkBlue, codeTextBox);
-            CheckKeyword("else", Color.DarkBlue, codeTextBox);
-
-            CheckKeyword("integer", Color.DarkGreen, codeTextBox);
-            CheckKeyword("decimal", Color.DarkGreen, codeTextBox);
-            CheckKeyword("bool", Color.DarkGreen, codeTextBox);
-            CheckKeyword("string", Color.DarkGreen, codeTextBox);
-            CheckKeyword("integer&", Color.DarkGreen, codeTextBox);
-            CheckKeyword("decimal&", Color.DarkGreen, codeTextBox);
-            CheckKeyword("bool&", Color.DarkGreen, codeTextBox);
-            CheckKeyword("print", Color.HotPink, codeTextBox);
-
-            CheckKeyword(">=", Color.Gray, codeTextBox);
-            CheckKeyword("<=", Color.Gray, codeTextBox);
-            CheckKeyword(">", Color.Gray, codeTextBox);
-            CheckKeyword("<", Color.Gray, codeTextBox);
-            CheckKeyword("-", Color.Gray, codeTextBox);
-            CheckKeyword("!=", Color.Gray, codeTextBox);
-            CheckKeyword("==", Color.Gray, codeTextBox);
-            CheckKeyword("=", Color.Gray, codeTextBox);
-            CheckKeyword(":", Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\+"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\/"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\*"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\%"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\("), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\)"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\."), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\["), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\]"), Color.Gray, codeTextBox);
-
-            CheckKeyword(new Regex("^*--.*"), Color.Gray, codeTextBox);
-
-            CheckKeyword(new Regex("true|false"), Color.HotPink, codeTextBox);
-            CheckKeyword(new Regex("[0-9][0-9]*"), Color.DarkOliveGreen, codeTextBox);
-            CheckKeyword(new Regex("\\d+\\.\\d+"), Color.DarkOliveGreen, codeTextBox);
-            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
-
-            if (originalCaretPosition < codeTextBox.TextLength)
-            {
-                codeTextBox.SelectionStart = originalCaretPosition;
-                codeTextBox.SelectionLength = 0;
-            }
-
-            this.codeTextBox.ResumeLayout();
-            this.codeTextBox.Visible = true;
-            this.codeTextBox.Focus();
-
-            this.VerifyCode();
-            this.codeTextBox.TextChanged += this.richTextBoxCode_TextChanged!;
-        }
-
-        /// <summary>
-        /// Muda a cor do texto baseado no regex
-        /// </summary>
-        /// <param name="regex"></param>
-        /// <param name="color"></param>
-        private void CheckKeyword(Regex regex, Color color, RichTextBox textbox)
-        {
-            var matches = regex.Matches(textbox.Text).ToList();
-
-            foreach (var match in matches)
-            {
-                int index = match.Index;
-                int size = match.Length;
-                int selectStart = textbox.SelectionStart;
-
-                textbox.Select(index, size);
-                textbox.SelectionColor = color;
-                textbox.Select(selectStart, 0);
-                textbox.SelectionColor = Color.Black;
-            }
-        }
-
-        /// <summary>
-        /// Insere destaque na linha
-        /// </summary>
-        /// <param name="line"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="color"></param>
-        private void HighlightLine(int line, int start, int end, Color color)
-        {
-            if (_disableHighlighting)
-                return;
-
-            if (line < 0)
-                return;
-
-            this.codeTextBox.SuspendLayout();
-
-            int originalSelectionStart = codeTextBox.SelectionStart;
-            int originalSelectionLength = codeTextBox.SelectionLength;
-
-            int lineStart = codeTextBox.GetFirstCharIndexFromLine(line);
-            int lineEnd = lineStart + codeTextBox.Lines[line].Length;
-
-            int selectionStart = Math.Max(lineStart + start, lineStart);
-            int selectionEnd = Math.Min(lineStart + end, lineEnd);
-
-            codeTextBox.SelectionStart = selectionStart;
-            codeTextBox.SelectionLength = selectionEnd - selectionStart;
-            codeTextBox.SelectionBackColor = color;
-
-            codeTextBox.SelectionStart = originalSelectionStart;
-            codeTextBox.SelectionLength = originalSelectionLength;
-
-            this.codeTextBox.ResumeLayout();
-        }
-
-        /// <summary>
-        /// Remove destaques do código
-        /// </summary>
-        private void RemoveHighlight()
-        {
-            if (_disableHighlighting)
-                return;
-
-            this.codeTextBox.SuspendLayout();
-
-            int originalSelectionStart = codeTextBox.SelectionStart;
-            int originalSelectionLength = codeTextBox.SelectionLength;
-
-            codeTextBox.SelectionStart = 0;
-            codeTextBox.SelectionLength = codeTextBox.Text.Length;
-
-            codeTextBox.SelectionBackColor = Color.Transparent;
-            codeTextBox.SelectionLength = 0;
-
-            codeTextBox.SelectionStart = originalSelectionStart;
-            codeTextBox.SelectionLength = originalSelectionLength;
-
-            this.codeTextBox.ResumeLayout();
-        }
-
-        /// <summary>
-        /// Change the color of a word in the text
-        /// </summary>
-        /// <param name="word"></param>
-        /// <param name="color"></param>
-        private void CheckKeyword(string word, Color color, RichTextBox textbox)
-        {
-            if (textbox.Text.Contains(word))
-            {
-                int index = -1;
-                int selectStart = textbox.SelectionStart;
-
-                while ((index = textbox.Text.IndexOf(word, (index + 1))) != -1)
-                {
-                    textbox.Select(index, word.Length);
-                    textbox.SelectionColor = color;
-                    textbox.Select(selectStart, 0);
-                    textbox.SelectionColor = Color.Black;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Faz syntax highlighting do assembly
-        /// </summary>
-        private void BeautifyGenerated()
-        {
-            if (_disableHighlighting)
-                return;
-
-            this.textBoxGenerated.Visible = false;
-            this.textBoxGenerated.SuspendLayout();
-
-            CheckKeyword("add", Color.Green, textBoxGenerated);
-            CheckKeyword("addf", Color.Green, textBoxGenerated);
-            CheckKeyword("addi", Color.Green, textBoxGenerated);
-            CheckKeyword("addfi", Color.Green, textBoxGenerated);
-            CheckKeyword("sub", Color.Green, textBoxGenerated);
-            CheckKeyword("subf", Color.Green, textBoxGenerated);
-            CheckKeyword("mul", Color.Green, textBoxGenerated);
-            CheckKeyword("mulf", Color.Green, textBoxGenerated);
-            CheckKeyword("muli", Color.Green, textBoxGenerated);
-            CheckKeyword("mulfi", Color.Green, textBoxGenerated);
-            CheckKeyword("div", Color.Green, textBoxGenerated);
-            CheckKeyword("divf", Color.Green, textBoxGenerated);
-
-            CheckKeyword("or", Color.Green, textBoxGenerated);
-            CheckKeyword("xor", Color.Green, textBoxGenerated);
-            CheckKeyword("and", Color.Green, textBoxGenerated);
-            CheckKeyword("not", Color.Green, textBoxGenerated);
-            CheckKeyword("sfl", Color.Green, textBoxGenerated);
-            CheckKeyword("sfr", Color.Green, textBoxGenerated);
-
-            CheckKeyword("jr", Color.Green, textBoxGenerated);
-            CheckKeyword("j", Color.Green, textBoxGenerated);
-            CheckKeyword("beq", Color.Green, textBoxGenerated);
-            CheckKeyword("bne", Color.Green, textBoxGenerated);
-            CheckKeyword("jal", Color.Green, textBoxGenerated);
-
-            CheckKeyword("se", Color.Green, textBoxGenerated);
-            CheckKeyword("sne", Color.Green, textBoxGenerated);
-            CheckKeyword("slt", Color.Green, textBoxGenerated);
-            CheckKeyword("sgt", Color.Green, textBoxGenerated);
-            CheckKeyword("slte", Color.Green, textBoxGenerated);
-            CheckKeyword("sgte", Color.Green, textBoxGenerated);
-            CheckKeyword("sltf", Color.Green, textBoxGenerated);
-            CheckKeyword("sgtf", Color.Green, textBoxGenerated);
-            CheckKeyword("sltof", Color.Green, textBoxGenerated);
-            CheckKeyword("sgtef", Color.Green, textBoxGenerated);
-            CheckKeyword("slt", Color.Green, textBoxGenerated);
-            CheckKeyword("sgt", Color.Green, textBoxGenerated);
-
-            CheckKeyword("lbr", Color.Green, textBoxGenerated);
-            CheckKeyword("lcr", Color.Green, textBoxGenerated);
-            CheckKeyword("lir", Color.Green, textBoxGenerated);
-            CheckKeyword("lfr", Color.Green, textBoxGenerated);
-            CheckKeyword("cfi", Color.Green, textBoxGenerated);
-            CheckKeyword("cif", Color.Green, textBoxGenerated);
-
-            CheckKeyword("lw", Color.Green, textBoxGenerated);
-            CheckKeyword("sw", Color.Green, textBoxGenerated);
-            CheckKeyword("sb", Color.Green, textBoxGenerated);
-            CheckKeyword("lb", Color.Green, textBoxGenerated);
-            CheckKeyword("move", Color.Green, textBoxGenerated);
-
-            CheckKeyword("syscall", Color.HotPink, textBoxGenerated);
-
-            foreach (var register in new Emulator(null, null, null).GetRegisters())
-                CheckKeyword(register.Name, Color.Blue, textBoxGenerated);
-
-            CheckKeyword(new Regex(".*--.*"), Color.DarkGreen, textBoxGenerated);
-            CheckKeyword(":", Color.HotPink, textBoxGenerated);
-
-            CheckKeyword(new Regex("\\s(\\d+)"), Color.Orange, textBoxGenerated);
-            CheckKeyword(new Regex("\\s(\\d+\\.\\d+)"), Color.Orange, textBoxGenerated);
-
-            CheckKeyword(new Regex("\\s(0x[0-9A-Fa-f]+)"), Color.HotPink, textBoxGenerated);
-            CheckKeyword(new Regex("'(.)'"), Color.Brown, textBoxGenerated);
-
-            this.textBoxGenerated.ResumeLayout();
-            this.textBoxGenerated.Visible = true;
-        }
-
-        /// <summary>
-        /// Disabilita syntax highlighting
+        /// Muda o tipo de transformação (mips ou c++)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonDisableHighlight_Click(object sender, EventArgs e)
+        private void comboBoxTransformer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _disableHighlighting = !_disableHighlighting;
-
-            if (_disableHighlighting)
-            {
-                this.buttonDisableHighlight.Text = "Enable Highlight";
-            }
-            else
-            {
-                this.buttonDisableHighlight.Text = "Disable Highlight";
-            }
+            textBoxGenerated.Text = string.Empty;
         }
-
-        #endregion
     }
 }

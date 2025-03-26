@@ -1,12 +1,12 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Syntatic.Base;
-using Language.Syntatic.Entities;
-using Language.Syntatic.Enums;
-using Language.Syntatic.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Syntatic.Base;
+using Manco.Syntatic.Entities;
+using Manco.Syntatic.Enums;
+using Manco.Syntatic.Exceptions;
 
-namespace Language.Syntatic.Tree
+namespace Manco.Syntatic.Tree
 {
     /// <summary>
     /// Valida sintaxe do else

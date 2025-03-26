@@ -1,10 +1,10 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
-using Language.Compiler.Exceptions;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
+using Manco.Compiler.Exceptions;
 
-namespace Language.Compiler.Resolver
+namespace Manco.Compiler.Resolver
 {
     /// <summary>
     /// Compila expressões para assembly e retorna
@@ -32,13 +32,13 @@ namespace Language.Compiler.Resolver
         )
         {
             // Variaveis atuais disponiveis
-            List<Variable> variables = scopes
-                .SelectMany(x => x.Variables)
+            var variables = scopes
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name != currentVarName)
                 .ToList();
 
             // Reduz tokens para simplificação da compilação
-            List<CompilerToken> tokens = Validate(originalTokens, variables, info);
+            var tokens = Validate(originalTokens, variables, info);
           
             // Declaração de string por inteiro (alocação)
             if(tokens.Count() == 1 && restriction == ExpressionRestriction.StringDeclaration && tokens[0].Type == TokenType.INTEGER_VAL)
@@ -58,7 +58,7 @@ namespace Language.Compiler.Resolver
 
             int index = 0;
             int startingStack = info.StackPointer;
-            List<CompilerToken> result = new List<CompilerToken>();
+            var result = new List<CompilerToken>();
 
             foreach (var token in tokens)
             {

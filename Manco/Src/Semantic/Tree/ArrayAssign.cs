@@ -1,13 +1,13 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Exceptions;
-using Language.Semantic.Utils;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Exceptions;
+using Manco.Semantic.Utils;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida atribuição em array, por índice
@@ -21,7 +21,7 @@ namespace Language.Semantic.Tree
                 throw new SemanticException($"Unexcepted token at array index assign", tokens[position - 1], ErrorCode.ArrayIndexAssign);
           
             var variable = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name == tokens[0].Content)
                 .FirstOrDefault();
 

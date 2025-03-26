@@ -1,4 +1,4 @@
-﻿namespace Language.Compiler.Enums
+﻿namespace Manco.Compiler.Enums
 {
     /// <summary>
     /// Tipo do escopo

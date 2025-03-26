@@ -1,12 +1,12 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Exceptions;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida condicionais (somente expressões)

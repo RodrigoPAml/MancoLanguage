@@ -1,14 +1,17 @@
-﻿using Language.Compiler;
-using Language.Lexer;
-using Language.Lexer.Entities;
-using Language.Semantic;
-using Language.Syntatic;
+﻿using Manco.Common.Enums;
+using Manco.Common.Interfaces;
+using Manco.Compiler;
+using Manco.Lexer;
+using Manco.Lexer.Entities;
+using Manco.Semantic;
+using Manco.Syntatic;
+using Manco.Transpiler;
 using System.Globalization;
 
 namespace Manco
 {
     /// <summary>
-    /// Provedor da linguagem manco, utilizado para sua validação e compilação
+    /// Provedor da linguagem manco, utilizado para sua validação e compilação/transpilação
     /// </summary>
     public class MancoProvider
     {
@@ -35,7 +38,7 @@ namespace Manco
         /// </summary>
         public void Validate()
         {
-            Lexer lexer = new Lexer();
+            var lexer = new LexerProvider();
             lexer.Parse(_text);
 
             var tokens = lexer.GetResult();
@@ -55,7 +58,7 @@ namespace Manco
         {
             string result = string.Empty;   
 
-            Lexer lexer = new Lexer();
+            var lexer = new LexerProvider();
             lexer.Parse(_text);
 
             foreach(var tokens in lexer.GetResult())
@@ -77,19 +80,19 @@ namespace Manco
         /// <returns></returns>
         public List<List<Token>> GetTokens()
         {
-            var lexer = new Lexer();
+            var lexer = new LexerProvider();
             lexer.Parse(_text);
 
             return lexer.GetResult();
         }
 
         /// <summary>
-        /// Compila código e retorna instruções em assembly formato baseado em arquitetura MIPS
+        /// Transforma código e retorna as novas instruções
         /// </summary>
         /// <returns></returns>
-        public List<string> Compile()
+        public List<string> Transform(TransformerType type)
         {
-            Lexer lexer = new Lexer();
+            var lexer = new LexerProvider();
             lexer.Parse(_text);
 
             var tokens = lexer.GetResult();
@@ -100,8 +103,21 @@ namespace Manco
             SemanticChecker semanticChecker = new SemanticChecker();
             semanticChecker.Parse(tokens);
 
-            Compiler compiler = new Compiler(); 
-            return compiler.Compile(tokens);
+            ITransformer transformer = null;
+
+            switch(type)
+            {
+                case TransformerType.CompiledMIPS:
+                    transformer = new MipsCompiler();
+                    break;
+                case TransformerType.TranspiledCPlusPlus:
+                    transformer = new CPlusPlusTranspiler();
+                    break;
+                default:
+                    throw new Exception($"Invalid transformer type {type}");
+            }
+
+            return transformer.Execute(tokens);
         }
     }
 }

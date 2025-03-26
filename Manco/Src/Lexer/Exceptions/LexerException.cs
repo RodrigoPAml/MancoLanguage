@@ -1,8 +1,8 @@
-﻿using Language.Common.Enums;
-using Language.Common.Exceptions;
-using Language.Lexer.Entities;
+﻿using Manco.Common.Enums;
+using Manco.Common.Exceptions;
+using Manco.Lexer.Entities;
 
-namespace Language.Lexer.Exceptions
+namespace Manco.Lexer.Exceptions
 {
     /// <summary>
     /// Exceção de Lexer

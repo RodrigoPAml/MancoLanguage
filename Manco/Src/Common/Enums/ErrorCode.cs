@@ -1,4 +1,4 @@
-﻿namespace Language.Common.Enums
+﻿namespace Manco.Common.Enums
 {
     /// <summary>
     /// Códigos de erro para etapas de compilação

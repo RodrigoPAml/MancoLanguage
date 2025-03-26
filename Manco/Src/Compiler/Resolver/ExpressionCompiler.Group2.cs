@@ -1,7 +1,7 @@
-﻿using Language.Lexer.Enums;
-using Language.Compiler.Entities;
+﻿using Manco.Lexer.Enums;
+using Manco.Compiler.Entities;
 
-namespace Language.Compiler.Resolver
+namespace Manco.Compiler.Resolver
 {
     public partial class ExpressionCompiler
     {
@@ -13,7 +13,7 @@ namespace Language.Compiler.Resolver
         /// <returns></returns>
         private List<CompilerToken> ResolvePriorityTokensGroup2(List<CompilerToken> tokens, CompilationInfo info)
         {
-            List<CompilerToken> resolved = new List<CompilerToken>();
+            var resolved = new List<CompilerToken>();
             TokenType? operation = null;
 
             foreach (var token in tokens)

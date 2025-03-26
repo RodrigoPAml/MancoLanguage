@@ -1,11 +1,11 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Syntatic.Entities;
-using Language.Syntatic.Enums;
-using Language.Syntatic.Exceptions;
-using Language.Syntatic.Tree;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Syntatic.Entities;
+using Manco.Syntatic.Enums;
+using Manco.Syntatic.Exceptions;
+using Manco.Syntatic.Tree;
 
-namespace Language.Syntatic
+namespace Manco.Syntatic
 {
     /// <summary>
     /// Verifica a sintaxe do código
@@ -14,9 +14,9 @@ namespace Language.Syntatic
     {
         public void Parse(List<List<Token>> tokens)
         {
-            Scope global = new Scope(ScopeType.Global);
+            var global = new Scope(ScopeType.Global);
 
-            Stack<Scope> scopes = new Stack<Scope>();    
+            var scopes = new Stack<Scope>();    
             scopes.Push(global);
 
             foreach (var line in tokens)

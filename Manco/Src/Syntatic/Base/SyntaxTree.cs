@@ -1,7 +1,7 @@
-﻿using Language.Lexer.Entities;
-using Language.Syntatic.Entities;
+﻿using Manco.Lexer.Entities;
+using Manco.Syntatic.Entities;
 
-namespace Language.Syntatic.Base
+namespace Manco.Syntatic.Base
 {
     /// <summary>
     /// Estrutura base da árvore que valida a sintaxe do código iterativamente por

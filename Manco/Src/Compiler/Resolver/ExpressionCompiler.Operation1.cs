@@ -1,9 +1,9 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Enums;
-using Language.Compiler.Entities;
-using Language.Compiler.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Exceptions;
 
-namespace Language.Compiler.Resolver
+namespace Manco.Compiler.Resolver
 {
     public partial class ExpressionCompiler
     {

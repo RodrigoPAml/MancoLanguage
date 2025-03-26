@@ -1,37 +1,32 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
-using Language.Compiler.Utils;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
+using Manco.Compiler.Utils;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Compila atribuição em array, por índice
     /// </summary>
     public class ArrayAssign : CompilerTree
     {
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             var variable = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name == tokens[0].Content)
                 .First();
 
             var expectedResult = TypeConverter.ExpectedResult(variable.Type, tokens[position - 1]);
-            var expr = new Expression(
-                variable.Type == TokenType.STRING_DECL 
-                    ? ExpressionRestriction.StringArrayIndex
-                    : ExpressionRestriction.None,
-                  string.Empty
-            );
+            var expr = new Expression(ExpressionRestriction.None);
 
-            // Valida/Comila expressão da atribuição ao índice
-            expr.Validate(position+3, tokens, scopes, info);
+            // Valida/Compila expressão da atribuição ao índice
+            expr.Generate(position+3, tokens, scopes, info);
 
             var indexVariable = scopes
-              .SelectMany(x => x.Variables)
+              .SelectMany(x => x.Childrens)
               .Where(x => x.Name == tokens[2].Content)
               .FirstOrDefault();
 

@@ -1,16 +1,16 @@
-﻿using Language.Lexer.Entities;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
+﻿using Manco.Lexer.Entities;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Compila break de loops
     /// </summary>
     public class Break : CompilerTree
     {
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             var lastWhileScope = scopes.ToList().First(x => x.Type == ScopeType.Loop);
 

@@ -1,11 +1,11 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Exceptions;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida semantica quando invoca um indentificador
@@ -83,7 +83,7 @@ namespace Language.Semantic.Tree
         /// </summary>
         private void ValidateVariableDontExists(int position, List<Token> tokens, Stack<Scope> scopes, bool isArray)
         {
-            if (scopes.Any(x => x.Variables.Any(y => y.Name == tokens[position - 1].Content && y.Type != TokenType.FUNCTION)))
+            if (scopes.Any(x => x.Childrens.Any(y => y.Name == tokens[position - 1].Content && y.Type != TokenType.FUNCTION)))
                 throw new SemanticException($"Variable {tokens[position - 1]} already declared", tokens[position - 1], ErrorCode.Identifier);
 
             string functionName = scopes.ElementAt(scopes.Count()-2).Name;
@@ -91,7 +91,7 @@ namespace Language.Semantic.Tree
             if(functionName == tokens[position - 1].Content)
                 throw new SemanticException($"Variable {tokens[position - 1]} has the same name of the function", tokens[position - 1], ErrorCode.Identifier);
 
-            scopes.First().Variables.Add(new Variable()
+            scopes.First().Childrens.Add(new ScopeVariable()
             {
                 Name = tokens[position - 1].Content,
                 Type = tokens[position - 2].Type,
@@ -105,7 +105,7 @@ namespace Language.Semantic.Tree
         private void ValidateVariableExistsArray(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             var variable = scopes
-                 .SelectMany(x => x.Variables)
+                 .SelectMany(x => x.Childrens)
                  .Where(y => y.Name == tokens[position - 1].Content && y.Type != TokenType.FUNCTION)
                  .FirstOrDefault();
 
@@ -120,7 +120,7 @@ namespace Language.Semantic.Tree
             if(indexToken.Type == TokenType.IDENTIFIER)
             {
                 var variableIndex = scopes
-                    .SelectMany(x => x.Variables)
+                    .SelectMany(x => x.Childrens)
                     .Where(y => y.Name == indexToken.Content && y.Type != TokenType.FUNCTION)
                     .FirstOrDefault();
 
@@ -141,7 +141,7 @@ namespace Language.Semantic.Tree
         private void ValidateVariableExists(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             var variable = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(y => y.Name == tokens[position - 1].Content && y.Type != TokenType.FUNCTION)
                 .FirstOrDefault();
 
@@ -161,7 +161,7 @@ namespace Language.Semantic.Tree
         /// <exception cref="SemanticException"></exception>
         private void ValidateFunctionsExists(int position, List<Token> tokens, Stack<Scope> scopes)
         {
-            if (!scopes.Any(x => x.Variables.Any(y => y.Name == tokens[position - 1].Content && y.Type == TokenType.FUNCTION)))
+            if (!scopes.Any(x => x.Childrens.Any(y => y.Name == tokens[position - 1].Content && y.Type == TokenType.FUNCTION)))
                 throw new SemanticException($"Function {tokens[position - 1]} don't exist", tokens[position - 1], ErrorCode.FunctionDeclaration);
         }
     }

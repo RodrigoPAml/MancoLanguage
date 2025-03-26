@@ -1,7 +1,7 @@
-﻿using Language.Lexer.Enums;
-using Language.Syntatic.Enums;
+﻿using Manco.Lexer.Enums;
+using Manco.Syntatic.Enums;
 
-namespace Language.Syntatic.Entities
+namespace Manco.Syntatic.Entities
 {
     /// <summary>
     /// Representa o scopo, tambem guarda commandos que pertence a um scopo

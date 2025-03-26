@@ -1,7 +1,7 @@
-﻿using Language.Lexer.Enums;
-using Language.Semantic.Entities;
+﻿using Manco.Lexer.Enums;
+using Manco.Semantic.Entities;
 
-namespace Language.Semantic.Resolver
+namespace Manco.Semantic.Resolver
 {
     public partial class ExpressionResolver
     {
@@ -12,7 +12,7 @@ namespace Language.Semantic.Resolver
         /// <returns></returns>
         public List<SemanticToken> ResolvePriorityTokensGroup4(List<SemanticToken> tokens)
         {
-            List<SemanticToken> resolved = new List<SemanticToken>();
+            var resolved = new List<SemanticToken>();
             TokenType? operation = null;
 
             foreach (var token in tokens)
@@ -50,7 +50,7 @@ namespace Language.Semantic.Resolver
         /// <returns></returns>
         private List<SemanticToken> ResolvePriorityTokensGroup41(List<SemanticToken> tokens)
         {
-            List<SemanticToken> resolved = new List<SemanticToken>();
+            var resolved = new List<SemanticToken>();
             TokenType? operation = null;
 
             foreach (var token in tokens)

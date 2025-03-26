@@ -1,10 +1,10 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Entities;
-using Language.Compiler.Exceptions;
-using Language.Compiler.Utils;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Exceptions;
+using Manco.Compiler.Utils;
 
-namespace Language.Compiler.Resolver
+namespace Manco.Compiler.Resolver
 {
     public partial class ExpressionCompiler
     {
@@ -16,11 +16,11 @@ namespace Language.Compiler.Resolver
         /// <param name="info"></param>
         /// <returns></returns>
         /// <exception cref="CompilerException"></exception>
-        private List<CompilerToken> Validate(List<Token> tokens, List<Variable> variables, CompilationInfo info)
+        private List<CompilerToken> Validate(List<Token> tokens, List<ScopeVariable> variables, CompilationInfo info)
         {
             tokens = TreatNegatives(tokens);
 
-            List<CompilerToken> result = new List<CompilerToken>();
+            var result = new List<CompilerToken>();
             for(var i = 0; i < tokens.Count; i++)
             {
                 bool haveArr = i + 3 < tokens.Count;
@@ -116,8 +116,8 @@ namespace Language.Compiler.Resolver
         /// <returns></returns>
         private List<Token> TreatNegatives(List<Token> tokens)
         {
-            List<Token> newTokens = new List<Token>();
-            List<TokenType> allowedTypes = new List<TokenType>()
+            var newTokens = new List<Token>();
+            var allowedTypes = new List<TokenType>()
             {
                 TokenType.INTEGER_VAL,
                 TokenType.BOOL_VAL,
@@ -170,7 +170,7 @@ namespace Language.Compiler.Resolver
             if (toResolve.Count() != 1)
                 return;
 
-            List<TokenType> numbers = new List<TokenType>()
+            var numbers = new List<TokenType>()
             {
                 TokenType.INTEGER_VAL,
                 TokenType.INTEGER_VAR,
@@ -197,7 +197,7 @@ namespace Language.Compiler.Resolver
                 return;
             }
 
-            List<TokenType> booleans = new List<TokenType>()
+            var booleans = new List<TokenType>()
             {
                 TokenType.BOOL_VAL,
                 TokenType.BOOL_VAR,
@@ -221,7 +221,7 @@ namespace Language.Compiler.Resolver
                 return;
             }
 
-            List<TokenType> strings = new List<TokenType>()
+            var strings = new List<TokenType>()
             {
                 TokenType.STRING_VAL,
                 TokenType.STR_VAR,

@@ -1,4 +1,4 @@
-﻿namespace Language.Lexer.Enums
+﻿namespace Manco.Lexer.Enums
 {
     /// <summary>
     /// Tipo do token

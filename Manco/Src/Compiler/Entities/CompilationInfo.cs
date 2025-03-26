@@ -1,4 +1,4 @@
-﻿namespace Language.Compiler.Entities
+﻿namespace Manco.Compiler.Entities
 {
     /// <summary>
     /// Informações para compilação

@@ -1,7 +1,7 @@
-﻿using Language.Lexer.Entities;
-using Language.Semantic.Entities;
+﻿using Manco.Lexer.Entities;
+using Manco.Semantic.Entities;
 
-namespace Language.Semantic.Base
+namespace Manco.Semantic.Base
 {
     /// <summary>
     /// Estrutura base da árvore que valida a semantica do código iterativamente atráves dos

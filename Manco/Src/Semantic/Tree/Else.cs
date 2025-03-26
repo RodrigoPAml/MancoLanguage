@@ -1,9 +1,9 @@
-﻿using Language.Lexer.Entities;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
+﻿using Manco.Lexer.Entities;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida else

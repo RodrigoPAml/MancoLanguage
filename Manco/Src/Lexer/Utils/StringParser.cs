@@ -1,7 +1,7 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Exceptions;
 
-namespace Language.Lexer.Utils
+namespace Manco.Lexer.Utils
 {
     /// <summary>
     /// Faz parser ignorando tabulação ou espaço multiplos (splitting)

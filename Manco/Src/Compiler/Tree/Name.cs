@@ -1,9 +1,9 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Gera código para chamadas de identificador, atribuições, etc..
@@ -20,7 +20,7 @@ namespace Language.Compiler.Tree
             _isAttribution = isAttribution;
         }
 
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             // Cai aqui quando se esta atribuindo a uma variavel existente ou chamada de função
             if(_isAttribution)
@@ -32,19 +32,19 @@ namespace Language.Compiler.Tree
                 {
                     // Valida Chamada de função
                     case TokenType.OPEN:
-                        new FunctionCall().Validate(position, tokens, scopes, info);
+                        new FunctionCall().Generate(position, tokens, scopes, info);
                         break;
                     // Atribuição de variavel
                     case TokenType.ASSIGN:
                         {
                             var assign = new Assign();
-                            assign.Validate(position + 1, tokens, scopes, info);
+                            assign.Generate(position + 1, tokens, scopes, info);
                             ChangeVariable(info, scopes, tokens, assign?.GetResult()?.Type);
                         }
                         break;
                     // Atribuição por indice (array)
                     case TokenType.OPEN_BRACKET:
-                        new ArrayAssign().Validate(position + 1, tokens, scopes, info);
+                        new ArrayAssign().Generate(position + 1, tokens, scopes, info);
                         break;
                 } 
             }
@@ -73,7 +73,7 @@ namespace Language.Compiler.Tree
                             AddNewVariable(position, tokens, scopes, false);
 
                             var assign = new Assign();
-                            assign.Validate(position + 1, tokens, scopes, info);
+                            assign.Generate(position + 1, tokens, scopes, info);
 
                             var result = assign.GetResult();
                             SetVariableStackPos(position, tokens, scopes, info, result!);
@@ -110,7 +110,7 @@ namespace Language.Compiler.Tree
         public void ChangeVariable(CompilationInfo info, Stack<Scope> scopes, List<Token> tokens, TokenType? returnedType)
         {
             var variables = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .ToList();
         
             var variable = variables
@@ -121,12 +121,18 @@ namespace Language.Compiler.Tree
             if (variable?.Type == TokenType.INTEGER_DECL && returnedType == TokenType.DECIMAL_VAL)
                 info.Lines.Add("cfi t0 t0");
 
+            if (variable?.Type == TokenType.INTEGER_DECL_REF && returnedType == TokenType.DECIMAL_VAL)
+                info.Lines.Add("cfi t0 t0");
+
             // Conversão quando retorno é int pra float
             if (variable?.Type == TokenType.DECIMAL_DECL && returnedType == TokenType.INTEGER_VAL)
                 info.Lines.Add("cif t0 t0");
 
-            // Quando passado o endereço da variave
-            if(variable?.AddressStackPos != -1)
+            if (variable?.Type == TokenType.DECIMAL_DECL_REF && returnedType == TokenType.INTEGER_VAL)
+                info.Lines.Add("cif t0 t0");
+
+            // Quando passado o endereço da variavel
+            if (variable?.AddressStackPos != -1)
             {
                 info.Lines.Add($"lw t5 {-variable!.AddressStackPos - info.StackPointer} sp");
                 info.Lines.Add($"sw t0 0 t5");
@@ -174,7 +180,7 @@ namespace Language.Compiler.Tree
             bool isArray
         )
         {
-            scopes.First().Variables.Add(new Variable()
+            scopes.First().Childrens.Add(new ScopeVariable()
             {
                 Name = tokens[position - 1].Content,
                 Type = tokens[position - 2].Type,
@@ -199,7 +205,7 @@ namespace Language.Compiler.Tree
         )
         {
             // Seta no array
-            var variable = scopes.First().Variables.LastOrDefault();
+            var variable = scopes.First().Childrens.LastOrDefault();
 
             variable!.StackPos = info.StackPointer;
             variable!.Size = size;
@@ -224,7 +230,7 @@ namespace Language.Compiler.Tree
             CompilerToken token
         )
         {
-            var variable = scopes.First().Variables.Last();
+            var variable = scopes.First().Childrens.Last();
 
             if (token != null)
             {

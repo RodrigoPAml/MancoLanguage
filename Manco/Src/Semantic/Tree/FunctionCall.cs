@@ -1,14 +1,14 @@
-﻿using Language.Common.Enums;
-using Language.Compiler.Exceptions;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Exceptions;
-using Language.Semantic.Utils;
+﻿using Manco.Common.Enums;
+using Manco.Compiler.Exceptions;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Exceptions;
+using Manco.Semantic.Utils;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida chamada de função
@@ -27,7 +27,7 @@ namespace Language.Semantic.Tree
                 throw new SemanticException($"Function main can't be called", tokens[position], ErrorCode.FunctionCall);
 
             var functionVar = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name == functionName && x.Type == TokenType.FUNCTION)
                 .FirstOrDefault();
 
@@ -35,7 +35,7 @@ namespace Language.Semantic.Tree
                 throw new SemanticException($"Function {functionName} was not founded in the global scope", tokens[position], ErrorCode.FunctionCall);
 
             // Função sem argumentos 
-            if (currentTokens.Count() == 2 && functionVar.ChildVariables.Count == 0)
+            if (currentTokens.Count() == 2 && functionVar.FunctionArguments.Count == 0)
                 return;
 
             var groups = SplitTokens(
@@ -46,13 +46,13 @@ namespace Language.Semantic.Tree
             );
 
             // Não bate número de argumentos
-            if (groups.Count != functionVar.ChildVariables.Count)
-                throw new SemanticException($"Function {functionName} expects {functionVar.ChildVariables.Count} arguments but recieved {groups.Count}", tokens[position], ErrorCode.FunctionCall);
+            if (groups.Count != functionVar.FunctionArguments.Count)
+                throw new SemanticException($"Function {functionName} expects {functionVar.FunctionArguments.Count} arguments but recieved {groups.Count}", tokens[position], ErrorCode.FunctionCall);
 
             var indexVariable = 0;
             foreach (var group in groups)
             {
-                var functionVariable = functionVar.ChildVariables[indexVariable];
+                var functionVariable = functionVar.FunctionArguments[indexVariable];
                 var restriction = ExpressionRestriction.None;
 
                 List<TokenType> referenceTypes = new List<TokenType>()
@@ -87,7 +87,7 @@ namespace Language.Semantic.Tree
 
                     var result = expr.GetResult();
 
-                    if (!expr.IsResultValid(expectedResult))
+                    if (!expr.IsResultValid(expectedResult, restriction))
                         throw new SemanticException($"Expression type {result} is not valid with expected function type {expectedResult}", tokens[position - 1], ErrorCode.FunctionCall);
                 }
 
@@ -102,8 +102,8 @@ namespace Language.Semantic.Tree
         /// <returns></returns>
         private static List<List<Token>> SplitTokens(List<Token> tokens)
         {
-            List<List<Token>> tokenGroups = new List<List<Token>>();
-            List<Token> currentGroup = new List<Token>();
+            var tokenGroups = new List<List<Token>>();
+            var currentGroup = new List<Token>();
 
             foreach (var token in tokens)
             {

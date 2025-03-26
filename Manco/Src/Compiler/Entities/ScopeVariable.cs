@@ -1,19 +1,21 @@
-﻿using Language.Lexer.Enums;
+﻿using Manco.Lexer.Enums;
 
-namespace Language.Compiler.Entities
+namespace Manco.Compiler.Entities
 {
     /// <summary>
-    /// Variavel declarada
+    /// Variavel do escopo é o que um escopo vê imediatamente abaixo do seu nível
+    /// Por exemplo o escopo global vê declarações de funções
+    /// Os escopos de função veem variáveis
     /// </summary>
-    public class Variable
+    public class ScopeVariable
     {
         /// <summary>
-        /// Nome da Variavel
+        /// Nome
         /// </summary>
         public string Name { get; set; } = string.Empty; 
 
         /// <summary>
-        /// Tipo do token relacionado a variavel
+        /// Tipo do token relacionado
         /// </summary>
         public TokenType Type { get; set; }
 
@@ -23,7 +25,7 @@ namespace Language.Compiler.Entities
         public bool IsArray { get; set; } = false;
 
         /// <summary>
-        /// Se variavel veio da função atual
+        /// Se variavel foi declarada da função atual (scopo = função)
         /// </summary>
         public bool FromFunction { get; set; } = false;
 
@@ -43,8 +45,9 @@ namespace Language.Compiler.Entities
         public int AddressStackPos { get; set; } = -1;
 
         /// <summary>
-        /// Se é uma função aqui esta seus argumentos
+        /// Normalmente uma variavel de escopo não pode ter filhos
+        /// Mas em caso do escopo global, ele possui uma função como filho, então aqui é guardados os argumentos da função
         /// </summary>
-        public List<Variable> ChildVariables { get; set; } = new List<Variable>();
+        public List<ScopeVariable> FunctionArguments { get; set; } = new List<ScopeVariable>();
     }
 }

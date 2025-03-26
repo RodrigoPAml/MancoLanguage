@@ -1,6 +1,6 @@
-﻿using Language.Lexer.Entities;
+﻿using Manco.Lexer.Entities;
 
-namespace Language.Semantic.Entities
+namespace Manco.Semantic.Entities
 {
     /// <summary>
     /// Token formado por um ou mais tokens para simplificação da fase semantica
@@ -10,7 +10,7 @@ namespace Language.Semantic.Entities
         /// <summary>
         /// Variavel relacionada a token
         /// </summary>
-        public Variable Variable { get; set; } = null;
+        public ScopeVariable Variable { get; set; } = null;
 
         /// <summary>
         /// Se é array

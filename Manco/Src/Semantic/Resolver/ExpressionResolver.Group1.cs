@@ -1,7 +1,7 @@
-﻿using Language.Lexer.Enums;
-using Language.Semantic.Entities;
+﻿using Manco.Lexer.Enums;
+using Manco.Semantic.Entities;
 
-namespace Language.Semantic.Resolver
+namespace Manco.Semantic.Resolver
 {
     public partial class ExpressionResolver
     {
@@ -12,7 +12,7 @@ namespace Language.Semantic.Resolver
         /// <returns></returns>
         public List<SemanticToken> ResolvePriorityTokensGroup1(List<SemanticToken> tokens)
         {
-            List<SemanticToken> resolved = new List<SemanticToken>();
+            var resolved = new List<SemanticToken>();
 
             TokenType? operation = null;
 
@@ -32,8 +32,11 @@ namespace Language.Semantic.Resolver
                             switch (operation)
                             {
                                 case TokenType.DIVIDE:
-                                    if (float.Parse(token.Content) == 0)
-                                        throw new Exception("Division by zero");
+                                    if (float.TryParse(token.Content, out float number))
+                                    {
+                                        if(number == 0)
+                                            throw new Exception("Division by zero");
+                                    }
 
                                     resolved[resolved.Count() - 1] = Divide(resolved.Last(), token);
                                     break;
@@ -59,7 +62,7 @@ namespace Language.Semantic.Resolver
         /// <returns></returns>
         private List<SemanticToken> ResolvePriorityTokensGroup12(List<SemanticToken> tokens)
         {
-            List<SemanticToken> resolved = new List<SemanticToken>();
+            var resolved = new List<SemanticToken>();
 
             TokenType? operation = null;
 

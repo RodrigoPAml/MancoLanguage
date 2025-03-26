@@ -1,19 +1,19 @@
-﻿using Language.Lexer.Enums;
+﻿using Manco.Lexer.Enums;
 
-namespace Language.Semantic.Entities
+namespace Manco.Transpiler.Entities
 {
     /// <summary>
-    /// Variavel declarada
+    /// Variavel de escopo são o que um escopo vê imediantamente abaixo dele
     /// </summary>
-    public class Variable
+    public class ScopeVariable
     {
         /// <summary>
-        /// Nome da Variavel
+        /// Nome
         /// </summary>
         public string Name { get; set; } = string.Empty; 
 
         /// <summary>
-        /// Tipo do token relacionado a variavel
+        /// Tipo do token relacionado
         /// </summary>
         public TokenType Type { get; set; }
 
@@ -23,13 +23,13 @@ namespace Language.Semantic.Entities
         public bool IsArray { get; set; } = false;
 
         /// <summary>
-        /// Se variavel veio da função atual
+        /// Se variavel foi declarada da função atual (scopo = função)
         /// </summary>
         public bool FromFunction { get; set; } = false;
 
         /// <summary>
-        /// Se é uma função aqui esta seus argumentos
+        /// Usado somente em caso de função, o escopo global vê uma função, mas também vê suas variaveis
         /// </summary>
-        public List<Variable> ChildVariables { get; set; } = new List<Variable>();
+        public List<ScopeVariable> FunctionArguments { get; set; } = new List<ScopeVariable>();
     }
 }

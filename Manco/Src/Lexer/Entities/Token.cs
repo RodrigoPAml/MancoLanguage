@@ -1,6 +1,6 @@
-﻿using Language.Lexer.Enums;
+﻿using Manco.Lexer.Enums;
 
-namespace Language.Lexer.Entities
+namespace Manco.Lexer.Entities
 {
     /// <summary>
     /// Representa um token

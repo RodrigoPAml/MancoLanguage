@@ -1,4 +1,4 @@
-﻿namespace Language.Syntatic.Enums
+﻿namespace Manco.Syntatic.Enums
 {
     /// <summary>
     /// Tipos de scopo

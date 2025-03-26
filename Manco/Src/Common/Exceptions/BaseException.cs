@@ -1,7 +1,7 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
 
-namespace Language.Common.Exceptions
+namespace Manco.Common.Exceptions
 {
     /// <summary>
     /// Base language exception

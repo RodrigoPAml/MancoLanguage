@@ -1,4 +1,4 @@
-﻿namespace Language.Semantic.Enums
+﻿namespace Manco.Semantic.Enums
 {
     /// <summary>
     /// Restrições de validação de expressão

@@ -1,12 +1,12 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Syntatic.Base;
-using Language.Syntatic.Entities;
-using Language.Syntatic.Enums;
-using Language.Syntatic.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Syntatic.Base;
+using Manco.Syntatic.Entities;
+using Manco.Syntatic.Enums;
+using Manco.Syntatic.Exceptions;
 
-namespace Language.Syntatic.Tree
+namespace Manco.Syntatic.Tree
 {
     /// <summary>
     /// Valida sintaxe na declaração de uma função utilizando maquina de estados
@@ -16,13 +16,13 @@ namespace Language.Syntatic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             if (position >= tokens.Count)
-                throw new SyntaxException($"Unexpected token in function decleration", tokens[position - 1], ErrorCode.FunctionDeclaration);
+                throw new SyntaxException($"Unexpected token in function declaration", tokens[position - 1], ErrorCode.FunctionDeclaration);
 
             // Função deve sempre estar no escopo global
             if (scopes.First().Type != ScopeType.Global)
                 throw new SyntaxException($"Function declaration must be in global scope", tokens[position], ErrorCode.FunctionDeclaration);
 
-            FunctionState state = FunctionState.FunctionName;
+            var state = FunctionState.FunctionName;
 
             // Insere escopo da função
             scopes.Push(new Scope(ScopeType.Function));

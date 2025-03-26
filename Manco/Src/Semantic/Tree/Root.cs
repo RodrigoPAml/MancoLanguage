@@ -1,10 +1,10 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Exceptions;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Exceptions;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida semantica do código utilizando uma arvore de estados e uma stack para controle escopo

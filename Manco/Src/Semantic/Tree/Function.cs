@@ -1,12 +1,12 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Base;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Base;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Exceptions;
 
-namespace Language.Semantic.Tree
+namespace Manco.Semantic.Tree
 {
     /// <summary>
     /// Valida semantica de declaração de função
@@ -16,26 +16,28 @@ namespace Language.Semantic.Tree
         public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes)
         {
             // Verifica se a função com mesmo nome já não foi declarada
-            if (scopes.First().Variables.Any(x => x.Name == tokens[position].Content && x.Type == TokenType.FUNCTION))
+            if (scopes.First().Childrens.Any(x => x.Name == tokens[position].Content && x.Type == TokenType.FUNCTION))
                 throw new SemanticException($"Function {tokens[position]} already declared", tokens[position], ErrorCode.FunctionDeclaration);
 
-            // Adiciona função a variaveis do escopo (global)
-            var functionVar = new Variable()
+            var functionVar = new ScopeVariable()
             {
                 Name = tokens[position].Content,
                 Type = TokenType.FUNCTION,
             };
 
-            scopes.First().Variables.Add(functionVar);
+            // Adiciona função a filhos do escopo (global)
+            scopes.First().Childrens.Add(functionVar);
             
+            // Adiciona função como escopo global
             scopes.Push(new Scope(ScopeType.Function, tokens[position].Content));
 
             // Função sem argumentos
             if (tokens[position + 2].Type == TokenType.CLOSE)
                 return;
 
-            List<Variable> variables = new List<Variable>();
-            FunctionState state = FunctionState.FunctionName;
+            // Variaveis de scopo para função
+            var variables = new List<ScopeVariable>();
+            var state = FunctionState.FunctionName;
 
             // Itera novamente, para validar suas variaveis
             foreach (Token token in tokens.Skip(position))
@@ -80,7 +82,7 @@ namespace Language.Semantic.Tree
                                 case TokenType.DECIMAL_DECL_REF:
                                 case TokenType.INTEGER_DECL_REF:
                                 case TokenType.BOOLEAN_DECL_REF:
-                                    variables.Add(new Variable()
+                                    variables.Add(new ScopeVariable()
                                     {
                                         Type = token.Type,
                                         FromFunction = true,
@@ -107,10 +109,13 @@ namespace Language.Semantic.Tree
                                 case TokenType.DECIMAL_DECL_REF:
                                 case TokenType.INTEGER_DECL_REF:
                                 case TokenType.BOOLEAN_DECL_REF:
-                                    variables.Add(new Variable()
+                                    variables.Add(new ScopeVariable()
                                     {
                                         Type = token.Type,
                                         FromFunction = true,
+                                        IsArray = token.Type == TokenType.STRING_DECL
+                                            ? true
+                                            : false
                                     });
 
                                     state = FunctionState.VariableName;
@@ -191,13 +196,12 @@ namespace Language.Semantic.Tree
                 }
             }
 
-            // Adiciona argumentos da função a variaveis do escopo da função
             foreach(var variable in variables)
             {
                 string functionName = tokens[position].Content;
                 
                 // Valida se mesmo argumento já não existe
-                if (scopes.First().Variables.Any(x => x.Name == variable.Name))
+                if (scopes.First().Childrens.Any(x => x.Name == variable.Name))
                 {
                     var repeatedToken = tokens.Find(x => x.Content == variable.Name);
                     throw new SemanticException("Variable of function already declared", repeatedToken, ErrorCode.FunctionDeclaration);
@@ -207,9 +211,11 @@ namespace Language.Semantic.Tree
                 if (variable.Name == functionName)
                     throw new SemanticException("Variable of function have the same name of the function", tokens[position], ErrorCode.FunctionDeclaration);
 
-                // Add functions variable in the scope, since its the first one, dont verify if already exists
-                scopes.First().Variables.Add(variable);
-                functionVar.ChildVariables.Add(variable);
+                // Adiciona argumentos da função a filhos do escopo da função
+                scopes.First().Childrens.Add(variable);
+
+                // Adiciona tambem a variavel de escopo como filho dela mesma (global scope -> function scopes -> variables)
+                functionVar.FunctionArguments.Add(variable);
             }
         }
 

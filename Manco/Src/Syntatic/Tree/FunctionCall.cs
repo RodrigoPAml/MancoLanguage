@@ -1,11 +1,11 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Syntatic.Base;
-using Language.Syntatic.Entities;
-using Language.Syntatic.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Syntatic.Base;
+using Manco.Syntatic.Entities;
+using Manco.Syntatic.Exceptions;
 
-namespace Language.Syntatic.Tree
+namespace Manco.Syntatic.Tree
 {
     /// <summary>
     /// Valida chamada de função
@@ -50,8 +50,8 @@ namespace Language.Syntatic.Tree
 
         private static List<List<Token>> SplitTokens(List<Token> tokens)
         {
-            List<List<Token>> tokenGroups = new List<List<Token>>();
-            List<Token> currentGroup = new List<Token>();
+            var tokenGroups = new List<List<Token>>();
+            var currentGroup = new List<Token>();
 
             foreach (var token in tokens)
             {

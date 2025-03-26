@@ -1,4 +1,5 @@
-﻿using AssemblerEmulator;
+﻿using AssemblerSimulator;
+using Manco.Common.Enums;
 using System.Text;
 
 namespace Manco
@@ -40,7 +41,7 @@ namespace Manco
         {
             MancoProvider provider = new MancoProvider();
 
-            string code = "function main2()\n" +
+            string code = "function main()\n" +
                           "    print(10 * 2)\n" +
                           "end";
 
@@ -50,7 +51,8 @@ namespace Manco
             provider.Validate();
 
             // ou então chame compilar, que faz toda parte acima mais a compilação
-            var compiledCode = provider.Compile();
+            // tambem suporta transpilar para c++
+            var compiledCode = provider.Transform(TransformerType.CompiledMIPS);
 
             Console.WriteLine("Código compilado:");
             Console.WriteLine();

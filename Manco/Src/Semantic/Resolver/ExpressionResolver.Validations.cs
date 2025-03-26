@@ -1,12 +1,12 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Exceptions;
-using Language.Semantic.Utils;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Exceptions;
+using Manco.Semantic.Utils;
 
-namespace Language.Semantic.Resolver
+namespace Manco.Semantic.Resolver
 {
     public partial class ExpressionResolver
     {
@@ -18,11 +18,11 @@ namespace Language.Semantic.Resolver
         /// <param name="restriction"></param>
         /// <returns></returns>
         /// <exception cref="SemanticException"></exception>
-        public List<SemanticToken> Validate(List<Token> tokens, List<Variable> variables, ExpressionRestriction restriction)
+        public List<SemanticToken> Validate(List<Token> tokens, List<ScopeVariable> variables, ExpressionRestriction restriction)
         {
             tokens = TreatNegatives(tokens);
 
-            List<SemanticToken> result = new List<SemanticToken>();
+            var result = new List<SemanticToken>();
             for(var i = 0; i < tokens.Count; i++)
             {
                 bool haveArr = i + 3 < tokens.Count;
@@ -119,7 +119,7 @@ namespace Language.Semantic.Resolver
         /// <param name="restriction"></param>
         /// <param name="tokens"></param>
         /// <param name="variables"></param>
-        private void ValidateRestrictions(ExpressionRestriction restriction, List<SemanticToken> tokens, List<Variable> variables)
+        private void ValidateRestrictions(ExpressionRestriction restriction, List<SemanticToken> tokens, List<ScopeVariable> variables)
         {
             switch(restriction)
             {
@@ -130,7 +130,7 @@ namespace Language.Semantic.Resolver
                         if (tokens.Count() != 1)
                             throw new SemanticException("String index assignment must be with only a single operation", tokens[0], ErrorCode.Expression);
 
-                        List<TokenType> allowed = new List<TokenType>()
+                        var allowed = new List<TokenType>()
                         {
                             TokenType.STRING_VAL,
                             TokenType.ARR_INDEX_STRING,
@@ -148,7 +148,7 @@ namespace Language.Semantic.Resolver
                     break;
                 case ExpressionRestriction.StringDeclaration:
                     {
-                        List<TokenType> allowed = new List<TokenType>()
+                        var allowed = new List<TokenType>()
                         {
                             TokenType.STRING_VAL,
                             TokenType.STR_VAR,
@@ -174,7 +174,7 @@ namespace Language.Semantic.Resolver
                         if (tokens.Count() != 1)
                             throw new SemanticException("Reference argument must be provided by a previous declared variable", tokens[0], ErrorCode.Expression);
 
-                        List<TokenType> allowed = new List<TokenType>()
+                        var allowed = new List<TokenType>()
                         {
                             TokenType.STR_VAR,
                             TokenType.BOOL_VAR,
@@ -199,7 +199,7 @@ namespace Language.Semantic.Resolver
                         if (tokens.Count() != 1)
                             throw new SemanticException("Reference argument must be provided by a previous declared variable", tokens[0], ErrorCode.Expression);
 
-                        List<TokenType> allowed = new List<TokenType>()
+                        var allowed = new List<TokenType>()
                         {
                             TokenType.STR_VAR,
                             TokenType.BOOL_VAR,
@@ -225,8 +225,8 @@ namespace Language.Semantic.Resolver
         /// <returns></returns>
         private List<Token> TreatNegatives(List<Token> tokens)
         {
-            List<Token> newTokens = new List<Token>();
-            List<TokenType> allowedTypes = new List<TokenType>()
+            var newTokens = new List<Token>();
+            var allowedTypes = new List<TokenType>()
             {
                 TokenType.INTEGER_VAL,
                 TokenType.BOOL_VAL,

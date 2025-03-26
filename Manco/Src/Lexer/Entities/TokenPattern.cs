@@ -1,8 +1,8 @@
-﻿using Language.Lexer.Enums;
+﻿using Manco.Lexer.Enums;
 using System.Text.RegularExpressions;
-using MatchType = Language.Lexer.Enums.MatchType;
+using MatchType = Manco.Lexer.Enums.MatchType;
 
-namespace Language.Lexer.Entities
+namespace Manco.Lexer.Entities
 {
     /// <summary>
     /// Classe que reconhece um token
@@ -36,7 +36,7 @@ namespace Language.Lexer.Entities
             return _type;
         }
 
-        public Token? Find(string token, int line, int desloc)
+        public Token Find(string token, int line, int desloc)
         {
             var match = _match.Match(token);
 

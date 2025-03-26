@@ -1,16 +1,16 @@
-﻿using Language.Lexer.Entities;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
+﻿using Manco.Lexer.Entities;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Compila while loop
     /// </summary>
     public class Loop : CompilerTree
     {
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             info.Lines.Add(string.Empty);
             info.Lines.Add($"-- Calculo de instrução de scopo loop");
@@ -23,7 +23,7 @@ namespace Language.Compiler.Tree
             info.Lines.Add($"#BEGIN_LOOP{currentScope.Id}:");
 
             var expr = new Expression();
-            expr.Validate(position, tokens, scopes, info);
+            expr.Generate(position, tokens, scopes, info);
  
             info.Lines.Add($"beq t0 one #BODY_LOOP{currentScope.Id}");
             info.Lines.Add($"addi sp sp {currentScope.StackBegin - info.StackPointer}");

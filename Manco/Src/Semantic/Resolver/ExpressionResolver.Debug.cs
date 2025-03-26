@@ -1,6 +1,6 @@
-﻿using Language.Semantic.Entities;
+﻿using Manco.Semantic.Entities;
 
-namespace Language.Semantic.Resolver
+namespace Manco.Semantic.Resolver
 {
     public partial class ExpressionResolver
     {

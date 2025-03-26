@@ -1,24 +1,24 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Compila condicionais
     /// </summary>
     public class Condition : CompilerTree
     {
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             info.Lines.Add(string.Empty);
             info.Lines.Add($"-- Calculo de instrução de scopo");
 
             // Expressão da condição é do scopo de fora
             var expr = new Expression();
-            expr.Validate(position, tokens, scopes, info);
+            expr.Generate(position, tokens, scopes, info);
 
             info.Lines.Add(string.Empty);
             var name = string.Join(' ', tokens.Select(x => x.Content).ToArray());

@@ -1,35 +1,37 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
-using Language.Compiler.Tree;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
+using Manco.Compiler.Tree;
+using Manco.Common.Interfaces;
 
-namespace Language.Compiler
+namespace Manco.Compiler
 {
     /// <summary>
     /// Compilador do código
     /// Compila código assembly baseado na arquitetura MIPS
     /// </summary>
-    public class Compiler
+    public class MipsCompiler : ITransformer
     {
-        public List<string> Compile(List<List<Token>> tokens)
+        public List<string> Execute(List<List<Token>> tokens)
         {
-            CompilationInfo info = new CompilationInfo();
+            var info = new CompilationInfo();
+            info.Lines.Add("-- Código compilado para arquitetura baseada em MIPS architecture");
             info.Lines.Add("j main");
 
-            Scope global = new Scope(info.IdCounter++, ScopeType.Global);
+            var global = new Scope(info.IdCounter++, ScopeType.Global);
 
-            Stack<Scope> scopes = new Stack<Scope>();    
+            var scopes = new Stack<Scope>();    
             scopes.Push(global);
 
             // Adiciona função print, nativa do systema
-            scopes.First().Variables.Add(new Variable()
+            scopes.First().Childrens.Add(new ScopeVariable()
             {
                 Name = "print",
                 Type = TokenType.FUNCTION,
-                ChildVariables = new List<Variable>()
+                FunctionArguments = new List<ScopeVariable>()
                 {
-                    new Variable()
+                    new ScopeVariable()
                     {
                         Name= "any",
                         Type = TokenType.ANY 
@@ -38,7 +40,7 @@ namespace Language.Compiler
             });
 
             foreach (var line in tokens)
-                new Root().Validate(0, line, scopes, info);
+                new Root().Generate(0, line, scopes, info);
 
             if(info.UsePrintString)
                 AddPrintStringFunction(info);

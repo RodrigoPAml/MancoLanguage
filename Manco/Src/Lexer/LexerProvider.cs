@@ -1,17 +1,17 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Lexer.Exceptions;
-using Language.Lexer.Utils;
-using MatchType = Language.Lexer.Enums.MatchType;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Lexer.Exceptions;
+using Manco.Lexer.Utils;
+using MatchType = Manco.Lexer.Enums.MatchType;
 
-namespace Language.Lexer
+namespace Manco.Lexer
 {
     /// <summary>
     /// Implementação do lexer, detecta tokens da linguagem
     /// Caso algum token seja invalido gera exceção
     /// </summary>
-    public class Lexer
+    public class LexerProvider
     {
         private List<TokenPattern> _patterns = new List<TokenPattern>();
 
@@ -19,7 +19,7 @@ namespace Language.Lexer
 
         private List<Token> _lineTokens = new List<Token>();
 
-        public Lexer()
+        public LexerProvider()
         {
             _patterns.Add(new TokenPattern(MatchType.Exact, "integer&", TokenType.INTEGER_DECL_REF));
             _patterns.Add(new TokenPattern(MatchType.Exact, "decimal&", TokenType.DECIMAL_DECL_REF));

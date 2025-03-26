@@ -1,7 +1,7 @@
-﻿using Language.Compiler.Entities;
-using Language.Lexer.Enums;
+﻿using Manco.Compiler.Entities;
+using Manco.Lexer.Enums;
 
-namespace Language.Compiler.Resolver
+namespace Manco.Compiler.Resolver
 {
     public partial class ExpressionCompiler
     {
@@ -24,7 +24,7 @@ namespace Language.Compiler.Resolver
             // Calculo de endereço base + deslocamento
             if (tkn.IndexVariable != null)
             {
-                int sizePerItem = tkn.Type == TokenType.ARR_INDEX_STRING
+                var sizePerItem = tkn.Type == TokenType.ARR_INDEX_STRING
                       ? 1
                       : 4;
 
@@ -304,7 +304,7 @@ namespace Language.Compiler.Resolver
 
             return new CompilerToken()
             {
-                Type = TokenType.DECIMAL_VAL,
+                Type = TokenType.INTEGER_VAL,
                 StackSize = 4,
                 StackPos = info.StackPointer - 4
             };

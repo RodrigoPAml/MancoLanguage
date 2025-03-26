@@ -1,19 +1,19 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Compila atribuições normais
     /// </summary>
     public class Assign : CompilerTree
     {
-        private CompilerToken? _result = null;
+        private CompilerToken _result = null;
 
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
              int indexVariable =
                 tokens[0].Type == TokenType.IDENTIFIER
@@ -21,11 +21,11 @@ namespace Language.Compiler.Tree
                 : 1;
 
             var variable = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name == tokens[indexVariable].Content)
                 .FirstOrDefault();
 
-            string varName = variable?.Name ?? string.Empty;
+            var varName = variable?.Name ?? string.Empty;
             var type = variable?.Type ?? TokenType.ANY;
 
             var expr = new Expression(
@@ -37,7 +37,7 @@ namespace Language.Compiler.Tree
                     : string.Empty
            );
       
-            expr.Validate(position, tokens, scopes, info);
+            expr.Generate(position, tokens, scopes, info);
             _result = expr.GetResult();
         }
 
@@ -45,7 +45,7 @@ namespace Language.Compiler.Tree
         /// Retorna resultado
         /// </summary>
         /// <returns></returns>
-        public CompilerToken? GetResult()
+        public CompilerToken GetResult()
         {
             return _result;
         }

@@ -1,10 +1,10 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Enums;
-using Language.Compiler.Exceptions;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Enums;
+using Manco.Compiler.Exceptions;
 
-namespace Language.Compiler.Utils
+namespace Manco.Compiler.Utils
 {
     /// <summary>
     /// Conversão entre tipos

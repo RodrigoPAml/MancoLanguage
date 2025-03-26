@@ -1,20 +1,20 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
-using Language.Compiler.Exceptions;
-using Language.Compiler.Utils;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
+using Manco.Compiler.Exceptions;
+using Manco.Compiler.Utils;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
-    /// Valida chamada de função
+    /// Compila chamada de função
     /// </summary>
     public class FunctionCall : CompilerTree
     {
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
             var currentTokens = tokens
                 .Skip(position)
@@ -23,23 +23,24 @@ namespace Language.Compiler.Tree
             var functionName = tokens[position - 1].Content;
 
             var functionVar = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name == functionName && x.Type == TokenType.FUNCTION)
                 .FirstOrDefault();
 
             var variables = scopes
-                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Type != TokenType.FUNCTION)
                 .ToList();
 
             // Função sem argumentos 
-            if (currentTokens.Count() == 2 && functionVar?.ChildVariables.Count == 0)
+            if (currentTokens.Count() == 2 && functionVar?.FunctionArguments.Count == 0)
             {
                 if (functionName != "main" && functionName != "print")
                     info.Lines.Add($"jal {functionName}");
                 return;
             }
 
+            // Grupos de argumentos separados por tokens, cada grupo é um argumento
             var groups = SplitTokens(
                 currentTokens
                     .Skip(1)
@@ -52,8 +53,8 @@ namespace Language.Compiler.Tree
 
             foreach (var group in groups)
             {
-                var functionVariable = functionVar?.ChildVariables[indexVariable];
-                var restriction = ExpressionRestriction.None;
+                var functionVariable = functionVar?.FunctionArguments[indexVariable];
+                bool isReference = false;
 
                 var referenceTypes = new List<TokenType>()
                 {
@@ -64,11 +65,11 @@ namespace Language.Compiler.Tree
 
                 // Por referencia
                 if (referenceTypes.Contains(functionVariable!.Type))
-                    restriction = ExpressionRestriction.SingleReferenceVariable;
+                    isReference = true;
 
                 // Quando é array é referencia sempre
                 if (functionVariable.IsArray)
-                    restriction = ExpressionRestriction.ArrayReferenceVariable;
+                    isReference = true;
 
                 // Função especial do sistema, o print
                 if (functionName == "print")
@@ -76,7 +77,7 @@ namespace Language.Compiler.Tree
                     var expr = new Expression();
 
                     // Valida expressão do print
-                    expr.Validate(0, group, scopes, info);
+                    expr.Generate(0, group, scopes, info);
                     var result = expr.GetResult();
 
                     if(result?.Type == TokenType.INTEGER_VAL || result?.Type == TokenType.BOOL_VAL)
@@ -102,7 +103,7 @@ namespace Language.Compiler.Tree
                 }
                 else
                 {
-                    if (restriction == ExpressionRestriction.SingleReferenceVariable || restriction == ExpressionRestriction.ArrayReferenceVariable)
+                    if (isReference)
                     {
                         var variableRef = variables.Find(x => x.Name == group[0].Content);
 
@@ -117,8 +118,8 @@ namespace Language.Compiler.Tree
                         info.Lines.Add($"-- Criando valor para enviar em nome de '{functionVariable.Name}'");
                        
                         var expectedResult = TypeConverter.ExpectedResult(functionVariable.Type, tokens[position]);
-                        var expr = new Expression(restriction);
-                        expr.Validate(0, group, scopes, info);
+                        var expr = new Expression(ExpressionRestriction.None);
+                        expr.Generate(0, group, scopes, info);
 
                         // Conversão quando retorno é float para int
                         if (functionVariable?.Type == TokenType.INTEGER_DECL && expr.GetResult()?.Type == TokenType.DECIMAL_VAL)
@@ -145,7 +146,7 @@ namespace Language.Compiler.Tree
             indexVariable = 0;
             foreach (var result in results)
             {
-                var functionVariable = functionVar?.ChildVariables[indexVariable];
+                var functionVariable = functionVar?.FunctionArguments[indexVariable];
 
                 if (functionName != "print")
                 {

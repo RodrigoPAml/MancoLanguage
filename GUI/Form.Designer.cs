@@ -36,12 +36,13 @@
             buttonLoad = new Button();
             ButtonRun = new Button();
             buttonDisableHighlight = new Button();
+            comboBoxTransformer = new ComboBox();
             codeTextBox = new RichTextBox();
             tableLayoutPanel4 = new TableLayoutPanel();
             listBoxOutput = new ListBox();
             listBoxCodeOutput = new TextBox();
             tableLayoutPanel3 = new TableLayoutPanel();
-            tabControl1 = new TabControl();
+            tabControlTranspilado = new TabControl();
             tabPage = new TabPage();
             textBoxGenerated = new RichTextBox();
             tabPage2 = new TabPage();
@@ -50,7 +51,7 @@
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            tabControl1.SuspendLayout();
+            tabControlTranspilado.SuspendLayout();
             tabPage.SuspendLayout();
             tabPage2.SuspendLayout();
             SuspendLayout();
@@ -75,7 +76,8 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tableLayoutPanel2.ColumnCount = 5;
+            tableLayoutPanel2.ColumnCount = 6;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
@@ -86,6 +88,7 @@
             tableLayoutPanel2.Controls.Add(buttonLoad, 0, 0);
             tableLayoutPanel2.Controls.Add(ButtonRun, 3, 0);
             tableLayoutPanel2.Controls.Add(buttonDisableHighlight, 4, 0);
+            tableLayoutPanel2.Controls.Add(comboBoxTransformer, 5, 0);
             tableLayoutPanel2.Location = new Point(3, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
@@ -136,13 +139,23 @@
             // buttonDisableHighlight
             // 
             buttonDisableHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDisableHighlight.Location = new Point(450, 3);
+            buttonDisableHighlight.Location = new Point(303, 3);
             buttonDisableHighlight.Name = "buttonDisableHighlight";
             buttonDisableHighlight.Size = new Size(117, 23);
             buttonDisableHighlight.TabIndex = 5;
             buttonDisableHighlight.Text = "Disable Highlight";
             buttonDisableHighlight.UseVisualStyleBackColor = true;
             buttonDisableHighlight.Click += buttonDisableHighlight_Click;
+            // 
+            // comboBoxTransformer
+            // 
+            comboBoxTransformer.FormattingEnabled = true;
+            comboBoxTransformer.Items.AddRange(new object[] { "Mips Compiler", "C++ Transpiler" });
+            comboBoxTransformer.Location = new Point(426, 3);
+            comboBoxTransformer.Name = "comboBoxTransformer";
+            comboBoxTransformer.Size = new Size(121, 23);
+            comboBoxTransformer.TabIndex = 6;
+            comboBoxTransformer.SelectedIndexChanged += comboBoxTransformer_SelectedIndexChanged;
             // 
             // codeTextBox
             // 
@@ -200,7 +213,7 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60.19737F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 39.80264F));
             tableLayoutPanel3.Controls.Add(tableLayoutPanel1, 0, 0);
-            tableLayoutPanel3.Controls.Add(tabControl1, 1, 0);
+            tableLayoutPanel3.Controls.Add(tabControlTranspilado, 1, 0);
             tableLayoutPanel3.Location = new Point(12, 12);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
@@ -208,16 +221,16 @@
             tableLayoutPanel3.Size = new Size(968, 555);
             tableLayoutPanel3.TabIndex = 1;
             // 
-            // tabControl1
+            // tabControlTranspilado
             // 
-            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tabControl1.Controls.Add(tabPage);
-            tabControl1.Controls.Add(tabPage2);
-            tabControl1.Location = new Point(585, 3);
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(380, 549);
-            tabControl1.TabIndex = 1;
+            tabControlTranspilado.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControlTranspilado.Controls.Add(tabPage);
+            tabControlTranspilado.Controls.Add(tabPage2);
+            tabControlTranspilado.Location = new Point(585, 3);
+            tabControlTranspilado.Name = "tabControlTranspilado";
+            tabControlTranspilado.SelectedIndex = 0;
+            tabControlTranspilado.Size = new Size(380, 549);
+            tabControlTranspilado.TabIndex = 1;
             // 
             // tabPage
             // 
@@ -276,7 +289,7 @@
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
-            tabControl1.ResumeLayout(false);
+            tabControlTranspilado.ResumeLayout(false);
             tabPage.ResumeLayout(false);
             tabPage2.ResumeLayout(false);
             ResumeLayout(false);
@@ -296,10 +309,11 @@
         private TableLayoutPanel tableLayoutPanel4;
         private TextBox listBoxCodeOutput;
         private Button buttonDisableHighlight;
-        private TabControl tabControl1;
+        private TabControl tabControlTranspilado;
         private TabPage tabPage;
         private TabPage tabPage2;
         private RichTextBox textBoxGenerated;
         private RichTextBox textBoxTokens;
+        private ComboBox comboBoxTransformer;
     }
 }

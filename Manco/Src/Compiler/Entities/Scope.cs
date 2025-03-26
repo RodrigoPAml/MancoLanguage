@@ -1,14 +1,21 @@
-﻿using Language.Compiler.Enums;
+﻿using Manco.Compiler.Enums;
 
-namespace Language.Compiler.Entities
+namespace Manco.Compiler.Entities
 {
     /// <summary>
     /// Scopo
+    /// Um scopo não contêm outro scopo, apesar de poder estar dentro de um
+    /// Stack determina isso
     /// </summary>
     public class Scope
     {
         /// <summary>
-        /// Compiler
+        /// Id do scopo
+        /// </summary>
+        public int Id { get; private set; }
+
+        /// <summary>
+        /// Tipo do scopo
         /// </summary>
         public ScopeType Type { get; set; }
 
@@ -18,17 +25,12 @@ namespace Language.Compiler.Entities
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Variaveis do Scopo
+        /// Filhos do Scopo
         /// </summary>
-        public List<Variable> Variables { get; set; } = new List<Variable>();
+        public List<ScopeVariable> Childrens { get; set; } = new List<ScopeVariable>();
 
         /// <summary>
-        /// Id do scopo
-        /// </summary>
-        public int Id { get; private set; }
-
-        /// <summary>
-        /// Ultimo Id de if desse scopo
+        /// Ultimo Id de if/else/elif desse scopo
         /// </summary>
         public int LastIfId { get; set; } = 0;
 

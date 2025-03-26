@@ -1,12 +1,12 @@
-﻿using Language.Common.Enums;
-using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Semantic.Entities;
-using Language.Semantic.Enums;
-using Language.Semantic.Exceptions;
-using Language.Semantic.Utils;
+﻿using Manco.Common.Enums;
+using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Semantic.Entities;
+using Manco.Semantic.Enums;
+using Manco.Semantic.Exceptions;
+using Manco.Semantic.Utils;
 
-namespace Language.Semantic.Resolver
+namespace Manco.Semantic.Resolver
 {
     /// Prioridade dos tokens
     /// * / then % GRUPO 1
@@ -32,13 +32,13 @@ namespace Language.Semantic.Resolver
         )
         {
             // Variaveis atuais disponiveis
-            List<Variable> variables = scopes
-                .SelectMany(x => x.Variables)
+            var variables = scopes
+                .SelectMany(x => x.Childrens)
                 .Where(x => x.Name != currentVarName)
                 .ToList();
 
             // Reduz tokens para simplificação
-            List<SemanticToken> tokens = Validate(originalTokens, variables, restriction);
+            var tokens = Validate(originalTokens, variables, restriction);
             ValidateRestrictions(restriction, tokens, variables);
 
             tokens.Insert(0, new SemanticToken()
@@ -56,7 +56,7 @@ namespace Language.Semantic.Resolver
             //Print(tokens);
 
             int index = 0;
-            List<SemanticToken> result = new List<SemanticToken>();
+            var result = new List<SemanticToken>();
 
             foreach (var token in tokens)
             {

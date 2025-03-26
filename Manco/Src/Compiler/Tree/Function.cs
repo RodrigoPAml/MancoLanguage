@@ -1,36 +1,39 @@
-﻿using Language.Lexer.Entities;
-using Language.Lexer.Enums;
-using Language.Compiler.Base;
-using Language.Compiler.Entities;
-using Language.Compiler.Enums;
+﻿using Manco.Lexer.Entities;
+using Manco.Lexer.Enums;
+using Manco.Compiler.Base;
+using Manco.Compiler.Entities;
+using Manco.Compiler.Enums;
 
-namespace Language.Compiler.Tree
+namespace Manco.Compiler.Tree
 {
     /// <summary>
     /// Gera código para declaração de função
     /// </summary>
     public class Function : CompilerTree
     {
-        public override void Validate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
+        public override void Generate(int position, List<Token> tokens, Stack<Scope> scopes, CompilationInfo info)
         {
-            // Adiciona função a variaveis do escopo (global)
-            var functionVar = new Variable()
+            var functionName = tokens[position].Content;
+            var functionVar = new ScopeVariable()
             {
-                Name = tokens[position].Content,
+                Name = functionName,
                 Type = TokenType.FUNCTION,
             };
 
-            scopes.First().Variables.Add(functionVar);
-            scopes.Push(new Scope(info.IdCounter++, ScopeType.Function, tokens[position].Content, 0));
+            // Adiciona função a filhos do escopo (global)
+            scopes.First().Childrens.Add(functionVar);
 
+            // Adiciona função como escopo
+            scopes.Push(new Scope(info.IdCounter++, ScopeType.Function, functionName, 0));
+
+            // Escopo atual
             var scope = scopes.First();
-            string functionName = tokens[position].Content;
 
             info.Lines.Add(string.Empty);
-            info.Lines.Add($"-- Instrução para função {tokens[position].Content} with id {scope.Id}");
+            info.Lines.Add($"-- Instrução para função {functionName} with id {scope.Id}");
             info.Lines.Add($"{functionName}:");
 
-            // Função main não foi chamada por nenhuma outra, nã oprecisa de return address
+            // Função main não foi chamada por nenhuma outra, não precisa de return address
             if(functionName != "main")
             {
                 info.Lines.Add($"sw ra 0 sp");
@@ -42,8 +45,8 @@ namespace Language.Compiler.Tree
             if (tokens[position + 2].Type == TokenType.CLOSE)
                 return;
 
-            List<Variable> variables = new List<Variable>();
-            FunctionState state = FunctionState.FunctionName;
+            var variables = new List<ScopeVariable>();
+            var state = FunctionState.FunctionName;
 
             // Itera novamente, para validar suas variaveis
             foreach (Token token in tokens.Skip(position))
@@ -84,7 +87,7 @@ namespace Language.Compiler.Tree
                                 case TokenType.DECIMAL_DECL_REF:
                                 case TokenType.INTEGER_DECL_REF:
                                 case TokenType.BOOLEAN_DECL_REF:
-                                    variables.Add(new Variable()
+                                    variables.Add(new ScopeVariable()
                                     {
                                         Type = token.Type,
                                         FromFunction = true,
@@ -109,10 +112,13 @@ namespace Language.Compiler.Tree
                                 case TokenType.DECIMAL_DECL_REF:
                                 case TokenType.INTEGER_DECL_REF:
                                 case TokenType.BOOLEAN_DECL_REF:
-                                    variables.Add(new Variable()
+                                    variables.Add(new ScopeVariable()
                                     {
                                         Type = token.Type,
                                         FromFunction = true,
+                                        IsArray = token.Type == TokenType.STRING_DECL
+                                            ? true
+                                            : false
                                     });
 
                                     state = FunctionState.VariableName;
@@ -184,7 +190,6 @@ namespace Language.Compiler.Tree
             }
 
             int accumulatedStackPos = variables.Count() * 4;
-            // Adiciona argumentos da função a variaveis do escopo da função
             foreach(var variable in variables)
             {
                 variable.StackPos = 0;
@@ -195,8 +200,11 @@ namespace Language.Compiler.Tree
 
                 accumulatedStackPos -= 4; // Endereço = 4 bytes
 
-                scopes.First().Variables.Add(variable);
-                functionVar.ChildVariables.Add(variable);
+                // Adiciona argumentos da função a filhos do escopo da função
+                scopes.First().Childrens.Add(variable);
+
+                // Adiciona tambem a variavel de escopo como filho dela mesma (global scope -> function scopes -> variables)
+                functionVar.FunctionArguments.Add(variable);
             }
         }
 
