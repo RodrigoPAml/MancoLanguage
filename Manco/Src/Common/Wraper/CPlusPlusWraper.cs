@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace GUI
+namespace Manco.Common.Wrapper
 {
     /// <summary>
     /// Wraper around G++ to compile and invoke programs
