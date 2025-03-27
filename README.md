@@ -53,6 +53,18 @@ The code editor is a little buggier because of Windows Form limitations on synta
 - The language syntax is based on lua with some mix of c++ and imagination
 - The language can be compile to a set of MIPS based assembly and will be executed with the assembly simulator embedded
 - Or, be transpiled to C++ and executed with g++ (need to be installed to work)
+
+## Limitations
+
+- Arrays must be declared empty, an after initialized by index and have fixed size
+- Strings can be declared with the content or by the addition of strings or other strings variables. This will determine its fixed size
+- String can be declared by assigning an integer (empty string)
+- Strings must be modified only by index
+- No global variables
+- Print accepts only one argument
+- Arrays index must be a variable, you can't calculate inside the array index
+- MIPS compiler execute all "if/elseif" expression even if not needed, this can lead to undefined behavior, but duplicating the if resolves the problem
+- Passing a variable to an function by an array index access is not allowed if the function expects reference variable
   
 ### Example 1
 
