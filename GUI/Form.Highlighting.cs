@@ -44,6 +44,8 @@ namespace GUI
             this.codeTextBox.Visible = true;
             this.codeTextBox.Focus();
 
+            this.VerifyCode();
+
             this.codeTextBox.TextChanged += this.richTextBoxCode_TextChanged!;
         }
 

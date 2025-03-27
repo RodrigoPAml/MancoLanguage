@@ -54,6 +54,10 @@ namespace Manco.Transpiler.Tree
                             var tokensToAssign = tokens.Skip(5).ToList();
                             var expr = Conversions.BuildExpression(tokensToAssign);
 
+                            // Atribuição de array na string em C++ é com aspas simples 
+                            if(expr.Contains("\""))
+                                expr = expr.Replace("\"", "'");
+
                             info.AddLine($"{name}[{index}] = {expr};");
                         }
                         break;

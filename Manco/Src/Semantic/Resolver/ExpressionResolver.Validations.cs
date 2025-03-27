@@ -156,7 +156,7 @@ namespace Manco.Semantic.Resolver
                             TokenType.PLUS,
                         };
 
-                        if (tokens.Count() == 1 && tokens[0].Type == TokenType.INTEGER_VAL)
+                        if (tokens.Count() == 1 && tokens[0].Type == TokenType.INTEGER_VAL && int.Parse(tokens[0].Content) != 0)
                             break;
 
                         var invalidToken = tokens.Find(x => !allowed.Contains(x.Type));
