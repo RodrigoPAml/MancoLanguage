@@ -18,6 +18,8 @@ The compiler output and program output are in bottom.
 
 Into the top, a select exists with the options of a MIPS Compiler or C++ transpiler.
 
+The code editor is a little buggier because of Windows Form limitations on highlighting, so you can disable it if you want.
+
 ![image](https://github.com/user-attachments/assets/37979c1a-5506-44f6-86c6-e3641d3b12c5)
 
 An error in the editor and tokens involved on the left
