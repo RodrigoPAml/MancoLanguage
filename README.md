@@ -16,7 +16,7 @@ On the left is the code editor, and on the right are the generated assembly and 
 
 The compiler output and program output are in bottom.
 
-Into the top an select exists with the options of a MIPS Compiler or C++ transpiler.
+Into the top, a select exists with the options of a MIPS Compiler or C++ transpiler.
 
 ![image](https://github.com/user-attachments/assets/37979c1a-5506-44f6-86c6-e3641d3b12c5)
 
