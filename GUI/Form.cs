@@ -1,8 +1,9 @@
 using System.Text;
 using Manco;
 using AssemblerSimulator;
-using Manco.Common.Exceptions;
 using Manco.Common.Enums;
+using Manco.Common.Wrapper;
+using Manco.Common.Exceptions;
 using Timer = System.Windows.Forms.Timer;
 using WinForm = System.Windows.Forms.Form;
 
