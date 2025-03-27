@@ -18,7 +18,6 @@ namespace Manco
                           "        print(\"\\n1 + 1 is 2\")\n" +
                           "    end\n" +
                           "end\n";
-            Console.WriteLine(code);
 
             provider.SetCode(code);
 
