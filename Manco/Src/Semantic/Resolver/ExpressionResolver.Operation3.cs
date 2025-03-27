@@ -502,6 +502,31 @@ namespace Manco.Semantic.Resolver
                                 throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
                         }
                     }
+                case TokenType.BOOL_VAL:
+                case TokenType.BOOL_VAR:
+                case TokenType.ARR_INDEX_BOOL:
+                    {
+                        switch (right.Type)
+                        {
+                            case TokenType.BOOL_VAL:
+                            case TokenType.BOOL_VAR:
+                            case TokenType.ARR_INDEX_BOOL:
+                                {
+                                    var result = left.TestValue == right.TestValue
+                                        ? "true"
+                                        : "false";
+
+                                    return new SemanticToken()
+                                    {
+                                        TestValue = result,
+                                        Content = result,
+                                        Type = TokenType.BOOL_VAL,
+                                    };
+                                }
+                            default:
+                                throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
+                        }
+                    }
                 default:
                     throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
             }
@@ -606,6 +631,31 @@ namespace Manco.Semantic.Resolver
                             case TokenType.STRING_VAL:
                             case TokenType.STR_VAR:
                             case TokenType.ARR_INDEX_STRING:
+                                {
+                                    var result = left.TestValue != right.TestValue
+                                        ? "true"
+                                        : "false";
+
+                                    return new SemanticToken()
+                                    {
+                                        TestValue = result,
+                                        Content = result,
+                                        Type = TokenType.BOOL_VAL,
+                                    };
+                                }
+                            default:
+                                throw new SemanticException($"Cannot compare tokens of types {left.Type} and {right.Type}", left, ErrorCode.Expression);
+                        }
+                    }
+                case TokenType.BOOL_VAL:
+                case TokenType.BOOL_VAR:
+                case TokenType.ARR_INDEX_BOOL:
+                    {
+                        switch (right.Type)
+                        {
+                            case TokenType.BOOL_VAL:
+                            case TokenType.BOOL_VAR:
+                            case TokenType.ARR_INDEX_BOOL:
                                 {
                                     var result = left.TestValue != right.TestValue
                                         ? "true"

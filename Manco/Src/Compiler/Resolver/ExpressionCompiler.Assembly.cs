@@ -89,6 +89,56 @@ namespace Manco.Compiler.Resolver
         }
 
         /// <summary>
+        /// Operação entre inteiros
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="op"></param>
+        /// <param name="returnedType"></param>
+        /// <returns></returns>
+        private CompilerToken BoolOp(CompilationInfo info, CompilerToken left, CompilerToken right, string op, TokenType returnedType)
+        {
+            // Significa que esta na stack, puxamos valor para t0
+            if (left.StackPos != -1)
+            {
+                SetIndexToT5(info, left);
+                info.Lines.Add($"lw t0 {left.StackPos - info.StackPointer} t5");
+            }
+            else
+            {
+                var value = left.Content == "true" ? "1" : "0";
+                info.Lines.Add($"lir t0 {value}");
+            }
+
+            // Significa que esta na stack, puxamos valor para t1
+            if (right.StackPos != -1)
+            {
+                SetIndexToT5(info, right);
+                info.Lines.Add($"lw t1 {right.StackPos - info.StackPointer} t5");
+            }
+            else
+            {
+                var value = right.Content == "true" ? "1" : "0";
+                info.Lines.Add($"lir t1 {value}");
+            }
+
+            // Faz operação e salva na stack na posição atual
+            info.Lines.Add($"{op} t0 t0 t1");
+            info.Lines.Add("sw t0 0 sp");
+            info.Lines.Add("addi sp sp 4");
+
+            info.StackPointer += 4;
+
+            return new CompilerToken()
+            {
+                Type = returnedType,
+                StackSize = 4,
+                StackPos = info.StackPointer - 4,
+            };
+        }
+
+        /// <summary>
         /// Operações entre decimal e inteiro
         /// </summary>
         /// <param name="info"></param>

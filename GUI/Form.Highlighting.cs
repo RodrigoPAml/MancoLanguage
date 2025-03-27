@@ -31,54 +31,8 @@ namespace GUI
             this.codeTextBox.Visible = false;
             this.codeTextBox.SuspendLayout();
 
-            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
-
-            CheckKeyword("function", Color.DarkBlue, codeTextBox);
-            CheckKeyword("end", Color.DarkBlue, codeTextBox);
-            CheckKeyword("while", Color.DarkBlue, codeTextBox);
-            CheckKeyword("or", Color.DarkBlue, codeTextBox);
-            CheckKeyword("and", Color.DarkBlue, codeTextBox);
-            CheckKeyword("break", Color.DarkBlue, codeTextBox);
-            CheckKeyword("continue", Color.DarkBlue, codeTextBox);
-            CheckKeyword("break", Color.DarkBlue, codeTextBox);
-            CheckKeyword("if", Color.DarkBlue, codeTextBox);
-            CheckKeyword("elif", Color.DarkBlue, codeTextBox);
-            CheckKeyword("else", Color.DarkBlue, codeTextBox);
-
-            CheckKeyword("integer", Color.DarkGreen, codeTextBox);
-            CheckKeyword("decimal", Color.DarkGreen, codeTextBox);
-            CheckKeyword("bool", Color.DarkGreen, codeTextBox);
-            CheckKeyword("string", Color.DarkGreen, codeTextBox);
-            CheckKeyword("integer&", Color.DarkGreen, codeTextBox);
-            CheckKeyword("decimal&", Color.DarkGreen, codeTextBox);
-            CheckKeyword("bool&", Color.DarkGreen, codeTextBox);
-            CheckKeyword("print", Color.HotPink, codeTextBox);
-
-            CheckKeyword(">=", Color.Gray, codeTextBox);
-            CheckKeyword("<=", Color.Gray, codeTextBox);
-            CheckKeyword(">", Color.Gray, codeTextBox);
-            CheckKeyword("<", Color.Gray, codeTextBox);
-            CheckKeyword("-", Color.Gray, codeTextBox);
-            CheckKeyword("!=", Color.Gray, codeTextBox);
-            CheckKeyword("==", Color.Gray, codeTextBox);
-            CheckKeyword("=", Color.Gray, codeTextBox);
-            CheckKeyword(":", Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\+"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\/"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\*"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\%"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\("), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\)"), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\."), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\["), Color.Gray, codeTextBox);
-            CheckKeyword(new Regex("\\]"), Color.Gray, codeTextBox);
-
-            CheckKeyword(new Regex("^*--.*"), Color.Gray, codeTextBox);
-
-            CheckKeyword(new Regex("true|false"), Color.HotPink, codeTextBox);
-            CheckKeyword(new Regex("[0-9][0-9]*"), Color.DarkOliveGreen, codeTextBox);
-            CheckKeyword(new Regex("\\d+\\.\\d+"), Color.DarkOliveGreen, codeTextBox);
-            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
+            RemoveHighlight();
+            MancoBeautify();
 
             if (originalCaretPosition < codeTextBox.TextLength)
             {
@@ -90,7 +44,6 @@ namespace GUI
             this.codeTextBox.Visible = true;
             this.codeTextBox.Focus();
 
-            this.VerifyCode();
             this.codeTextBox.TextChanged += this.richTextBoxCode_TextChanged!;
         }
 
@@ -125,9 +78,6 @@ namespace GUI
         /// <param name="color"></param>
         private void HighlightLine(int line, int start, int end, Color color)
         {
-            if (_disableHighlighting)
-                return;
-
             if (line < 0)
                 return;
 
@@ -155,11 +105,8 @@ namespace GUI
         /// <summary>
         /// Remove destaques do código
         /// </summary>
-        private void RemoveHighlight()
+        private void RemoveHighlight(bool clearAlsoTextColor = false)
         {
-            if (_disableHighlighting)
-                return;
-
             this.codeTextBox.SuspendLayout();
 
             int originalSelectionStart = codeTextBox.SelectionStart;
@@ -167,6 +114,9 @@ namespace GUI
 
             codeTextBox.SelectionStart = 0;
             codeTextBox.SelectionLength = codeTextBox.Text.Length;
+
+            if(clearAlsoTextColor)
+                codeTextBox.SelectionColor = Color.Black;
 
             codeTextBox.SelectionBackColor = Color.Transparent;
             codeTextBox.SelectionLength = 0;
@@ -341,6 +291,61 @@ namespace GUI
         }
 
         /// <summary>
+        /// Syntax highlighting para linguagem manco
+        /// </summary>
+        private void MancoBeautify()
+        {
+            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
+
+            CheckKeyword("function", Color.DarkBlue, codeTextBox);
+            CheckKeyword("end", Color.DarkBlue, codeTextBox);
+            CheckKeyword("while", Color.DarkBlue, codeTextBox);
+            CheckKeyword("or", Color.DarkBlue, codeTextBox);
+            CheckKeyword("and", Color.DarkBlue, codeTextBox);
+            CheckKeyword("break", Color.DarkBlue, codeTextBox);
+            CheckKeyword("continue", Color.DarkBlue, codeTextBox);
+            CheckKeyword("break", Color.DarkBlue, codeTextBox);
+            CheckKeyword("if", Color.DarkBlue, codeTextBox);
+            CheckKeyword("elif", Color.DarkBlue, codeTextBox);
+            CheckKeyword("else", Color.DarkBlue, codeTextBox);
+
+            CheckKeyword("integer", Color.DarkGreen, codeTextBox);
+            CheckKeyword("decimal", Color.DarkGreen, codeTextBox);
+            CheckKeyword("bool", Color.DarkGreen, codeTextBox);
+            CheckKeyword("string", Color.DarkGreen, codeTextBox);
+            CheckKeyword("integer&", Color.DarkGreen, codeTextBox);
+            CheckKeyword("decimal&", Color.DarkGreen, codeTextBox);
+            CheckKeyword("bool&", Color.DarkGreen, codeTextBox);
+            CheckKeyword("print", Color.HotPink, codeTextBox);
+
+            CheckKeyword(">=", Color.Gray, codeTextBox);
+            CheckKeyword("<=", Color.Gray, codeTextBox);
+            CheckKeyword(">", Color.Gray, codeTextBox);
+            CheckKeyword("<", Color.Gray, codeTextBox);
+            CheckKeyword("-", Color.Gray, codeTextBox);
+            CheckKeyword("!=", Color.Gray, codeTextBox);
+            CheckKeyword("==", Color.Gray, codeTextBox);
+            CheckKeyword("=", Color.Gray, codeTextBox);
+            CheckKeyword(":", Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\+"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\/"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\*"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\%"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\("), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\)"), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\."), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\["), Color.Gray, codeTextBox);
+            CheckKeyword(new Regex("\\]"), Color.Gray, codeTextBox);
+
+            CheckKeyword(new Regex("^*--.*"), Color.Gray, codeTextBox);
+
+            CheckKeyword(new Regex("true|false"), Color.HotPink, codeTextBox);
+            CheckKeyword(new Regex("[0-9][0-9]*"), Color.DarkOliveGreen, codeTextBox);
+            CheckKeyword(new Regex("\\d+\\.\\d+"), Color.DarkOliveGreen, codeTextBox);
+            CheckKeyword(new Regex("\"[^\"]*\""), Color.Orange, codeTextBox);
+        }
+
+        /// <summary>
         /// Disabilita syntax highlighting
         /// </summary>
         /// <param name="sender"></param>
@@ -357,6 +362,8 @@ namespace GUI
             {
                 this.buttonDisableHighlight.Text = "Disable Highlight";
             }
+
+            RemoveHighlight(true);
         }
 
         #endregion

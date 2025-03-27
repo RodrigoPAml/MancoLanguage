@@ -80,6 +80,7 @@ namespace GUI
             {
                 // Limpa saída
                 listBoxOutput.Items.Clear();
+                RemoveHighlight();
 
                 // Insere código
                 _provider.SetCode(string.Join('\n', codeTextBox.Text));
@@ -109,10 +110,8 @@ namespace GUI
                 {
                     listBoxOutput.Items.Add($"Code compiled with mips in {(DateTime.Now - now).TotalMilliseconds} ms");
                 }
-
-                RemoveHighlight();
+           
                 BeautifyGenerated();
-
                 _hasCodeError = false;
             }
             catch (BaseException bex)
@@ -127,6 +126,7 @@ namespace GUI
             }
             finally
             {
+                VerifyCode();
                 this.codeTextBox.TextChanged += this.richTextBoxCode_TextChanged!;
             }
         }
@@ -140,7 +140,6 @@ namespace GUI
         {
             if (_hasCodeError)
                 return;
-
 
             if(string.IsNullOrEmpty(textBoxGenerated.Text))
             {
