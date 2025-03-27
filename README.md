@@ -16,9 +16,7 @@ On the left is the code editor, and on the right are the generated assembly and 
 
 The compiler output and program output are in bottom.
 
-Into the top, a select exists with the options of a MIPS Compiler or C++ transpiler.
-
-The code editor is a little buggier because of Windows Form limitations on syntax highlighting, so you can disable it if you want.
+Into the top, a select exists with the options of a MIPS Compiler or C++ transpiler,
 
 ![image](https://github.com/user-attachments/assets/37979c1a-5506-44f6-86c6-e3641d3b12c5)
 
@@ -37,6 +35,8 @@ If you are going to build and run the project don't forget to do **git submodule
 The files examples are on the folder **Examples**
 
 Or you can download tha **available release** that contains the **GUI** and some examples ready for use.
+
+The code editor is a little buggier because of Windows Form limitations on syntax highlighting, so you can disable it if you want, it will still show errors on the text.
 
 **Note**: To use the g++ compiler when using the transpiler mode you need to install g++. Use https://www.msys2.org/ to easy setup on windows.
 
