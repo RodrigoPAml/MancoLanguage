@@ -43,10 +43,10 @@ namespace Manco
 
             var tokens = lexer.GetResult();
 
-            SyntaxChecker checker = new SyntaxChecker();
+            var checker = new SyntaxChecker();
             checker.Parse(tokens);
 
-            SemanticChecker semanticChecker = new SemanticChecker();
+            var semanticChecker = new SemanticChecker();
             semanticChecker.Parse(tokens);
         }
 
@@ -65,7 +65,11 @@ namespace Manco
             {
                 foreach(var token in tokens)
                 {
-                    result += token.Type.ToString() + $" ({token.Content}) "; 
+                    string lineContent = token.Type.ToString() + $" ({token.Content}) ";
+
+                    lineContent = lineContent.Replace("\n", "\\n");
+
+                    result += lineContent;
                 }
 
                 result += "\n";
@@ -97,10 +101,10 @@ namespace Manco
 
             var tokens = lexer.GetResult();
 
-            SyntaxChecker checker = new SyntaxChecker();
+            var checker = new SyntaxChecker();
             checker.Parse(tokens);
 
-            SemanticChecker semanticChecker = new SemanticChecker();
+            var semanticChecker = new SemanticChecker();
             semanticChecker.Parse(tokens);
 
             ITransformer transformer = null;
